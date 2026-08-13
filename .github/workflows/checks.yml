@@ -19,8 +19,7 @@ jobs:
         uses: Cyb3r-Jak3/html5validator-action@master
         with:
           root: .
-          blacklist: node_modules .github
-          extra: --ignore-re "^_"
+          blacklist: node_modules .github _head.html _header.html _footer.html
 
   links:
     name: Broken links
