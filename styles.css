@@ -31,26 +31,28 @@
 }
 
 :root {
-  --colour-page: #FBFAFA;
-  --colour-surface: #FFFFFF;
-  --colour-surface-alt: #F0EDEE;
-  --colour-text: #1C181A;
+  --colour-page: #fbfafa;
+  --colour-surface: #ffffff;
+  --colour-surface-alt: #f0edee;
+  --colour-text: #1c181a;
   --colour-text-muted: #575053;
-  --colour-line: #DAD4D6;
-  --colour-line-strong: #7E7478;
-  --colour-focus: #1C181A;
+  --colour-line: #dad4d6;
+  --colour-line-strong: #7e7478;
+  --colour-focus: #1c181a;
 
-  --colour-accent-fill: #D41B5C;
-  --colour-accent-fill-hover: #B8154F;
-  --colour-accent-fill-soft: #A34063;
-  --colour-on-accent: #FFFFFF;
-  --colour-accent-text: #B8154F;
-  --colour-accent-text-soft: #8F3552;
+  --colour-accent-fill: #d41b5c;
+  --colour-accent-fill-hover: #b8154f;
+  --colour-accent-fill-soft: #a34063;
+  --colour-on-accent: #ffffff;
+  --colour-accent-text: #b8154f;
+  --colour-accent-text-soft: #8f3552;
 
-  --gradient-accent: linear-gradient(135deg, #D41B5C 0%, #A8265F 100%);
+  --gradient-accent: linear-gradient(135deg, #d41b5c 0%, #a8265f 100%);
 
-  --shadow-raised: 0 1px 2px rgba(28, 24, 26, 0.06), 0 4px 12px rgba(28, 24, 26, 0.05);
-  --shadow-overlay: 0 2px 4px rgba(28, 24, 26, 0.08), 0 12px 28px rgba(28, 24, 26, 0.12);
+  --shadow-raised:
+    0 1px 2px rgba(28, 24, 26, 0.06), 0 4px 12px rgba(28, 24, 26, 0.05);
+  --shadow-overlay:
+    0 2px 4px rgba(28, 24, 26, 0.08), 0 12px 28px rgba(28, 24, 26, 0.12);
 
   --font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
 
@@ -90,24 +92,25 @@
 
 :root[data-theme="dark"] {
   --colour-page: #141213;
-  --colour-surface: #1E1B1D;
+  --colour-surface: #1e1b1d;
   --colour-surface-alt: #282426;
-  --colour-text: #ECE8E9;
-  --colour-text-muted: #ADA5A8;
+  --colour-text: #ece8e9;
+  --colour-text-muted: #ada5a8;
   --colour-line: #393336;
-  --colour-line-strong: #857C80;
-  --colour-focus: #FFFFFF;
+  --colour-line-strong: #857c80;
+  --colour-focus: #ffffff;
 
-  --colour-accent-fill: #D41B5C;
-  --colour-accent-fill-hover: #DC2664;
-  --colour-accent-fill-soft: #A34063;
-  --colour-accent-text: #F5749F;
-  --colour-accent-text-soft: #D98CA6;
+  --colour-accent-fill: #d41b5c;
+  --colour-accent-fill-hover: #dc2664;
+  --colour-accent-fill-soft: #a34063;
+  --colour-accent-text: #f5749f;
+  --colour-accent-text-soft: #d98ca6;
 
-  --gradient-accent: linear-gradient(135deg, #B8154F 0%, #7E2B4E 100%);
+  --gradient-accent: linear-gradient(135deg, #b8154f 0%, #7e2b4e 100%);
 
   --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-overlay: 0 2px 4px rgba(0, 0, 0, 0.5), 0 12px 28px rgba(0, 0, 0, 0.55);
+  --shadow-overlay:
+    0 2px 4px rgba(0, 0, 0, 0.5), 0 12px 28px rgba(0, 0, 0, 0.55);
 
   color-scheme: dark;
 }
@@ -152,8 +155,19 @@ html[data-text-size="3"] {
 }
 
 body,
-h1, h2, h3, h4, h5, h6,
-p, figure, blockquote, ul, ol, dl, dd {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+ul,
+ol,
+dl,
+dd {
   margin: 0;
 }
 
@@ -191,16 +205,27 @@ main {
   flex: 1 0 auto;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   line-height: var(--line-height-heading);
   font-weight: 600;
   text-wrap: balance;
 }
 
-h1 { font-size: var(--size-2xl); }
-h2 { font-size: var(--size-xl); }
-h3 { font-size: var(--size-lg); }
-h4 { font-size: var(--size-md); }
+h1 {
+  font-size: var(--size-2xl);
+}
+h2 {
+  font-size: var(--size-xl);
+}
+h3 {
+  font-size: var(--size-lg);
+}
+h4 {
+  font-size: var(--size-md);
+}
 
 p {
   max-width: var(--reading-width);
@@ -317,9 +342,11 @@ textarea {
   width: 2.75rem;
   height: 2.75rem;
   border-radius: var(--radius-md);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 0.125rem;
-  transition: width var(--speed-settled) ease, height var(--speed-settled) ease;
+  transition:
+    width var(--speed-settled) ease,
+    height var(--speed-settled) ease;
 }
 
 .site-header.is-scrolled .brand-mark {
@@ -432,7 +459,9 @@ textarea {
   border-radius: var(--radius-pill);
   color: var(--colour-text);
   cursor: pointer;
-  transition: background-color var(--speed-quick) ease, color var(--speed-quick) ease;
+  transition:
+    background-color var(--speed-quick) ease,
+    color var(--speed-quick) ease;
 }
 
 .control-button:hover {
@@ -488,9 +517,15 @@ textarea {
   line-height: 1;
 }
 
-.size-1 { font-size: 0.75rem; }
-.size-2 { font-size: 0.9375rem; }
-.size-3 { font-size: 1.125rem; }
+.size-1 {
+  font-size: 0.75rem;
+}
+.size-2 {
+  font-size: 0.9375rem;
+}
+.size-3 {
+  font-size: 1.125rem;
+}
 
 .language-picker select,
 .accessibility-panel select {
@@ -659,7 +694,9 @@ textarea {
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
-  transition: background-color var(--speed-quick) ease, transform var(--speed-quick) ease;
+  transition:
+    background-color var(--speed-quick) ease,
+    transform var(--speed-quick) ease;
 }
 
 .donate-button[aria-current="page"] {
@@ -692,7 +729,9 @@ textarea {
   height: 2px;
   background-color: currentColor;
   border-radius: 2px;
-  transition: transform var(--speed-quick) ease, opacity var(--speed-quick) ease;
+  transition:
+    transform var(--speed-quick) ease,
+    opacity var(--speed-quick) ease;
 }
 
 .menu-icon {
@@ -706,8 +745,12 @@ textarea {
   left: 0;
 }
 
-.menu-icon::before { top: -0.375rem; }
-.menu-icon::after { top: 0.375rem; }
+.menu-icon::before {
+  top: -0.375rem;
+}
+.menu-icon::after {
+  top: 0.375rem;
+}
 
 .menu-toggle[aria-expanded="true"] .menu-icon {
   background-color: transparent;
@@ -920,7 +963,6 @@ textarea {
 .footer-contact a {
   color: var(--colour-text-muted);
 }
-
 
 /* Simplified text mode. Asked for by five of the thirty people we surveyed:
    strip images and decoration, leave plain text. Separate from the text size
