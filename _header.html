@@ -1,0 +1,92 @@
+<header class="site-header" id="siteHeader">
+  <a class="skip-link" href="#main" data-i18n="skipToContent">Skip to main content</a>
+
+  <div class="header-bar">
+    <a class="brand" href="index.html">
+      <img class="brand-mark" src="assets/logo-placeholder.jpg" alt="" width="512" height="512">
+      <span class="brand-words">
+        <span class="brand-name">Autism Allyship</span>
+        <span class="brand-tagline" data-i18n="brandTagline">Where every mind belongs</span>
+      </span>
+    </a>
+
+    <nav class="primary-nav" id="primaryNav" data-i18n-aria-label="mainNavLabel" aria-label="Main">
+      <ul class="nav-list">
+        <li><a href="index.html" data-i18n="navHome">Home</a></li>
+
+        <li class="nav-dropdown">
+          <button type="button" class="nav-dropdown-trigger" id="communityTrigger"
+                  aria-expanded="false" aria-controls="communityMenu">
+            <span data-i18n="navCommunity">Community</span>
+            <svg class="chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+              <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <ul class="nav-dropdown-menu" id="communityMenu" hidden>
+            <li><a href="about.html" data-i18n="navAbout">About</a></li>
+            <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
+            <li><a href="gallery.html" data-i18n="navGallery">Image gallery</a></li>
+            <li><a href="events.html" data-i18n="navEvents">Events</a></li>
+          </ul>
+        </li>
+
+        <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
+        <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
+        <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="access-controls" id="accessControls" role="group"
+         data-i18n-aria-label="accessGroupLabel" aria-label="Display and comfort settings">
+
+      <button type="button" class="control-button" id="sensoryToggle" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+          <path d="M2 9c2.5-2.5 5-2.5 7.5 0S15 11.5 17.5 9 22.5 6.5 22 7M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 5-2.5 5.5-2"
+                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <span class="control-label" data-i18n="sensoryMode">Sensory-friendly mode</span>
+      </button>
+
+      <button type="button" class="control-button" id="darkModeToggle" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+          <path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        <span class="control-label" data-i18n="darkMode">Dark mode</span>
+      </button>
+
+      <div class="text-size-group" role="group" data-i18n-aria-label="textSize" aria-label="Text size">
+        <button type="button" class="control-button text-size-button" data-text-size="1" aria-pressed="true">
+          <span class="text-size-glyph size-1" aria-hidden="true">A</span>
+          <span class="control-label" data-i18n="textSizeNormal">Normal text size</span>
+        </button>
+        <button type="button" class="control-button text-size-button" data-text-size="2" aria-pressed="false">
+          <span class="text-size-glyph size-2" aria-hidden="true">A</span>
+          <span class="control-label" data-i18n="textSizeLarge">Large text size</span>
+        </button>
+        <button type="button" class="control-button text-size-button" data-text-size="3" aria-pressed="false">
+          <span class="text-size-glyph size-3" aria-hidden="true">A</span>
+          <span class="control-label" data-i18n="textSizeLarger">Extra large text size</span>
+        </button>
+      </div>
+
+      <div class="language-picker">
+        <label class="control-label" for="languageSelect" data-i18n="language">Language</label>
+        <select id="languageSelect">
+          <option value="en">English</option>
+          <option value="af">Afrikaans</option>
+          <option value="st">Sesotho</option>
+        </select>
+      </div>
+    </div>
+
+    <a class="donate-button" href="donate.html" data-i18n="navDonate">Donate</a>
+
+    <button type="button" class="menu-toggle" id="menuToggle"
+            aria-expanded="false" aria-controls="primaryNav accessControls">
+      <span class="menu-icon" aria-hidden="true"></span>
+      <span class="control-label" data-i18n="menu">Menu</span>
+    </button>
+  </div>
+</header>

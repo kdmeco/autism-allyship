@@ -1,0 +1,117 @@
+// Every string in the header and footer lives here, keyed by a short name.
+// main.js reads this object and swaps the text whenever the language changes.
+//
+// English is the source language and is filled in. Afrikaans and Sesotho are
+// left empty on purpose, for human translators to fill in. An empty string
+// falls back to the English value, so the site stays readable while the
+// translations are outstanding.
+//
+// To make new page content translatable: add data-i18n="yourKey" to the
+// element, then add yourKey to all three objects below.
+
+const translations = {
+  en: {
+    skipToContent: 'Skip to main content',
+    brandTagline: 'Where every mind belongs',
+    mainNavLabel: 'Main',
+    navHome: 'Home',
+    navCommunity: 'Community',
+    navAbout: 'About',
+    navBlog: 'Blog',
+    navGallery: 'Image gallery',
+    navEvents: 'Events',
+    navResources: 'Resources',
+    navShop: 'Shop',
+    navContact: 'Contact',
+    navDonate: 'Donate',
+    accessGroupLabel: 'Display and comfort settings',
+    sensoryMode: 'Sensory-friendly mode',
+    darkMode: 'Dark mode',
+    textSize: 'Text size',
+    textSizeNormal: 'Normal text size',
+    textSizeLarge: 'Large text size',
+    textSizeLarger: 'Extra large text size',
+    language: 'Language',
+    menu: 'Menu',
+    footerDescription: 'Building inclusive, accessible spaces for autistic and neurodivergent people and their families.',
+    npoLabel: 'NPO registration number',
+    footerQuickLinks: 'Quick links',
+    footerSocials: 'Follow us',
+    footerLegal: 'Legal',
+    legalPrivacy: 'Privacy policy',
+    legalTerms: 'Terms of use',
+    legalAccessibility: 'Accessibility statement',
+    legalPaia: 'PAIA manual',
+    rightsReserved: 'All rights reserved.'
+  },
+
+  af: {
+    skipToContent: '',
+    brandTagline: '',
+    mainNavLabel: '',
+    navHome: '',
+    navCommunity: '',
+    navAbout: '',
+    navBlog: '',
+    navGallery: '',
+    navEvents: '',
+    navResources: '',
+    navShop: '',
+    navContact: '',
+    navDonate: '',
+    accessGroupLabel: '',
+    sensoryMode: '',
+    darkMode: '',
+    textSize: '',
+    textSizeNormal: '',
+    textSizeLarge: '',
+    textSizeLarger: '',
+    language: '',
+    menu: '',
+    footerDescription: '',
+    npoLabel: '',
+    footerQuickLinks: '',
+    footerSocials: '',
+    footerLegal: '',
+    legalPrivacy: '',
+    legalTerms: '',
+    legalAccessibility: '',
+    legalPaia: '',
+    rightsReserved: ''
+  },
+
+  st: {
+    skipToContent: '',
+    brandTagline: '',
+    mainNavLabel: '',
+    navHome: '',
+    navCommunity: '',
+    navAbout: '',
+    navBlog: '',
+    navGallery: '',
+    navEvents: '',
+    navResources: '',
+    navShop: '',
+    navContact: '',
+    navDonate: '',
+    accessGroupLabel: '',
+    sensoryMode: '',
+    darkMode: '',
+    textSize: '',
+    textSizeNormal: '',
+    textSizeLarge: '',
+    textSizeLarger: '',
+    language: '',
+    menu: '',
+    footerDescription: '',
+    npoLabel: '',
+    footerQuickLinks: '',
+    footerSocials: '',
+    footerLegal: '',
+    legalPrivacy: '',
+    legalTerms: '',
+    legalAccessibility: '',
+    legalPaia: '',
+    rightsReserved: ''
+  }
+};
