@@ -14,6 +14,7 @@ const STORAGE_KEYS = {
   theme: 'aaf-theme',
   textSize: 'aaf-text-size',
   sensory: 'aaf-sensory-mode',
+  plainText: 'aaf-plain-text',
   language: 'aaf-language'
 };
 
@@ -193,6 +194,25 @@ function setUpSensoryToggle() {
   });
 }
 
+// Strips images and decoration, leaving plain text on a plain background. Five
+// of the thirty people we surveyed asked for this. It is separate from the text
+// size control, which only changes how big the words are.
+function setUpPlainTextToggle() {
+  const toggle = document.getElementById('plainTextToggle');
+  if (!toggle) {
+    return;
+  }
+
+  toggle.setAttribute('aria-pressed', String(root.classList.contains('plain-text')));
+
+  toggle.addEventListener('click', function () {
+    const turningOn = !root.classList.contains('plain-text');
+    root.classList.toggle('plain-text', turningOn);
+    toggle.setAttribute('aria-pressed', String(turningOn));
+    saveSetting(STORAGE_KEYS.plainText, turningOn ? 'on' : 'off');
+  });
+}
+
 // Three steps: 1 is 100%, 2 is 125%, 3 is 150%. The percentages live in the
 // stylesheet against html[data-text-size]. Because every size in styles.css is
 // in rem, changing the root size scales the whole page together.
@@ -216,6 +236,59 @@ function setUpTextSizeControls() {
       saveSetting(STORAGE_KEYS.textSize, button.dataset.textSize);
       showCurrentSize();
     });
+  });
+}
+
+// The accessibility controls sit behind one labelled button rather than as a row
+// of icons in the header. Same open and close behaviour as the Community menu,
+// with one difference: clicking inside the panel does not close it, because
+// people usually change two or three settings at once.
+function setUpAccessibilityPanel() {
+  const trigger = document.getElementById('accessibilityTrigger');
+  const panel = document.getElementById('accessibilityPanel');
+  if (!trigger || !panel) {
+    return;
+  }
+
+  function openPanel() {
+    panel.classList.add('is-open');
+    trigger.setAttribute('aria-expanded', 'true');
+  }
+
+  function closePanel(returnFocusToTrigger) {
+    panel.classList.remove('is-open');
+    trigger.setAttribute('aria-expanded', 'false');
+    if (returnFocusToTrigger) {
+      trigger.focus();
+    }
+  }
+
+  trigger.addEventListener('click', function () {
+    if (trigger.getAttribute('aria-expanded') === 'true') {
+      closePanel(false);
+    } else {
+      openPanel();
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+      closePanel(true);
+    }
+  });
+
+  document.addEventListener('click', function (event) {
+    const clickedInside = panel.contains(event.target) || trigger.contains(event.target);
+    if (!clickedInside && trigger.getAttribute('aria-expanded') === 'true') {
+      closePanel(false);
+    }
+  });
+
+  panel.addEventListener('focusout', function (event) {
+    const movingWithinPanel = panel.contains(event.relatedTarget) || trigger.contains(event.relatedTarget);
+    if (!movingWithinPanel) {
+      closePanel(false);
+    }
   });
 }
 
@@ -391,7 +464,9 @@ function setUpFooterYear() {
 setUpLanguagePicker();
 setUpDarkModeToggle();
 setUpSensoryToggle();
+setUpPlainTextToggle();
 setUpTextSizeControls();
+setUpAccessibilityPanel();
 setUpCommunityDropdown();
 setUpMobileMenu();
 setUpShrinkingHeader();

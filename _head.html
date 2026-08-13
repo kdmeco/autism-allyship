@@ -20,10 +20,15 @@
     var root = document.documentElement;
     var saved = {};
 
+    // CSS only hides the accessibility panel when this class is present. If this
+    // script never runs, the panel stays visible and open rather than vanishing.
+    root.classList.add('js');
+
     try {
       saved.theme = localStorage.getItem('aaf-theme');
       saved.textSize = localStorage.getItem('aaf-text-size');
       saved.sensory = localStorage.getItem('aaf-sensory-mode');
+      saved.plainText = localStorage.getItem('aaf-plain-text');
       saved.language = localStorage.getItem('aaf-language');
     } catch (error) {
       // Private browsing and pages opened straight off the file system can
@@ -36,6 +41,10 @@
 
     if (saved.sensory === 'on') {
       root.classList.add('sensory-mode');
+    }
+
+    if (saved.plainText === 'on') {
+      root.classList.add('plain-text');
     }
 
     if (saved.language) {
