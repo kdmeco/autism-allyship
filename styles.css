@@ -179,7 +179,16 @@ body {
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-body);
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
+  /* Sticky footer. Without the flex column, a short page leaves the footer
+     partway up the screen with page background below it. dvh rather than vh so
+     mobile browser chrome does not push the footer below the fold. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+main {
+  flex: 1 0 auto;
 }
 
 h1, h2, h3, h4 {
@@ -405,14 +414,10 @@ textarea {
   padding: var(--space-2) var(--space-3);
 }
 
-.access-controls {
+.header-controls {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1);
-  background-color: var(--colour-surface-alt);
-  border: 1px solid var(--colour-line);
-  border-radius: var(--radius-pill);
+  gap: var(--space-2);
 }
 
 .control-button {
@@ -452,13 +457,30 @@ textarea {
 .text-size-group {
   display: flex;
   align-items: center;
-  gap: 0.125rem;
-  padding-inline: var(--space-1);
-  border-inline: 1px solid var(--colour-line);
+  gap: 0.25rem;
 }
 
 .text-size-button {
-  min-width: 2.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  background: none;
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-sm);
+  color: var(--colour-text);
+  cursor: pointer;
+}
+
+.text-size-button:hover {
+  background-color: var(--colour-surface-alt);
+}
+
+.text-size-button[aria-pressed="true"] {
+  background-color: var(--colour-accent-fill);
+  border-color: var(--colour-accent-fill);
+  color: var(--colour-on-accent);
 }
 
 .text-size-glyph {
@@ -470,12 +492,8 @@ textarea {
 .size-2 { font-size: 0.9375rem; }
 .size-3 { font-size: 1.125rem; }
 
-.language-picker {
-  display: flex;
-  align-items: center;
-}
-
-.language-picker select {
+.language-picker select,
+.accessibility-panel select {
   min-height: 2.5rem;
   padding: 0 var(--space-3);
   background-color: transparent;
@@ -485,8 +503,148 @@ textarea {
   cursor: pointer;
 }
 
-.language-picker select:hover {
+.accessibility-panel select {
+  border: 1px solid var(--colour-line-strong);
+}
+
+.accessibility-panel select:hover {
+  background-color: var(--colour-surface-alt);
+}
+
+.accessibility-menu {
+  position: relative;
+}
+
+.accessibility-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  background: none;
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--colour-text);
+  font: inherit;
+  font-size: var(--size-sm);
+  cursor: pointer;
+  transition: background-color var(--speed-quick) ease;
+}
+
+.accessibility-trigger:hover {
+  background-color: var(--colour-surface-alt);
+}
+
+.accessibility-trigger[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+.accessibility-panel {
+  position: absolute;
+  inset-inline-end: 0;
+  top: calc(100% + var(--space-2));
+  z-index: 60;
+  width: 21rem;
+  max-width: calc(100vw - var(--space-6));
+  padding: var(--space-4);
   background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-overlay);
+}
+
+.js .accessibility-panel {
+  display: none;
+}
+
+.js .accessibility-panel.is-open {
+  display: block;
+}
+
+.panel-intro {
+  margin: 0 0 var(--space-3);
+  font-size: var(--size-sm);
+  color: var(--colour-text-muted);
+}
+
+.panel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-top: 1px solid var(--colour-line);
+}
+
+.panel-row:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.panel-row-label {
+  font-size: var(--size-sm);
+  font-weight: 600;
+}
+
+.panel-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-2);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--colour-text);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--speed-quick) ease;
+}
+
+.panel-toggle:hover {
+  background-color: var(--colour-surface-alt);
+}
+
+.panel-toggle[aria-pressed="true"] {
+  background-color: var(--colour-surface-alt);
+  color: var(--colour-accent-text);
+}
+
+.panel-toggle[aria-pressed="true"] .panel-toggle-name::after {
+  content: " \2713";
+}
+
+.panel-toggle svg {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.panel-toggle-words {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.panel-toggle-name {
+  font-size: var(--size-sm);
+  font-weight: 600;
+}
+
+.panel-toggle-note {
+  font-size: var(--size-xs);
+  font-weight: 400;
+  color: var(--colour-text-muted);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 .donate-button {
@@ -569,7 +727,7 @@ textarea {
    wrap they land together as a tidy second row, in the same order they appear
    in the markup. */
 @media (min-width: 768px) {
-  .access-controls {
+  .header-controls {
     margin-inline-start: auto;
   }
 }
@@ -604,24 +762,38 @@ textarea {
   }
 
   .primary-nav,
-  .access-controls {
+  .header-controls {
     display: none;
     flex-basis: 100%;
   }
 
   .site-header[data-menu="open"] .primary-nav,
-  .site-header[data-menu="open"] .access-controls {
+  .site-header[data-menu="open"] .header-controls {
     display: flex;
     max-height: calc(100dvh - 9rem);
     overflow-y: auto;
   }
 
-  .site-header[data-menu="open"] .access-controls {
+  .site-header[data-menu="open"] .header-controls {
     flex-wrap: wrap;
     justify-content: center;
-    border-radius: var(--radius-lg);
     padding: var(--space-3);
     gap: var(--space-2);
+  }
+
+  /* On a phone the panel is wider than the screen if it stays anchored to the
+     button, so it becomes a full width block under the controls instead. */
+  .accessibility-menu {
+    position: static;
+    width: 100%;
+  }
+
+  .accessibility-panel {
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin-top: var(--space-2);
+    box-shadow: none;
   }
 
   .nav-list {
@@ -747,6 +919,34 @@ textarea {
 
 .footer-contact a {
   color: var(--colour-text-muted);
+}
+
+
+/* Simplified text mode. Asked for by five of the thirty people we surveyed:
+   strip images and decoration, leave plain text. Separate from the text size
+   control, which only changes how big the words are. The chevrons are kept so
+   the menus do not look broken. */
+:root.plain-text img,
+:root.plain-text video,
+:root.plain-text iframe,
+:root.plain-text .brand-mark {
+  display: none;
+}
+
+:root.plain-text {
+  --colour-surface: var(--colour-page);
+  --colour-surface-alt: var(--colour-page);
+  --gradient-accent: var(--colour-accent-fill);
+}
+
+:root.plain-text *:not(.chevron) {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:root.plain-text main {
+  max-width: 40rem;
+  line-height: 1.9;
 }
 
 :root.sensory-mode *,
