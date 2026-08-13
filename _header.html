@@ -1,32 +1,67 @@
 <header class="site-header" id="siteHeader">
-  <a class="skip-link" href="#main" data-i18n="skipToContent">Skip to main content</a>
+  <a class="skip-link" href="#main" data-i18n="skipToContent"
+    >Skip to main content</a
+  >
 
   <div class="header-bar">
     <a class="brand" href="index.html">
-      <img class="brand-mark" src="assets/logo-placeholder.jpg" alt="" width="512" height="512">
+      <img
+        class="brand-mark"
+        src="assets/brand/logo-placeholder.jpg"
+        alt=""
+        width="512"
+        height="512"
+      />
       <span class="brand-words">
         <span class="brand-name">Autism Allyship</span>
-        <span class="brand-tagline" data-i18n="brandTagline">Where every mind belongs</span>
+        <span class="brand-tagline" data-i18n="brandTagline"
+          >Where every mind belongs</span
+        >
       </span>
     </a>
 
-    <nav class="primary-nav" id="primaryNav" data-i18n-aria-label="mainNavLabel" aria-label="Main">
+    <nav
+      class="primary-nav"
+      id="primaryNav"
+      data-i18n-aria-label="mainNavLabel"
+      aria-label="Main"
+    >
       <ul class="nav-list">
         <li><a href="index.html" data-i18n="navHome">Home</a></li>
 
         <li class="nav-dropdown">
-          <button type="button" class="nav-dropdown-trigger" id="communityTrigger"
-                  aria-expanded="false" aria-controls="communityMenu">
+          <button
+            type="button"
+            class="nav-dropdown-trigger"
+            id="communityTrigger"
+            aria-expanded="false"
+            aria-controls="communityMenu"
+          >
             <span data-i18n="navCommunity">Community</span>
-            <svg class="chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
-              <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round"/>
+            <svg
+              class="chevron"
+              viewBox="0 0 16 16"
+              width="16"
+              height="16"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M3 6l5 5 5-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </button>
           <ul class="nav-dropdown-menu" id="communityMenu" hidden>
             <li><a href="about.html" data-i18n="navAbout">About</a></li>
             <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
-            <li><a href="gallery.html" data-i18n="navGallery">Image gallery</a></li>
+            <li>
+              <a href="gallery.html" data-i18n="navGallery">Image gallery</a>
+            </li>
             <li><a href="events.html" data-i18n="navEvents">Events</a></li>
           </ul>
         </li>
@@ -38,78 +73,196 @@
     </nav>
 
     <div class="header-controls">
-      <button type="button" class="control-button" id="darkModeToggle" aria-pressed="false">
-        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-          <path d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z" fill="none"
-                stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      <button
+        type="button"
+        class="control-button"
+        id="darkModeToggle"
+        aria-pressed="false"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+          />
         </svg>
         <span class="control-label" data-i18n="darkMode">Dark mode</span>
       </button>
 
       <div class="accessibility-menu">
-        <button type="button" class="accessibility-trigger" id="accessibilityTrigger"
-                aria-expanded="false" aria-controls="accessibilityPanel">
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-            <circle cx="12" cy="4.5" r="1.8" fill="currentColor"/>
-            <path d="M4 8.5h16M12 8.5v6m0 0l-3.5 6m3.5-6l3.5 6" fill="none"
-                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <button
+          type="button"
+          class="accessibility-trigger"
+          id="accessibilityTrigger"
+          aria-expanded="false"
+          aria-controls="accessibilityPanel"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="12" cy="4.5" r="1.8" fill="currentColor" />
+            <path
+              d="M4 8.5h16M12 8.5v6m0 0l-3.5 6m3.5-6l3.5 6"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
           </svg>
           <span data-i18n="accessibility">Accessibility</span>
-          <svg class="chevron" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
-            <path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round"/>
+          <svg
+            class="chevron"
+            viewBox="0 0 16 16"
+            width="16"
+            height="16"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path
+              d="M3 6l5 5 5-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </button>
 
         <div class="accessibility-panel" id="accessibilityPanel">
-          <p class="panel-intro" data-i18n="accessibilityIntro">Change how this site looks and reads. Your choices are remembered.</p>
+          <p class="panel-intro" data-i18n="accessibilityIntro">
+            Change how this site looks and reads. Your choices are remembered.
+          </p>
 
           <div class="panel-row">
-            <button type="button" class="panel-toggle" id="sensoryToggle" aria-pressed="false">
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-                <path d="M2 9c2.5-2.5 5-2.5 7.5 0S15 11.5 17.5 9 22.5 6.5 22 7M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 5-2.5 5.5-2"
-                      fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <button
+              type="button"
+              class="panel-toggle"
+              id="sensoryToggle"
+              aria-pressed="false"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M2 9c2.5-2.5 5-2.5 7.5 0S15 11.5 17.5 9 22.5 6.5 22 7M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 5-2.5 5.5-2"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
               </svg>
               <span class="panel-toggle-words">
-                <span class="panel-toggle-name" data-i18n="sensoryMode">Sensory-friendly mode</span>
-                <span class="panel-toggle-note" data-i18n="sensoryModeNote">Stops all movement and softens colour</span>
+                <span class="panel-toggle-name" data-i18n="sensoryMode"
+                  >Sensory-friendly mode</span
+                >
+                <span class="panel-toggle-note" data-i18n="sensoryModeNote"
+                  >Stops all movement and softens colour</span
+                >
               </span>
             </button>
           </div>
 
           <div class="panel-row">
-            <button type="button" class="panel-toggle" id="plainTextToggle" aria-pressed="false">
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
-                <path d="M4 6h16M4 11h16M4 16h10" fill="none" stroke="currentColor"
-                      stroke-width="1.8" stroke-linecap="round"/>
+            <button
+              type="button"
+              class="panel-toggle"
+              id="plainTextToggle"
+              aria-pressed="false"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M4 6h16M4 11h16M4 16h10"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
               </svg>
               <span class="panel-toggle-words">
-                <span class="panel-toggle-name" data-i18n="plainTextMode">Simplified text</span>
-                <span class="panel-toggle-note" data-i18n="plainTextModeNote">Hides images and shows plain text only</span>
+                <span class="panel-toggle-name" data-i18n="plainTextMode"
+                  >Simplified text</span
+                >
+                <span class="panel-toggle-note" data-i18n="plainTextModeNote"
+                  >Hides images and shows plain text only</span
+                >
               </span>
             </button>
           </div>
 
-          <div class="panel-row" role="group" data-i18n-aria-label="textSize" aria-label="Text size">
+          <div
+            class="panel-row"
+            role="group"
+            data-i18n-aria-label="textSize"
+            aria-label="Text size"
+          >
             <span class="panel-row-label" data-i18n="textSize">Text size</span>
             <div class="text-size-group">
-              <button type="button" class="text-size-button" data-text-size="1" aria-pressed="true">
+              <button
+                type="button"
+                class="text-size-button"
+                data-text-size="1"
+                aria-pressed="true"
+              >
                 <span class="text-size-glyph size-1" aria-hidden="true">A</span>
-                <span class="visually-hidden" data-i18n="textSizeNormal">Normal text size</span>
+                <span class="visually-hidden" data-i18n="textSizeNormal"
+                  >Normal text size</span
+                >
               </button>
-              <button type="button" class="text-size-button" data-text-size="2" aria-pressed="false">
+              <button
+                type="button"
+                class="text-size-button"
+                data-text-size="2"
+                aria-pressed="false"
+              >
                 <span class="text-size-glyph size-2" aria-hidden="true">A</span>
-                <span class="visually-hidden" data-i18n="textSizeLarge">Large text size</span>
+                <span class="visually-hidden" data-i18n="textSizeLarge"
+                  >Large text size</span
+                >
               </button>
-              <button type="button" class="text-size-button" data-text-size="3" aria-pressed="false">
+              <button
+                type="button"
+                class="text-size-button"
+                data-text-size="3"
+                aria-pressed="false"
+              >
                 <span class="text-size-glyph size-3" aria-hidden="true">A</span>
-                <span class="visually-hidden" data-i18n="textSizeLarger">Extra large text size</span>
+                <span class="visually-hidden" data-i18n="textSizeLarger"
+                  >Extra large text size</span
+                >
               </button>
             </div>
           </div>
 
           <div class="panel-row">
-            <label class="panel-row-label" for="languageSelect" data-i18n="language">Language</label>
+            <label
+              class="panel-row-label"
+              for="languageSelect"
+              data-i18n="language"
+              >Language</label
+            >
             <select id="languageSelect">
               <option value="en">English</option>
               <option value="af">Afrikaans</option>
@@ -122,8 +275,13 @@
 
     <a class="donate-button" href="donate.html" data-i18n="navDonate">Donate</a>
 
-    <button type="button" class="menu-toggle" id="menuToggle"
-            aria-expanded="false" aria-controls="primaryNav headerControls">
+    <button
+      type="button"
+      class="menu-toggle"
+      id="menuToggle"
+      aria-expanded="false"
+      aria-controls="primaryNav headerControls"
+    >
       <span class="menu-icon" aria-hidden="true"></span>
       <span class="control-label" data-i18n="menu">Menu</span>
     </button>
