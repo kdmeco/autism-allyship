@@ -482,7 +482,7 @@ function markCurrentPage() {
   // The Donate button sits outside .nav-list, so it has to be named separately
   // or donate.html ends up with nothing marked as the current page.
   document
-    .querySelectorAll(".nav-list a, .donate-button")
+    .querySelectorAll(".nav-list a, .donate-button, .footer-list a")
     .forEach(function (link) {
       const linkFile = link.getAttribute("href");
       if (linkFile === currentFile) {
