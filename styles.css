@@ -935,7 +935,8 @@ textarea {
   border-bottom: 1px solid transparent;
 }
 
-.footer-list a:hover {
+.footer-list a:hover,
+.footer-list a[aria-current="page"] {
   color: var(--colour-accent-text);
   border-bottom-color: currentColor;
 }
