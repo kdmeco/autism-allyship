@@ -105,6 +105,36 @@ const translations = {
     aboutTeamPlaceholder:
       "Meet the people behind the foundation. Team details coming soon.",
     aboutRegistrationHeading: "Registration details",
+    accessibilityPageTitle: "Accessibility statement",
+    accessibilityPageLede:
+      "The Autism Allyship Foundation is committed to making this website usable and welcoming for everyone. We work to keep it accessible to people with a wide range of abilities.",
+    accessibilityStandardsHeading: "The standard we aim for",
+    accessibilityStandardsText:
+      "We target the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. This is the international standard for making web content accessible to people with disabilities, and it is the level most public services and organisations aim for. We review the site against these guidelines as we build, and we run automated checks on every change.",
+    accessibilityFeaturesHeading: "Features to help you",
+    accessibilityFeaturesIntro:
+      "The site includes a set of controls you can change at any time, and your choices are remembered on your device:",
+    accessibilityFeatureSensory:
+      "Sensory-friendly mode, which stops all movement and softens the colours",
+    accessibilityFeatureTextSize:
+      "A text size control with three steps, from normal to extra large",
+    accessibilityFeaturePlainText:
+      "Simplified text mode, which hides images and shows plain text only",
+    accessibilityFeatureDarkMode: "Dark mode, for reading in low light",
+    accessibilityFeatureLanguage:
+      "A language selector for English, Afrikaans and Sesotho",
+    accessibilityFeaturesMore:
+      "Every page can be navigated with a keyboard alone, and includes a skip link so you can jump straight to the main content. All images carry alternative text, and headings follow a clear page structure for screen readers.",
+    accessibilityLimitationsHeading: "What we are still working on",
+    accessibilityLimitationsText:
+      "Some pages are still being built, and a few parts of the site use third-party content, such as social media embeds, which we do not fully control. Where a third-party element cannot be made fully accessible, we hide or replace it where we are able to, and we keep reviewing it as the site grows.",
+    accessibilityReportHeading: "Report a problem",
+    accessibilityReportText:
+      "If you find any part of this site difficult to use or read, or if something does not work for you, please tell us. We want to fix it. You can use the contact page and choose accessibility feedback, or reach us directly.",
+    accessibilityReportLink: "Report on the contact page",
+    accessibilityReviewHeading: "Last reviewed",
+    accessibilityReviewDate:
+      "This statement was last reviewed on 14 August 2026.",
   },
 
   af: {
@@ -186,6 +216,25 @@ const translations = {
     aboutTeamHeading: "",
     aboutTeamPlaceholder: "",
     aboutRegistrationHeading: "",
+    accessibilityPageTitle: "",
+    accessibilityPageLede: "",
+    accessibilityStandardsHeading: "",
+    accessibilityStandardsText: "",
+    accessibilityFeaturesHeading: "",
+    accessibilityFeaturesIntro: "",
+    accessibilityFeatureSensory: "",
+    accessibilityFeatureTextSize: "",
+    accessibilityFeaturePlainText: "",
+    accessibilityFeatureDarkMode: "",
+    accessibilityFeatureLanguage: "",
+    accessibilityFeaturesMore: "",
+    accessibilityLimitationsHeading: "",
+    accessibilityLimitationsText: "",
+    accessibilityReportHeading: "",
+    accessibilityReportText: "",
+    accessibilityReportLink: "",
+    accessibilityReviewHeading: "",
+    accessibilityReviewDate: "",
   },
 
   st: {
@@ -267,5 +316,24 @@ const translations = {
     aboutTeamHeading: "",
     aboutTeamPlaceholder: "",
     aboutRegistrationHeading: "",
+    accessibilityPageTitle: "",
+    accessibilityPageLede: "",
+    accessibilityStandardsHeading: "",
+    accessibilityStandardsText: "",
+    accessibilityFeaturesHeading: "",
+    accessibilityFeaturesIntro: "",
+    accessibilityFeatureSensory: "",
+    accessibilityFeatureTextSize: "",
+    accessibilityFeaturePlainText: "",
+    accessibilityFeatureDarkMode: "",
+    accessibilityFeatureLanguage: "",
+    accessibilityFeaturesMore: "",
+    accessibilityLimitationsHeading: "",
+    accessibilityLimitationsText: "",
+    accessibilityReportHeading: "",
+    accessibilityReportText: "",
+    accessibilityReportLink: "",
+    accessibilityReviewHeading: "",
+    accessibilityReviewDate: "",
   },
 };

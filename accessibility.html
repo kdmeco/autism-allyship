@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="theme-color"
+      content="#FBFAFA"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      content="#141213"
+      media="(prefers-color-scheme: dark)"
+    />
+
+    <link
+      rel="preload"
+      href="assets/fonts/poppins-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="assets/fonts/poppins-600.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+
+    <script src="translations.js" defer></script>
+    <script src="main.js" defer></script>
+
+    <script>
+      // Resolves the saved settings before the browser paints anything, so a
+      // returning visitor never sees a flash of the wrong theme or text size.
+      // Deliberately inline and tiny. If you change a storage key here, change it
+      // in main.js too.
+      (function () {
+        var root = document.documentElement;
+        var saved = {};
+
+        // CSS only hides the accessibility panel when this class is present. If this
+        // script never runs, the panel stays visible and open rather than vanishing.
+        root.classList.add("js");
+
+        try {
+          saved.theme = localStorage.getItem("aaf-theme");
+          saved.textSize = localStorage.getItem("aaf-text-size");
+          saved.sensory = localStorage.getItem("aaf-sensory-mode");
+          saved.plainText = localStorage.getItem("aaf-plain-text");
+          saved.language = localStorage.getItem("aaf-language");
+        } catch (error) {
+          // Private browsing and pages opened straight off the file system can
+          // block storage. Fall back to defaults rather than breaking the page.
+        }
+
+        var prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        root.setAttribute(
+          "data-theme",
+          saved.theme || (prefersDark ? "dark" : "light"),
+        );
+        root.setAttribute("data-text-size", saved.textSize || "1");
+
+        if (saved.sensory === "on") {
+          root.classList.add("sensory-mode");
+        }
+
+        if (saved.plainText === "on") {
+          root.classList.add("plain-text");
+        }
+
+        if (saved.language) {
+          root.setAttribute("lang", saved.language);
+        }
+      })();
+    </script>
+    <title>Accessibility | Autism Allyship</title>
+  </head>
+  <body>
+    <header class="site-header" id="siteHeader">
+      <a class="skip-link" href="#main" data-i18n="skipToContent"
+        >Skip to main content</a
+      >
+
+      <div class="header-bar">
+        <a class="brand" href="index.html">
+          <img
+            class="brand-mark"
+            src="assets/brand/logo-placeholder.jpg"
+            alt=""
+            width="512"
+            height="512"
+          />
+          <span class="brand-words">
+            <span class="brand-name">Autism Allyship</span>
+            <span class="brand-tagline" data-i18n="brandTagline"
+              >Where every mind belongs</span
+            >
+          </span>
+        </a>
+
+        <nav
+          class="primary-nav"
+          id="primaryNav"
+          data-i18n-aria-label="mainNavLabel"
+          aria-label="Main"
+        >
+          <ul class="nav-list">
+            <li><a href="index.html" data-i18n="navHome">Home</a></li>
+
+            <li class="nav-dropdown">
+              <button
+                type="button"
+                class="nav-dropdown-trigger"
+                id="communityTrigger"
+                aria-expanded="false"
+                aria-controls="communityMenu"
+              >
+                <span data-i18n="navCommunity">Community</span>
+                <svg
+                  class="chevron"
+                  viewBox="0 0 16 16"
+                  width="16"
+                  height="16"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <path
+                    d="M3 6l5 5 5-5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <ul class="nav-dropdown-menu" id="communityMenu" hidden>
+                <li><a href="about.html" data-i18n="navAbout">About</a></li>
+                <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
+                <li>
+                  <a href="gallery.html" data-i18n="navGallery"
+                    >Image gallery</a
+                  >
+                </li>
+                <li><a href="events.html" data-i18n="navEvents">Events</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a href="resources.html" data-i18n="navResources">Resources</a>
+            </li>
+            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
+            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <div class="header-controls" id="headerControls">
+          <button
+            type="button"
+            class="control-button"
+            id="darkModeToggle"
+            aria-pressed="false"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M20 14.5A8.5 8.5 0 019.5 4a8.5 8.5 0 1010.5 10.5z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <span class="control-label" data-i18n="darkMode">Dark mode</span>
+          </button>
+
+          <div class="accessibility-menu">
+            <button
+              type="button"
+              class="accessibility-trigger"
+              id="accessibilityTrigger"
+              aria-expanded="false"
+              aria-controls="accessibilityPanel"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <circle cx="12" cy="4.5" r="1.8" fill="currentColor" />
+                <path
+                  d="M4 8.5h16M12 8.5v6m0 0l-3.5 6m3.5-6l3.5 6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+              <span data-i18n="accessibility">Accessibility</span>
+              <svg
+                class="chevron"
+                viewBox="0 0 16 16"
+                width="16"
+                height="16"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M3 6l5 5 5-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div class="accessibility-panel" id="accessibilityPanel">
+              <p class="panel-intro" data-i18n="accessibilityIntro">
+                Change how this site looks and reads. Your choices are
+                remembered.
+              </p>
+
+              <div class="panel-row">
+                <button
+                  type="button"
+                  class="panel-toggle"
+                  id="sensoryToggle"
+                  aria-pressed="false"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      d="M2 9c2.5-2.5 5-2.5 7.5 0S15 11.5 17.5 9 22.5 6.5 22 7M2 15c2.5-2.5 5-2.5 7.5 0s5 2.5 7.5 0 5-2.5 5.5-2"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class="panel-toggle-words">
+                    <span class="panel-toggle-name" data-i18n="sensoryMode"
+                      >Sensory-friendly mode</span
+                    >
+                    <span class="panel-toggle-note" data-i18n="sensoryModeNote"
+                      >Stops all movement and softens colour</span
+                    >
+                  </span>
+                </button>
+              </div>
+
+              <div class="panel-row">
+                <button
+                  type="button"
+                  class="panel-toggle"
+                  id="plainTextToggle"
+                  aria-pressed="false"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="20"
+                    height="20"
+                    aria-hidden="true"
+                    focusable="false"
+                  >
+                    <path
+                      d="M4 6h16M4 11h16M4 16h10"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  <span class="panel-toggle-words">
+                    <span class="panel-toggle-name" data-i18n="plainTextMode"
+                      >Simplified text</span
+                    >
+                    <span
+                      class="panel-toggle-note"
+                      data-i18n="plainTextModeNote"
+                      >Hides images and shows plain text only</span
+                    >
+                  </span>
+                </button>
+              </div>
+
+              <div
+                class="panel-row"
+                role="group"
+                data-i18n-aria-label="textSize"
+                aria-label="Text size"
+              >
+                <span class="panel-row-label" data-i18n="textSize"
+                  >Text size</span
+                >
+                <div class="text-size-group">
+                  <button
+                    type="button"
+                    class="text-size-button"
+                    data-text-size="1"
+                    aria-pressed="true"
+                  >
+                    <span class="text-size-glyph size-1" aria-hidden="true"
+                      >A</span
+                    >
+                    <span class="visually-hidden" data-i18n="textSizeNormal"
+                      >Normal text size</span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="text-size-button"
+                    data-text-size="2"
+                    aria-pressed="false"
+                  >
+                    <span class="text-size-glyph size-2" aria-hidden="true"
+                      >A</span
+                    >
+                    <span class="visually-hidden" data-i18n="textSizeLarge"
+                      >Large text size</span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="text-size-button"
+                    data-text-size="3"
+                    aria-pressed="false"
+                  >
+                    <span class="text-size-glyph size-3" aria-hidden="true"
+                      >A</span
+                    >
+                    <span class="visually-hidden" data-i18n="textSizeLarger"
+                      >Extra large text size</span
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <div class="panel-row">
+                <label
+                  class="panel-row-label"
+                  for="languageSelect"
+                  data-i18n="language"
+                  >Language</label
+                >
+                <select id="languageSelect">
+                  <option value="en">English</option>
+                  <option value="af">Afrikaans</option>
+                  <option value="st">Sesotho</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <a class="donate-button" href="donate.html" data-i18n="navDonate"
+          >Donate</a
+        >
+
+        <button
+          type="button"
+          class="menu-toggle"
+          id="menuToggle"
+          aria-expanded="false"
+          aria-controls="primaryNav headerControls"
+        >
+          <span class="menu-icon" aria-hidden="true"></span>
+          <span class="control-label" data-i18n="menu">Menu</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main">
+      <div class="container">
+        <section class="page-heading" aria-labelledby="accessibilityHeading">
+          <h1 id="accessibilityHeading" data-i18n="accessibilityPageTitle">
+            Accessibility statement
+          </h1>
+          <p class="page-lede" data-i18n="accessibilityPageLede">
+            The Autism Allyship Foundation is committed to making this website
+            usable and welcoming for everyone. We work to keep it accessible to
+            people with a wide range of abilities.
+          </p>
+        </section>
+
+        <section class="about-section" aria-labelledby="standardsHeading">
+          <h2 id="standardsHeading" data-i18n="accessibilityStandardsHeading">
+            The standard we aim for
+          </h2>
+          <p data-i18n="accessibilityStandardsText">
+            We target the Web Content Accessibility Guidelines (WCAG) 2.2 at
+            level AA. This is the international standard for making web content
+            accessible to people with disabilities, and it is the level most
+            public services and organisations aim for. We review the site
+            against these guidelines as we build, and we run automated checks on
+            every change.
+          </p>
+        </section>
+
+        <section class="about-section" aria-labelledby="featuresHeading">
+          <h2 id="featuresHeading" data-i18n="accessibilityFeaturesHeading">
+            Features to help you
+          </h2>
+          <p data-i18n="accessibilityFeaturesIntro">
+            The site includes a set of controls you can change at any time, and
+            your choices are remembered on your device:
+          </p>
+          <ul class="feature-list" data-i18n-list="accessibilityFeaturesList">
+            <li data-i18n="accessibilityFeatureSensory">
+              Sensory-friendly mode, which stops all movement and softens the
+              colours
+            </li>
+            <li data-i18n="accessibilityFeatureTextSize">
+              A text size control with three steps, from normal to extra large
+            </li>
+            <li data-i18n="accessibilityFeaturePlainText">
+              Simplified text mode, which hides images and shows plain text only
+            </li>
+            <li data-i18n="accessibilityFeatureDarkMode">
+              Dark mode, for reading in low light
+            </li>
+            <li data-i18n="accessibilityFeatureLanguage">
+              A language selector for English, Afrikaans and Sesotho
+            </li>
+          </ul>
+          <p data-i18n="accessibilityFeaturesMore">
+            Every page can be navigated with a keyboard alone, and includes a
+            skip link so you can jump straight to the main content. All images
+            carry alternative text, and headings follow a clear page structure
+            for screen readers.
+          </p>
+        </section>
+
+        <section class="about-section" aria-labelledby="limitationsHeading">
+          <h2
+            id="limitationsHeading"
+            data-i18n="accessibilityLimitationsHeading"
+          >
+            What we are still working on
+          </h2>
+          <p data-i18n="accessibilityLimitationsText">
+            Some pages are still being built, and a few parts of the site use
+            third-party content, such as social media embeds, which we do not
+            fully control. Where a third-party element cannot be made fully
+            accessible, we hide or replace it where we are able to, and we keep
+            reviewing it as the site grows.
+          </p>
+        </section>
+
+        <section class="about-section" aria-labelledby="reportHeading">
+          <h2 id="reportHeading" data-i18n="accessibilityReportHeading">
+            Report a problem
+          </h2>
+          <p data-i18n="accessibilityReportText">
+            If you find any part of this site difficult to use or read, or if
+            something does not work for you, please tell us. We want to fix it.
+            You can use the contact page and choose accessibility feedback, or
+            reach us directly.
+          </p>
+          <div class="contact-strip-actions">
+            <a
+              class="button button-secondary"
+              href="contact.html"
+              data-i18n="accessibilityReportLink"
+              >Report on the contact page</a
+            >
+          </div>
+        </section>
+
+        <section class="about-section" aria-labelledby="reviewHeading">
+          <h2 id="reviewHeading" data-i18n="accessibilityReviewHeading">
+            Last reviewed
+          </h2>
+          <p data-i18n="accessibilityReviewDate">
+            This statement was last reviewed on 14 August 2026.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-columns">
+        <div class="footer-column footer-about">
+          <a class="brand brand-footer" href="index.html">
+            <img
+              class="brand-mark"
+              src="assets/brand/logo-placeholder.jpg"
+              alt=""
+              width="512"
+              height="512"
+            />
+            <span class="brand-words">
+              <span class="brand-name">Autism Allyship</span>
+            </span>
+          </a>
+          <p data-i18n="footerDescription">
+            Building inclusive, accessible spaces for autistic and
+            neurodivergent people and their families.
+          </p>
+          <p class="footer-npo">
+            <span data-i18n="npoLabel">NPO registration number</span>
+            <strong>000-000 NPO</strong>
+          </p>
+        </div>
+
+        <nav
+          class="footer-column"
+          data-i18n-aria-label="footerQuickLinks"
+          aria-label="Quick links"
+        >
+          <h2 class="footer-heading" data-i18n="footerQuickLinks">
+            Quick links
+          </h2>
+          <ul class="footer-list">
+            <li><a href="about.html" data-i18n="navAbout">About</a></li>
+            <li>
+              <a href="resources.html" data-i18n="navResources">Resources</a>
+            </li>
+            <li><a href="events.html" data-i18n="navEvents">Events</a></li>
+            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
+            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <nav
+          class="footer-column"
+          data-i18n-aria-label="footerSocials"
+          aria-label="Social media"
+        >
+          <h2 class="footer-heading" data-i18n="footerSocials">Follow us</h2>
+          <ul class="footer-list">
+            <li>
+              <a
+                href="https://www.instagram.com/autismallyship/"
+                rel="me noopener"
+                target="_blank"
+                >Instagram</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://x.com/AutismAllyship"
+                rel="me noopener"
+                target="_blank"
+                >X</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://chat.whatsapp.com/HI0K5zd5oTxC1tt8sWYPk2"
+                rel="noopener"
+                target="_blank"
+                >WhatsApp community</a
+              >
+            </li>
+          </ul>
+        </nav>
+
+        <nav
+          class="footer-column"
+          data-i18n-aria-label="footerLegal"
+          aria-label="Legal"
+        >
+          <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
+          <ul class="footer-list">
+            <li>
+              <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
+            </li>
+            <li>
+              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
+            </li>
+            <li>
+              <a href="accessibility.html" data-i18n="legalAccessibility"
+                >Accessibility statement</a
+              >
+            </li>
+            <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-baseline">
+        <p>
+          &copy; <span id="footerYear">2026</span> Autism Allyship Foundation.
+          <span data-i18n="rightsReserved">All rights reserved.</span>
+        </p>
+        <p class="footer-contact">
+          <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>
+          <span aria-hidden="true">&middot;</span>
+          <a href="tel:+27663859936">+27 66 385 9936</a>
+          <span aria-hidden="true">&middot;</span>
+          <span>Pretoria, Gauteng, South Africa</span>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
