@@ -1211,6 +1211,7 @@ textarea {
   font-size: var(--size-md);
   color: var(--colour-text-muted);
   margin-top: var(--space-3);
+  margin-inline: auto;
 }
 
 .about-section {
@@ -1228,6 +1229,7 @@ textarea {
 
 .about-section p {
   margin-bottom: var(--space-3);
+  margin-inline: auto;
 }
 
 .about-section p:last-child {
