@@ -81,6 +81,30 @@ const translations = {
       "We would love to hear from you. Whether you have a question, want to volunteer, or need support, reach out.",
     homeContactLink: "Contact us",
     homeWhatsAppLink: "Message us on WhatsApp",
+    aboutPageTitle: "About us",
+    aboutPageLede:
+      "Active Autism and Neuro-Diversity Allyship Foundation (Autism Allyship) is a vibrant community dedicated to fostering understanding, support, and advocacy for individuals with autism.",
+    aboutStoryHeading: "Our story",
+    aboutStoryText:
+      "Active Autism and Neuro-Diversity Allyship Foundation (Autism Allyship) is a vibrant community dedicated to fostering understanding, support, and advocacy for individuals with autism. We aim to create inclusive spaces and promote awareness through engaging resources and events that empower both individuals with autism and their allies.",
+    aboutStoryTagline: "Where every mind belongs.",
+    aboutVoiceHeading: "Our voice in the community",
+    aboutVoiceText:
+      "From featured segments on the FeministMommy YouTube series and Rekord East to deep dives on the Channel Africa platform, our foundation has consistently used major media platforms to shift the narrative from mere awareness to true autistic acceptance. This journey is sustained by our incredible ShowUpCrew, the unwavering friends who have become family, and is brought to life through our merchandise and mascots, Lumi and Ida, who champion the inherent value of neurodiversity across every social and leisure space we touch.",
+    aboutStandForHeading: "What we stand for",
+    aboutMissionTitle: "Our mission",
+    aboutMissionText:
+      "To promote the seamless integration of autistic and neurodivergent individuals into community spaces, and to advocate for sensory-friendly environments where everyone belongs.",
+    aboutVisionTitle: "Our vision",
+    aboutVisionText:
+      "A world where every mind belongs, and where autistic and neurodivergent people are valued and included in every space.",
+    aboutValuesTitle: "Our values",
+    aboutValuesText:
+      "Community, acceptance, advocacy and awareness guide everything we do, from the events we host to the resources we share.",
+    aboutTeamHeading: "Our team",
+    aboutTeamPlaceholder:
+      "Meet the people behind the foundation. Team details coming soon.",
+    aboutRegistrationHeading: "Registration details",
   },
 
   af: {
@@ -145,6 +169,23 @@ const translations = {
     homeContactText: "",
     homeContactLink: "",
     homeWhatsAppLink: "",
+    aboutPageTitle: "",
+    aboutPageLede: "",
+    aboutStoryHeading: "",
+    aboutStoryText: "",
+    aboutStoryTagline: "",
+    aboutVoiceHeading: "",
+    aboutVoiceText: "",
+    aboutStandForHeading: "",
+    aboutMissionTitle: "",
+    aboutMissionText: "",
+    aboutVisionTitle: "",
+    aboutVisionText: "",
+    aboutValuesTitle: "",
+    aboutValuesText: "",
+    aboutTeamHeading: "",
+    aboutTeamPlaceholder: "",
+    aboutRegistrationHeading: "",
   },
 
   st: {
@@ -209,5 +250,22 @@ const translations = {
     homeContactText: "",
     homeContactLink: "",
     homeWhatsAppLink: "",
+    aboutPageTitle: "",
+    aboutPageLede: "",
+    aboutStoryHeading: "",
+    aboutStoryText: "",
+    aboutStoryTagline: "",
+    aboutVoiceHeading: "",
+    aboutVoiceText: "",
+    aboutStandForHeading: "",
+    aboutMissionTitle: "",
+    aboutMissionText: "",
+    aboutVisionTitle: "",
+    aboutVisionText: "",
+    aboutValuesTitle: "",
+    aboutValuesText: "",
+    aboutTeamHeading: "",
+    aboutTeamPlaceholder: "",
+    aboutRegistrationHeading: "",
   },
 };

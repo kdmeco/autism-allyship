@@ -1198,3 +1198,55 @@ textarea {
   flex-wrap: wrap;
   gap: var(--space-3);
 }
+
+/* About page */
+
+.page-heading {
+  padding-block: var(--space-7) var(--space-5);
+  border-bottom: 1px solid var(--colour-line);
+}
+
+.page-lede {
+  font-size: var(--size-md);
+  color: var(--colour-text-muted);
+  margin-top: var(--space-3);
+}
+
+.about-section {
+  padding-block: var(--space-6);
+  border-bottom: 1px solid var(--colour-line);
+}
+
+.about-section:last-of-type {
+  border-bottom: 0;
+}
+
+.about-section h2 {
+  margin-bottom: var(--space-3);
+}
+
+.about-section p {
+  margin-bottom: var(--space-3);
+}
+
+.about-section p:last-child {
+  margin-bottom: 0;
+}
+
+.stand-for-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-4);
+}
+
+.registration-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--size-sm);
+}
+
+.registration-details strong {
+  font-variant-numeric: tabular-nums;
+}
