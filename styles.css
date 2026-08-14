@@ -1207,20 +1207,15 @@ textarea {
   border-bottom: 1px solid var(--colour-line);
 }
 
-.page-heading h1 {
-  max-width: var(--reading-width);
-  margin-inline: auto;
-}
-
 .page-lede {
+  max-width: none;
   font-size: var(--size-md);
   color: var(--colour-text-muted);
   margin-top: var(--space-3);
-  margin-inline: auto;
 }
 
 .about-section {
-  padding-block: var(--space-6);
+  padding-block: var(--space-7);
   border-bottom: 1px solid var(--colour-line);
 }
 
@@ -1229,14 +1224,12 @@ textarea {
 }
 
 .about-section h2 {
-  max-width: var(--reading-width);
   margin-bottom: var(--space-3);
-  margin-inline: auto;
 }
 
 .about-section p {
-  margin-bottom: var(--space-3);
-  margin-inline: auto;
+  max-width: none;
+  margin-bottom: var(--space-4);
 }
 
 .about-section p:last-child {
