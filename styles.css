@@ -583,6 +583,7 @@ textarea {
   max-width: calc(100vw - var(--space-6));
   max-height: calc(100dvh - 8rem);
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-4);
   background-color: var(--colour-surface);
   border: 1px solid var(--colour-line);
