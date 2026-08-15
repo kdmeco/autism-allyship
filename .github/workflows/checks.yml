@@ -41,6 +41,8 @@ jobs:
             --exclude instagram.com
             --exclude x.com
             './index.html'
+            './blog.html'
+            './blog-post.html'
           fail: false
 
   lighthouse:
@@ -63,6 +65,7 @@ jobs:
         with:
           urls: |
             http://localhost:8080/index.html
+            http://localhost:8080/blog.html
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
