@@ -153,6 +153,14 @@ const translations = {
     adminNavGallery: "Gallery",
     adminNavInbox: "Inbox",
     adminSignOut: "Sign out",
+    adminBlogListHeading: "Blog posts",
+    adminBlogListIntro: "All posts, published and draft.",
+    adminBlogNewPost: "New post",
+    adminBlogFilterLabel: "Filter posts",
+    adminBlogFilterAll: "All",
+    adminBlogFilterPublished: "Published",
+    adminBlogFilterDraft: "Draft",
+    adminBlogEmpty: "No posts yet. Create your first post.",
   },
 
   af: {
@@ -270,6 +278,14 @@ const translations = {
     adminNavGallery: "",
     adminNavInbox: "",
     adminSignOut: "",
+    adminBlogListHeading: "",
+    adminBlogListIntro: "",
+    adminBlogNewPost: "",
+    adminBlogFilterLabel: "",
+    adminBlogFilterAll: "",
+    adminBlogFilterPublished: "",
+    adminBlogFilterDraft: "",
+    adminBlogEmpty: "",
   },
 
   st: {
@@ -387,5 +403,13 @@ const translations = {
     adminNavGallery: "",
     adminNavInbox: "",
     adminSignOut: "",
+    adminBlogListHeading: "",
+    adminBlogListIntro: "",
+    adminBlogNewPost: "",
+    adminBlogFilterLabel: "",
+    adminBlogFilterAll: "",
+    adminBlogFilterPublished: "",
+    adminBlogFilterDraft: "",
+    adminBlogEmpty: "",
   },
 };
