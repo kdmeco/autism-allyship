@@ -1393,6 +1393,12 @@ ul.feature-list li {
   margin-bottom: var(--space-2);
 }
 
+.admin-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
 .admin-page-intro {
   color: var(--colour-text-muted);
 }
