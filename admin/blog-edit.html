@@ -369,6 +369,45 @@
             </div>
 
             <div class="form-field">
+              <label for="image" data-i18n="adminBlogImage"
+                >Featured image</label
+              >
+              <input type="file" id="image" name="image" accept="image/*" />
+              <p class="form-field-note" data-i18n="adminBlogImageNote">
+                Optional. Resized to 1600px WebP and a 400px thumbnail. Takes
+                about a minute to appear on the site.
+              </p>
+              <div class="image-preview" id="imagePreview" hidden>
+                <img id="imagePreviewImg" alt="" />
+                <p
+                  class="form-field-note"
+                  id="imageUploadStatus"
+                  data-i18n="adminBlogImageUploading"
+                >
+                  Uploading image...
+                </p>
+              </div>
+              <p
+                class="form-error"
+                id="imageError"
+                hidden
+                data-i18n="adminBlogImageError"
+              >
+                Failed to upload the image. Try again.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="imageAlt" data-i18n="adminBlogImageAltLabel"
+                >Image description</label
+              >
+              <input type="text" id="imageAlt" name="imageAlt" />
+              <p class="form-field-note" data-i18n="adminBlogImageAltNote">
+                Optional. Describes the featured image for screen readers.
+              </p>
+            </div>
+
+            <div class="form-field">
               <label for="body">
                 <span data-i18n="adminBlogBody">Body</span>
                 <span class="required-mark" data-i18n="requiredField"

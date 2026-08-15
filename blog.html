@@ -80,7 +80,7 @@
         }
       })();
     </script>
-    <title>Autism Allyship Foundation</title>
+    <title>Blog | Autism Allyship Foundation</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -391,123 +391,42 @@
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1 class="hero-heading" data-i18n="homeHeroHeading">Be Kind</h1>
-          <p class="hero-tagline" data-i18n="homeHeroTagline">
-            Where every mind belongs
-          </p>
-          <p class="hero-mission" data-i18n="homeHeroMission">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
-          </p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              href="donate.html"
-              data-i18n="homeHeroDonate"
-              >Donate</a
-            >
-            <a
-              class="button button-secondary"
-              href="about.html"
-              data-i18n="homeHeroAbout"
-              >Learn about us</a
-            >
-          </div>
-        </div>
-      </section>
-
       <div class="container">
-        <section class="home-section" aria-labelledby="whatWeDoHeading">
-          <h2 id="whatWeDoHeading" data-i18n="homeWhatWeDoHeading">
-            What we do
-          </h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3 data-i18n="homeCardAboutTitle">About us</h3>
-              <p data-i18n="homeCardAboutText">
-                Learn about our mission, vision and the people behind the
-                foundation.
-              </p>
-              <a href="about.html" data-i18n="homeCardAboutLink"
-                >Find out more</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardResourcesTitle">Resources</h3>
-              <p data-i18n="homeCardResourcesText">
-                Find support services, information and help across South Africa.
-              </p>
-              <a href="resources.html" data-i18n="homeCardResourcesLink"
-                >Browse resources</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardCommunityTitle">Community</h3>
-              <p data-i18n="homeCardCommunityText">
-                Join our events and connect with other families and allies.
-              </p>
-              <a href="events.html" data-i18n="homeCardCommunityLink"
-                >See our events</a
-              >
-            </article>
-          </div>
-        </section>
-
-        <section class="home-section" aria-labelledby="blogHeading">
-          <h2 id="blogHeading" data-i18n="homeBlogHeading">
-            Latest from our blog
-          </h2>
-          <div class="card-grid" id="homeBlogGrid"></div>
-          <div class="card card-placeholder" id="homeBlogPlaceholder">
-            <h3 data-i18n="homeBlogPlaceholderTitle">
-              Blog posts coming soon
-            </h3>
-            <p data-i18n="homeBlogPlaceholderText">
-              We are working on our first posts. Check back soon for news and
-              stories from the community.
-            </p>
-          </div>
-          <p class="home-blog-more">
-            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
+        <section class="page-heading" aria-labelledby="blogTitleHeading">
+          <h1 id="blogTitleHeading" data-i18n="blogPageTitle">Blog</h1>
+          <p class="page-lede" data-i18n="blogPageLede">
+            News, stories and updates from the foundation and the community.
           </p>
         </section>
 
-        <section class="home-section" aria-labelledby="eventHeading">
-          <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card card-placeholder">
-            <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
-            <p data-i18n="homeEventPlaceholderText">
-              Our next gathering is being planned. Check back soon for dates and
-              details.
-            </p>
-          </div>
-        </section>
+        <nav
+          class="blog-toolbar"
+          id="categoryPills"
+          data-i18n-aria-label="blogFilterLabel"
+          aria-label="Filter by category"
+          hidden
+        ></nav>
 
-        <section class="contact-strip" aria-labelledby="contactStripHeading">
-          <h2 id="contactStripHeading" data-i18n="homeContactHeading">
-            Get in touch
-          </h2>
-          <p data-i18n="homeContactText">
-            We would love to hear from you. Whether you have a question, want to
-            volunteer, or need support, reach out.
+        <div class="card-grid" id="blogGrid"></div>
+
+        <p class="blog-empty" id="blogEmpty" hidden data-i18n="blogEmptyText">
+          There are no posts here yet. Check back soon.
+        </p>
+
+        <nav
+          class="pagination"
+          id="blogPagination"
+          data-i18n-aria-label="blogPaginationLabel"
+          aria-label="Blog pages"
+          hidden
+        ></nav>
+
+        <noscript>
+          <p class="blog-empty">
+            The blog list needs JavaScript to load posts. Please enable it to
+            read our posts.
           </p>
-          <div class="contact-strip-actions">
-            <a
-              class="button button-secondary"
-              href="contact.html"
-              data-i18n="homeContactLink"
-              >Contact us</a
-            >
-            <a
-              class="button button-whatsapp"
-              href="https://wa.me/27663859936"
-              data-i18n="homeWhatsAppLink"
-              >Message us on WhatsApp</a
-            >
-          </div>
-        </section>
+        </noscript>
       </div>
     </main>
 
@@ -599,9 +518,7 @@
             <li>
               <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
             </li>
-            <li>
-              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
-            </li>
+            <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
             <li>
               <a href="accessibility.html" data-i18n="legalAccessibility"
                 >Accessibility statement</a
@@ -626,6 +543,7 @@
         </p>
       </div>
     </footer>
-    <script type="module" src="home-blog.js"></script>
+
+    <script type="module" src="blog.js"></script>
   </body>
 </html>
