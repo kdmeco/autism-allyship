@@ -459,35 +459,19 @@
           <h2 id="blogHeading" data-i18n="homeBlogHeading">
             Latest from our blog
           </h2>
-          <div class="card-grid">
-            <article class="card card-placeholder">
-              <h3 data-i18n="homeBlogPlaceholderTitle">
-                Blog posts coming soon
-              </h3>
-              <p data-i18n="homeBlogPlaceholderText">
-                We are working on our first posts. Check back soon for news and
-                stories from the community.
-              </p>
-            </article>
-            <article class="card card-placeholder">
-              <h3 data-i18n="homeBlogPlaceholderTitle">
-                Blog posts coming soon
-              </h3>
-              <p data-i18n="homeBlogPlaceholderText">
-                We are working on our first posts. Check back soon for news and
-                stories from the community.
-              </p>
-            </article>
-            <article class="card card-placeholder">
-              <h3 data-i18n="homeBlogPlaceholderTitle">
-                Blog posts coming soon
-              </h3>
-              <p data-i18n="homeBlogPlaceholderText">
-                We are working on our first posts. Check back soon for news and
-                stories from the community.
-              </p>
-            </article>
+          <div class="card-grid" id="homeBlogGrid"></div>
+          <div class="card card-placeholder" id="homeBlogPlaceholder">
+            <h3 data-i18n="homeBlogPlaceholderTitle">
+              Blog posts coming soon
+            </h3>
+            <p data-i18n="homeBlogPlaceholderText">
+              We are working on our first posts. Check back soon for news and
+              stories from the community.
+            </p>
           </div>
+          <p class="home-blog-more">
+            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
+          </p>
         </section>
 
         <section class="home-section" aria-labelledby="eventHeading">
@@ -642,5 +626,6 @@
         </p>
       </div>
     </footer>
+    <script type="module" src="home-blog.js"></script>
   </body>
 </html>
