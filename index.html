@@ -626,6 +626,15 @@
         </p>
       </div>
     </footer>
-    <script type="module" src="home-blog.js"></script>
+    <script>
+      // The posts script pulls the Firebase modules, so it starts after the
+      // page has painted rather than competing with the fonts on the network.
+      window.addEventListener("load", function () {
+        var script = document.createElement("script");
+        script.type = "module";
+        script.src = "home-blog.js";
+        document.body.appendChild(script);
+      });
+    </script>
   </body>
 </html>
