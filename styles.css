@@ -1539,3 +1539,15 @@ ul.feature-list li {
   gap: var(--space-3);
   margin-top: var(--space-2);
 }
+
+.image-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.image-preview img {
+  max-width: 18rem;
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-md);
+}

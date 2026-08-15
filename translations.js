@@ -178,6 +178,11 @@ const translations = {
     adminBlogSaveButton: "Save post",
     adminBlogCancelButton: "Cancel",
     adminBlogSaveFailed: "Failed to save the post. Try again.",
+    adminBlogImage: "Featured image",
+    adminBlogImageNote:
+      "Optional. Resized to 1600px WebP and a 400px thumbnail. Takes about a minute to appear on the site.",
+    adminBlogImageUploading: "Uploading image...",
+    adminBlogImageError: "Failed to upload the image. Try again.",
     requiredField: "(required)",
   },
 
@@ -320,6 +325,10 @@ const translations = {
     adminBlogSaveButton: "",
     adminBlogCancelButton: "",
     adminBlogSaveFailed: "",
+    adminBlogImage: "",
+    adminBlogImageNote: "",
+    adminBlogImageUploading: "",
+    adminBlogImageError: "",
     requiredField: "",
   },
 
@@ -462,6 +471,10 @@ const translations = {
     adminBlogSaveButton: "",
     adminBlogCancelButton: "",
     adminBlogSaveFailed: "",
+    adminBlogImage: "",
+    adminBlogImageNote: "",
+    adminBlogImageUploading: "",
+    adminBlogImageError: "",
     requiredField: "",
   },
 };
