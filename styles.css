@@ -1267,3 +1267,109 @@ ul.feature-list {
 ul.feature-list li {
   max-width: var(--content-width);
 }
+
+/* Admin login page */
+
+.admin-login {
+  max-width: 30rem;
+  margin-inline: auto;
+  padding-block: var(--space-7);
+}
+
+.admin-login h1 {
+  margin-bottom: var(--space-2);
+}
+
+.admin-login-intro {
+  color: var(--colour-text-muted);
+  margin-bottom: var(--space-5);
+}
+
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-field label {
+  font-weight: 600;
+  font-size: var(--size-sm);
+}
+
+.form-field input {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--colour-text);
+}
+
+.form-field input:focus-visible {
+  outline: 3px solid var(--colour-focus);
+  outline-offset: 2px;
+}
+
+.form-error {
+  color: var(--colour-accent-text);
+  font-size: var(--size-sm);
+  font-weight: 600;
+}
+
+.form-error-general {
+  padding: var(--space-3);
+  background-color: var(--colour-surface-alt);
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-md);
+}
+
+.admin-login-note {
+  margin-top: var(--space-5);
+  font-size: var(--size-sm);
+  color: var(--colour-text-muted);
+}
+
+/* Admin dashboard */
+
+.admin-dashboard {
+  padding-block: var(--space-7);
+}
+
+.admin-dashboard h1 {
+  margin-bottom: var(--space-2);
+}
+
+.admin-dashboard-intro {
+  color: var(--colour-text-muted);
+  margin-bottom: var(--space-5);
+}
+
+.admin-nav-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.admin-nav-link {
+  display: block;
+  padding: var(--space-4);
+  background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-md);
+  color: var(--colour-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color var(--speed-quick) ease;
+}
+
+.admin-nav-link:hover {
+  background-color: var(--colour-surface-alt);
+}
