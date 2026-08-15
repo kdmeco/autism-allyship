@@ -697,9 +697,8 @@ textarea {
   font-weight: 700;
   text-decoration: none;
   white-space: nowrap;
-  transition:
-    background-color var(--speed-quick) ease,
-    transform var(--speed-quick) ease;
+  cursor: pointer;
+  transition: transform var(--speed-quick) ease;
 }
 
 .donate-button[aria-current="page"] {
@@ -1102,7 +1101,8 @@ textarea {
   font-weight: 700;
   text-decoration: none;
   border: 2px solid transparent;
-  transition: background-color var(--speed-quick) ease;
+  cursor: pointer;
+  transition: transform var(--speed-quick) ease;
 }
 
 .button-primary {
