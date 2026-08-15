@@ -1,7 +1,8 @@
 // Admin blog post create and edit. Reads the id from the URL if present and
 // loads that post, otherwise shows an empty form for a new post. Saves to the
 // posts collection in Firestore. An optional featured image is resized in the
-// browser and committed to the repo via the upload Worker.
+// browser and committed to the repo via the upload Worker, which only accepts
+// requests that carry a signed in admin's Firebase ID token.
 
 import { auth, db } from "../firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
@@ -14,7 +15,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { resizeImage } from "./resize-helper.js";
 
-const WORKER_URL = "https://autism-allyship-upload.kdmeco-dev.workers.dev";
+// The Worker serves its placeholder page at the root, so the upload endpoint
+// answers at /upload.
+const WORKER_URL = "https://autism-allyship-upload.kdmeco-dev.workers.dev/upload";
 
 const form = document.getElementById("blogForm");
 const titleInput = document.getElementById("title");
@@ -22,6 +25,7 @@ const categoryInput = document.getElementById("category");
 const bodyInput = document.getElementById("body");
 const publishedInput = document.getElementById("published");
 const imageInput = document.getElementById("image");
+const imageAltInput = document.getElementById("imageAlt");
 const imagePreview = document.getElementById("imagePreview");
 const imagePreviewImg = document.getElementById("imagePreviewImg");
 const imageUploadStatus = document.getElementById("imageUploadStatus");
@@ -64,14 +68,26 @@ async function loadPost(id) {
     bodyInput.value = data.body || "";
     publishedInput.checked = data.published === true;
     uploadedImageUrl = data.imageUrl || "";
+    imageAltInput.value = data.imageAlt || "";
   } catch (error) {
     console.error("Failed to load post:", error);
     showFormError("Failed to load the post. Go back and try again.");
   }
 }
 
+// Images should land on the branch this page was served from, so an upload
+// tested on staging appears on staging and not only on the live site.
+function uploadBranch() {
+  const host = window.location.hostname;
+  if (host === "staging.autism-allyship.pages.dev") return "staging";
+  if (host === "dev.autism-allyship.pages.dev") return "dev";
+  if (host === "localhost" || host === "127.0.0.1") return "dev";
+  return null;
+}
+
 // When an image is selected, resize it in the browser and send it to the
-// upload Worker. The committed path is remembered and stored on save.
+// upload Worker with the admin's ID token. The committed path is remembered
+// and stored on save.
 imageInput.addEventListener("change", async function () {
   const file = imageInput.files && imageInput.files[0];
   if (!file) return;
@@ -83,11 +99,16 @@ imageInput.addEventListener("change", async function () {
 
   try {
     const resized = await resizeImage(file);
+    const token = await auth.currentUser.getIdToken();
+    const branch = uploadBranch();
 
     // Send the full image and its thumbnail in one commit.
     const response = await fetch(WORKER_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
       body: JSON.stringify({
         folder: "assets/uploads/blog/",
         commitMessage: "Upload blog image",
@@ -95,8 +116,16 @@ imageInput.addEventListener("change", async function () {
           { data: resized.fullBase64, type: "image/webp" },
           { data: resized.thumbBase64, type: "image/webp", thumb: true },
         ],
+        branch: branch,
       }),
     });
+
+    if (response.status === 401) {
+      showImageError("Your session has expired. Sign in again and retry.");
+      imageUploadStatus.hidden = true;
+      imagePreview.hidden = true;
+      return;
+    }
 
     if (!response.ok) {
       throw new Error("Upload failed with status " + response.status);
@@ -107,8 +136,9 @@ imageInput.addEventListener("change", async function () {
       throw new Error(result.error || "Upload failed");
     }
 
-    // The full image is always img-001.webp for this single-image upload.
-    uploadedImageUrl = "assets/uploads/blog/img-001.webp";
+    // The Worker returns the path relative to the repository root, which is
+    // how the public pages use it.
+    uploadedImageUrl = result.files[0].path;
 
     // Show a preview of the selected image (the resized thumbnail).
     imagePreviewImg.src = "data:image/webp;base64," + resized.thumbBase64;
@@ -177,6 +207,7 @@ form.addEventListener("submit", async function (event) {
     title: title,
     body: body,
     category: category,
+    imageAlt: imageAltInput.value.trim(),
     published: publishedInput.checked,
   };
 
