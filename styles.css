@@ -1467,3 +1467,69 @@ ul.feature-list li {
   background: var(--colour-accent-fill);
   color: var(--colour-on-accent);
 }
+
+/* Admin blog edit form */
+
+.admin-form-wide {
+  max-width: 48rem;
+}
+
+.required-mark {
+  font-weight: 400;
+  color: var(--colour-text-muted);
+  font-size: var(--size-sm);
+}
+
+.form-field-note {
+  font-size: var(--size-sm);
+  color: var(--colour-text-muted);
+}
+
+.form-field textarea {
+  min-height: 12rem;
+  padding: var(--space-3);
+  background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--colour-text);
+  resize: vertical;
+}
+
+.form-field textarea:focus-visible {
+  outline: 3px solid var(--colour-focus);
+  outline-offset: 2px;
+}
+
+.form-field-toggle {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toggle-label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-weight: 600;
+  font-size: var(--size-sm);
+}
+
+.toggle-note {
+  font-weight: 400;
+  color: var(--colour-text-muted);
+  font-size: var(--size-sm);
+}
+
+.form-field-toggle input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--colour-accent-fill);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
