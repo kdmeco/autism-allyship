@@ -494,6 +494,43 @@
               </p>
             </div>
 
+            <div class="form-field">
+              <label for="attachments" data-i18n="adminEventsAttachments"
+                >Attachments</label
+              >
+              <input
+                type="file"
+                id="attachments"
+                name="attachments"
+                accept="application/pdf,image/*"
+                multiple
+              />
+              <p
+                class="form-field-note"
+                data-i18n="adminEventsAttachmentsNote"
+              >
+                Optional. Posters, PDFs or extra photos, up to 5MB each and
+                20MB in total.
+              </p>
+              <p
+                class="form-field-note"
+                id="attachmentsUploadStatus"
+                hidden
+                data-i18n="adminEventsAttachmentsUploading"
+              >
+                Uploading attachment...
+              </p>
+              <p
+                class="form-error"
+                id="attachmentsError"
+                hidden
+                data-i18n="adminEventsAttachmentsError"
+              >
+                Failed to upload the attachment. Try again.
+              </p>
+              <ul class="event-attachment-list" id="attachmentList"></ul>
+            </div>
+
             <div class="form-field form-field-toggle">
               <label for="published" class="toggle-label">
                 <span data-i18n="adminEventsPublished">Published</span>

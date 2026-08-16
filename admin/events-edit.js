@@ -16,11 +16,16 @@ import {
   collection,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { resizeImage } from "./resize-helper.js";
+import { resizeImage, fileToBase64 } from "./resize-helper.js";
 
 // The Worker serves its placeholder page at the root, so the upload endpoint
 // answers at /upload.
 const WORKER_URL = "https://autism-allyship-upload.kdmeco-dev.workers.dev/upload";
+
+// Matches the Worker's own limits, so a rejection is explained here rather
+// than arriving as a bare 413 with no context.
+const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+const MAX_ATTACHMENTS_TOTAL_BYTES = 20 * 1024 * 1024;
 
 const form = document.getElementById("eventForm");
 const titleInput = document.getElementById("title");
@@ -33,17 +38,24 @@ const imageInput = document.getElementById("image");
 const imageAltInput = document.getElementById("imageAlt");
 const imagePreview = document.getElementById("imagePreview");
 const imageUploadStatus = document.getElementById("imageUploadStatus");
+const attachmentsInput = document.getElementById("attachments");
+const attachmentsUploadStatus = document.getElementById(
+  "attachmentsUploadStatus",
+);
+const attachmentList = document.getElementById("attachmentList");
 const publishedInput = document.getElementById("published");
 const titleError = document.getElementById("titleError");
 const descriptionError = document.getElementById("descriptionError");
 const startsAtError = document.getElementById("startsAtError");
 const imageError = document.getElementById("imageError");
+const attachmentsError = document.getElementById("attachmentsError");
 const formError = document.getElementById("formError");
 const heading = document.getElementById("eventEditHeading");
 const saveButton = form.querySelector('button[type="submit"]');
 
 let editingId = null;
 let uploadedImageUrl = "";
+let attachments = [];
 
 editingId = new URLSearchParams(window.location.search).get("id");
 
@@ -103,6 +115,8 @@ async function loadEvent(id) {
       typeof data.capacity === "number" ? data.capacity : 0;
     uploadedImageUrl = data.imageUrl || "";
     imageAltInput.value = data.imageAlt || "";
+    attachments = Array.isArray(data.attachments) ? data.attachments : [];
+    renderAttachmentList();
     publishedInput.checked = data.published === true;
   } catch (error) {
     console.error("Failed to load event:", error);
@@ -231,6 +245,146 @@ imageInput.addEventListener("change", async function () {
   }
 });
 
+function showAttachmentsError(message) {
+  attachmentsError.textContent = message;
+  attachmentsError.hidden = false;
+}
+
+function clearAttachmentsError() {
+  attachmentsError.hidden = true;
+  attachmentsError.textContent = "";
+}
+
+function renderAttachmentList() {
+  attachmentList.textContent = "";
+
+  attachments.forEach(function (attachment, index) {
+    const item = document.createElement("li");
+    item.className = "event-attachment-item";
+
+    const name = document.createElement("span");
+    name.className = "event-attachment-name";
+    name.textContent = attachment.name;
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "button button-secondary";
+    remove.textContent = "Remove";
+    // This only drops the attachment from the record being saved. The file
+    // itself was already committed to the repository the moment it was
+    // selected, the same trade-off the featured image makes above.
+    remove.addEventListener("click", function () {
+      attachments = attachments.filter(function (other, otherIndex) {
+        return otherIndex !== index;
+      });
+      renderAttachmentList();
+    });
+
+    item.appendChild(name);
+    item.appendChild(remove);
+    attachmentList.appendChild(item);
+  });
+}
+
+// Every attachment selected in one go is sent to the Worker as a single
+// commit, the same batching rule the image upload follows. PDFs cannot be
+// put through a canvas, so they are read as-is with fileToBase64 rather
+// than resized.
+attachmentsInput.addEventListener("change", async function () {
+  const files = Array.from(attachmentsInput.files || []);
+  if (files.length === 0) {
+    return;
+  }
+
+  clearAttachmentsError();
+
+  const oversizeFile = files.find(function (file) {
+    return file.size > MAX_ATTACHMENT_BYTES;
+  });
+  if (oversizeFile) {
+    showAttachmentsError(
+      oversizeFile.name + " is over 5MB. Choose a smaller file.",
+    );
+    attachmentsInput.value = "";
+    return;
+  }
+
+  const totalBytes = files.reduce(function (sum, file) {
+    return sum + file.size;
+  }, 0);
+  if (totalBytes > MAX_ATTACHMENTS_TOTAL_BYTES) {
+    showAttachmentsError(
+      "Those files add up to more than 20MB. Upload fewer at once.",
+    );
+    attachmentsInput.value = "";
+    return;
+  }
+
+  attachmentsUploadStatus.hidden = false;
+  attachmentsUploadStatus.textContent = "Uploading attachment...";
+
+  try {
+    const encoded = await Promise.all(
+      files.map(function (file) {
+        return fileToBase64(file);
+      }),
+    );
+    const token = await auth.currentUser.getIdToken();
+    const branch = uploadBranch();
+
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify({
+        folder: "assets/uploads/events/",
+        commitMessage: "Upload event attachment",
+        files: files.map(function (file, index) {
+          return { data: encoded[index], type: file.type };
+        }),
+        branch: branch,
+      }),
+    });
+
+    if (response.status === 401) {
+      showAttachmentsError("Your session has expired. Sign in again and retry.");
+      attachmentsUploadStatus.hidden = true;
+      attachmentsInput.value = "";
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error("Upload failed with status " + response.status);
+    }
+
+    const result = await response.json();
+    if (!result.ok) {
+      throw new Error(result.error || "Upload failed");
+    }
+
+    // The Worker returns paths in the same order the files were sent, so
+    // they can be zipped back up with the names and types the browser knows.
+    result.files.forEach(function (uploaded, index) {
+      attachments.push({
+        url: uploaded.path,
+        name: files[index].name,
+        type: files[index].type,
+      });
+    });
+    renderAttachmentList();
+    attachmentsUploadStatus.textContent =
+      "Attachments uploaded. They will appear on the site in about a minute.";
+  } catch (error) {
+    console.error("Attachment upload failed:", error);
+    showAttachmentsError("Failed to upload the attachment. Try again.");
+    attachmentsUploadStatus.hidden = true;
+  } finally {
+    attachmentsInput.value = "";
+  }
+});
+
 form.addEventListener("submit", async function (event) {
   event.preventDefault();
   clearErrors();
@@ -274,6 +428,9 @@ form.addEventListener("submit", async function (event) {
     price: price,
     capacity: capacity,
     imageAlt: imageAltInput.value.trim(),
+    // Owned entirely by this form: whatever is in the list when Save is
+    // pressed is what gets written, which is how removing one works.
+    attachments: attachments,
     published: publishedInput.checked,
   };
 
