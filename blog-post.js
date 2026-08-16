@@ -12,7 +12,6 @@ import {
 const article = document.getElementById("blogArticle");
 const titleSlot = document.getElementById("postTitle");
 const metaSlot = document.getElementById("postMeta");
-const imageSlot = document.getElementById("postImage");
 const bodySlot = document.getElementById("postBody");
 const missing = document.getElementById("postMissing");
 const shareButton = document.getElementById("shareButton");
@@ -48,9 +47,15 @@ function renderPost(data) {
   metaSlot.textContent = metaParts.join(" \u00b7 ");
 
   if (data.imageUrl) {
-    imageSlot.src = data.imageUrl;
-    imageSlot.alt = data.imageAlt || "";
-    imageSlot.hidden = false;
+    // Built here rather than shipped empty in the page, because an img with
+    // no src is invalid HTML.
+    const image = document.createElement("img");
+    image.className = "blog-image";
+    image.src = data.imageUrl;
+    image.alt = data.imageAlt || "";
+    image.width = 1600;
+    image.height = 1067;
+    article.insertBefore(image, bodySlot);
   }
 
   // Each line break in the textarea becomes its own paragraph, and the text
