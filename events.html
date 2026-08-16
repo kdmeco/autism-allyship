@@ -31,6 +31,9 @@
 
     <link rel="stylesheet" href="styles.css" />
 
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
 
@@ -80,7 +83,7 @@
         }
       })();
     </script>
-    <title>Autism Allyship Foundation</title>
+    <title>Events | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -391,127 +394,162 @@
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1 class="hero-heading" data-i18n="homeHeroHeading">Be Kind</h1>
-          <p class="hero-tagline" data-i18n="homeHeroTagline">
-            Where every mind belongs
+      <div class="container">
+        <section class="page-heading" aria-labelledby="eventsTitleHeading">
+          <h1 id="eventsTitleHeading" data-i18n="eventsPageTitle">Events</h1>
+          <p class="page-lede" data-i18n="eventsPageLede">
+            Gatherings, workshops and family days from the foundation and the
+            community.
           </p>
-          <p class="hero-mission" data-i18n="homeHeroMission">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
-          </p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              href="donate.html"
-              data-i18n="homeHeroDonate"
-              >Donate</a
+        </section>
+
+        <div class="events-toolbar" id="eventsToolbar" hidden>
+          <div class="events-filter-group">
+            <span
+              class="events-filter-group-label"
+              id="timeFilterLabel"
+              data-i18n="eventsFilterTimeLabel"
+              >Filter by time</span
             >
-            <a
-              class="button button-secondary"
-              href="about.html"
-              data-i18n="homeHeroAbout"
-              >Learn about us</a
+            <div
+              class="events-filter-buttons"
+              role="group"
+              aria-labelledby="timeFilterLabel"
             >
+              <button
+                type="button"
+                class="events-filter-button"
+                data-time-filter=""
+                aria-pressed="true"
+                data-i18n="eventsFilterTimeAll"
+              >
+                All
+              </button>
+              <button
+                type="button"
+                class="events-filter-button"
+                data-time-filter="upcoming"
+                aria-pressed="false"
+                data-i18n="eventsFilterTimeUpcoming"
+              >
+                Upcoming
+              </button>
+              <button
+                type="button"
+                class="events-filter-button"
+                data-time-filter="past"
+                aria-pressed="false"
+                data-i18n="eventsFilterTimePast"
+              >
+                Past
+              </button>
+            </div>
+          </div>
+
+          <div class="events-filter-group">
+            <span
+              class="events-filter-group-label"
+              id="priceFilterLabel"
+              data-i18n="eventsFilterPriceLabel"
+              >Filter by price</span
+            >
+            <div
+              class="events-filter-buttons"
+              role="group"
+              aria-labelledby="priceFilterLabel"
+            >
+              <button
+                type="button"
+                class="events-filter-button"
+                data-price-filter=""
+                aria-pressed="true"
+                data-i18n="eventsFilterPriceAll"
+              >
+                Any price
+              </button>
+              <button
+                type="button"
+                class="events-filter-button"
+                data-price-filter="free"
+                aria-pressed="false"
+                data-i18n="eventsFilterPriceFree"
+              >
+                Free
+              </button>
+              <button
+                type="button"
+                class="events-filter-button"
+                data-price-filter="ticketed"
+                aria-pressed="false"
+                data-i18n="eventsFilterPriceTicketed"
+              >
+                Ticketed
+              </button>
+            </div>
           </div>
         </div>
-      </section>
 
-      <div class="container">
-        <section class="home-section" aria-labelledby="whatWeDoHeading">
-          <h2 id="whatWeDoHeading" data-i18n="homeWhatWeDoHeading">
-            What we do
+        <p class="events-count" id="eventsCount" aria-live="polite"></p>
+
+        <p
+          class="blog-empty"
+          id="eventsFilteredEmpty"
+          hidden
+          data-i18n="eventsEmptyText"
+        >
+          No events match your filters.
+        </p>
+
+        <p class="events-clear" id="eventsClearRow" hidden>
+          <a href="events.html" id="eventsClearLink" data-i18n="eventsClearFilters"
+            >Clear the filters</a
+          >
+        </p>
+
+        <div id="upcomingSection">
+          <h2
+            class="events-section-heading"
+            id="eventsUpcomingHeading"
+            data-i18n="eventsUpcomingHeading"
+          >
+            Upcoming events
           </h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3 data-i18n="homeCardAboutTitle">About us</h3>
-              <p data-i18n="homeCardAboutText">
-                Learn about our mission, vision and the people behind the
-                foundation.
-              </p>
-              <a href="about.html" data-i18n="homeCardAboutLink"
-                >Find out more</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardResourcesTitle">Resources</h3>
-              <p data-i18n="homeCardResourcesText">
-                Find support services, information and help across South Africa.
-              </p>
-              <a href="resources.html" data-i18n="homeCardResourcesLink"
-                >Browse resources</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardCommunityTitle">Community</h3>
-              <p data-i18n="homeCardCommunityText">
-                Join our events and connect with other families and allies.
-              </p>
-              <a href="events.html" data-i18n="homeCardCommunityLink"
-                >See our events</a
-              >
-            </article>
-          </div>
-        </section>
+          <div class="card-grid" id="eventsUpcomingList"></div>
+          <p
+            class="blog-empty"
+            id="eventsUpcomingEmpty"
+            hidden
+            data-i18n="eventsUpcomingEmptyText"
+          >
+            There are no upcoming events yet. Check back soon.
+          </p>
+        </div>
 
-        <section class="home-section" aria-labelledby="blogHeading">
-          <h2 id="blogHeading" data-i18n="homeBlogHeading">
-            Latest from our blog
+        <div id="pastSection">
+          <h2
+            class="events-section-heading"
+            id="eventsPastHeading"
+            data-i18n="eventsPastHeading"
+          >
+            Past events
           </h2>
-          <div class="card-grid" id="homeBlogGrid"></div>
-          <div class="card card-placeholder" id="homeBlogPlaceholder">
-            <h3 data-i18n="homeBlogPlaceholderTitle">
-              Blog posts coming soon
-            </h3>
-            <p data-i18n="homeBlogPlaceholderText">
-              We are working on our first posts. Check back soon for news and
-              stories from the community.
-            </p>
-          </div>
-          <p class="home-blog-more">
-            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
+          <div class="card-grid" id="eventsPastList"></div>
+          <p
+            class="blog-empty"
+            id="eventsPastEmpty"
+            hidden
+            data-i18n="eventsPastEmptyText"
+          >
+            There are no past events to show yet.
           </p>
-        </section>
+        </div>
 
-        <section class="home-section" aria-labelledby="eventHeading">
-          <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card-grid" id="homeEventGrid"></div>
-          <div class="card card-placeholder" id="homeEventPlaceholder">
-            <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
-            <p data-i18n="homeEventPlaceholderText">
-              Our next gathering is being planned. Check back soon for dates and
-              details.
-            </p>
-          </div>
-          <p class="home-event-more">
-            <a href="events.html" data-i18n="homeAllEvents">See all events</a>
+        <noscript>
+          <p class="blog-empty">
+            The events list needs JavaScript to load. Please enable it to see
+            upcoming and past events.
           </p>
-        </section>
-
-        <section class="contact-strip" aria-labelledby="contactStripHeading">
-          <h2 id="contactStripHeading" data-i18n="homeContactHeading">
-            Get in touch
-          </h2>
-          <p data-i18n="homeContactText">
-            We would love to hear from you. Whether you have a question, want to
-            volunteer, or need support, reach out.
-          </p>
-          <div class="contact-strip-actions">
-            <a
-              class="button button-secondary"
-              href="contact.html"
-              data-i18n="homeContactLink"
-              >Contact us</a
-            >
-            <a
-              class="button button-whatsapp"
-              href="https://wa.me/27663859936"
-              data-i18n="homeWhatsAppLink"
-              >Message us on WhatsApp</a
-            >
-          </div>
-        </section>
+        </noscript>
       </div>
     </main>
 
@@ -603,9 +641,7 @@
             <li>
               <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
             </li>
-            <li>
-              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
-            </li>
+            <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
             <li>
               <a href="accessibility.html" data-i18n="legalAccessibility"
                 >Accessibility statement</a
@@ -630,20 +666,7 @@
         </p>
       </div>
     </footer>
-    <script>
-      // Both scripts pull the Firebase modules, so they start after the page
-      // has painted rather than competing with the fonts on the network.
-      window.addEventListener("load", function () {
-        var blogScript = document.createElement("script");
-        blogScript.type = "module";
-        blogScript.src = "home-blog.js";
-        document.body.appendChild(blogScript);
 
-        var eventScript = document.createElement("script");
-        eventScript.type = "module";
-        eventScript.src = "home-events.js";
-        document.body.appendChild(eventScript);
-      });
-    </script>
+    <script type="module" src="events.js"></script>
   </body>
 </html>
