@@ -13,10 +13,24 @@ import {
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
+const toolbar = document.getElementById("eventsToolbar");
+const upcomingSection = document.getElementById("upcomingSection");
 const upcomingList = document.getElementById("eventsUpcomingList");
 const upcomingEmpty = document.getElementById("eventsUpcomingEmpty");
+const pastSection = document.getElementById("pastSection");
 const pastList = document.getElementById("eventsPastList");
 const pastEmpty = document.getElementById("eventsPastEmpty");
+const timeButtons = document.querySelectorAll("[data-time-filter]");
+const priceButtons = document.querySelectorAll("[data-price-filter]");
+const countLine = document.getElementById("eventsCount");
+const filteredEmpty = document.getElementById("eventsFilteredEmpty");
+const clearRow = document.getElementById("eventsClearRow");
+const clearLink = document.getElementById("eventsClearLink");
+
+let activeTimeFilter = "";
+let activePriceFilter = "";
+let totalEvents = 0;
+let allEvents = [];
 
 // Strings built in JavaScript miss applyLanguage, so they are looked up here
 // for the language already resolved by main.js.
@@ -53,6 +67,7 @@ function isSoldOut(eventItem) {
 function buildCard(eventItem) {
   const card = document.createElement("article");
   card.className = "card";
+  card.dataset.price = eventItem.isTicketed ? "ticketed" : "free";
 
   if (eventItem.imageUrl) {
     const image = document.createElement("img");
@@ -134,15 +149,116 @@ async function loadEvents() {
     });
 
   upcoming.forEach(function (eventItem) {
-    upcomingList.appendChild(buildCard(eventItem));
+    eventItem.section = "upcoming";
+    eventItem.cardElement = buildCard(eventItem);
+    upcomingList.appendChild(eventItem.cardElement);
   });
   past.forEach(function (eventItem) {
-    pastList.appendChild(buildCard(eventItem));
+    eventItem.section = "past";
+    eventItem.cardElement = buildCard(eventItem);
+    pastList.appendChild(eventItem.cardElement);
   });
 
+  // These reflect whether any event genuinely exists in each section, and
+  // stay fixed regardless of the filters below. A price filter narrowing a
+  // section to nothing gets its own message, not this one.
   upcomingEmpty.hidden = upcoming.length > 0;
   pastEmpty.hidden = past.length > 0;
+
+  allEvents = upcoming.concat(past);
+  totalEvents = allEvents.length;
+
+  if (totalEvents > 0) {
+    toolbar.hidden = false;
+  }
+
+  applyFilters();
 }
+
+function setUpFilterGroup(buttons, datasetKey, onChange) {
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      buttons.forEach(function (other) {
+        other.setAttribute("aria-pressed", String(other === button));
+      });
+      onChange(button.dataset[datasetKey]);
+      applyFilters();
+    });
+  });
+}
+
+setUpFilterGroup(timeButtons, "timeFilter", function (value) {
+  activeTimeFilter = value;
+});
+setUpFilterGroup(priceButtons, "priceFilter", function (value) {
+  activePriceFilter = value;
+});
+
+// Hiding and unhiding cards and sections, never removing them, so a failure
+// in here can only ever leave the full list showing.
+function applyFilters() {
+  try {
+    const filtersActive = Boolean(activeTimeFilter) || Boolean(activePriceFilter);
+
+    upcomingSection.hidden = activeTimeFilter === "past";
+    pastSection.hidden = activeTimeFilter === "upcoming";
+
+    let shown = 0;
+    allEvents.forEach(function (eventItem) {
+      const sectionVisible =
+        !activeTimeFilter || activeTimeFilter === eventItem.section;
+      const priceMatches =
+        !activePriceFilter || eventItem.cardElement.dataset.price === activePriceFilter;
+      const visible = sectionVisible && priceMatches;
+      eventItem.cardElement.hidden = !visible;
+      if (visible) {
+        shown = shown + 1;
+      }
+    });
+
+    countLine.textContent =
+      shown === 1
+        ? translated("eventsCountSingular")
+        : translated("eventsCountPlural")
+            .replace("{shown}", String(shown))
+            .replace("{total}", String(totalEvents));
+
+    filteredEmpty.hidden = !(filtersActive && shown === 0 && totalEvents > 0);
+    clearRow.hidden = !filtersActive;
+
+    // A filter can hide the card the keyboard focus was inside. Move focus
+    // to the first time filter button rather than let it fall back to the
+    // top of the page.
+    const focusInsideHidden =
+      document.activeElement &&
+      document.activeElement.closest &&
+      document.activeElement.closest("[hidden]");
+    if (focusInsideHidden && timeButtons.length > 0) {
+      timeButtons[0].focus();
+    }
+  } catch (error) {
+    console.error("Filtering failed, showing the full list:", error);
+    allEvents.forEach(function (eventItem) {
+      eventItem.cardElement.hidden = false;
+    });
+    upcomingSection.hidden = false;
+    pastSection.hidden = false;
+  }
+}
+
+clearLink.addEventListener("click", function (event) {
+  event.preventDefault();
+  activeTimeFilter = "";
+  activePriceFilter = "";
+  timeButtons.forEach(function (button, index) {
+    button.setAttribute("aria-pressed", String(index === 0));
+  });
+  priceButtons.forEach(function (button, index) {
+    button.setAttribute("aria-pressed", String(index === 0));
+  });
+  applyFilters();
+  timeButtons[0].focus();
+});
 
 loadEvents().catch(function (error) {
   console.error("Failed to load events:", error);
