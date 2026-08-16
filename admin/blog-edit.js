@@ -27,7 +27,6 @@ const publishedInput = document.getElementById("published");
 const imageInput = document.getElementById("image");
 const imageAltInput = document.getElementById("imageAlt");
 const imagePreview = document.getElementById("imagePreview");
-const imagePreviewImg = document.getElementById("imagePreviewImg");
 const imageUploadStatus = document.getElementById("imageUploadStatus");
 const titleError = document.getElementById("titleError");
 const bodyError = document.getElementById("bodyError");
@@ -140,9 +139,17 @@ imageInput.addEventListener("change", async function () {
     // how the public pages use it.
     uploadedImageUrl = result.files[0].path;
 
-    // Show a preview of the selected image (the resized thumbnail).
-    imagePreviewImg.src = "data:image/webp;base64," + resized.thumbBase64;
-    imagePreviewImg.alt = file.name || "Featured image";
+    // Show a preview of the selected image (the resized thumbnail). Built
+    // here rather than shipped empty in the page, because an img with no src
+    // is invalid HTML.
+    const previousPreview = imagePreview.querySelector("img");
+    if (previousPreview) {
+      previousPreview.remove();
+    }
+    const previewImage = document.createElement("img");
+    previewImage.src = "data:image/webp;base64," + resized.thumbBase64;
+    previewImage.alt = file.name || "Featured image";
+    imagePreview.insertBefore(previewImage, imageUploadStatus);
     imageUploadStatus.textContent =
       "Image uploaded. It will appear on the site in about a minute.";
   } catch (error) {
