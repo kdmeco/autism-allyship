@@ -1,5 +1,7 @@
-// Admin blog post list. Loads all posts from Firestore, shows published and
-// draft, filters by status, and handles delete. Edit links go to blog-edit.html.
+// Admin blog post list. Loads all posts from Firestore and shows them in two
+// collapsible groups, published and draft. Deleting asks for a second click
+// on an inline confirmation rather than a browser dialog, which the browser
+// can silence and which would then block deleting entirely.
 
 import { auth, db } from "../firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
@@ -12,9 +14,8 @@ import {
   orderBy,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 
-const postList = document.getElementById("postList");
+const groups = document.getElementById("postGroups");
 const emptyState = document.getElementById("emptyState");
-const filterSelect = document.getElementById("postFilter");
 
 let allPosts = [];
 
@@ -45,7 +46,7 @@ async function loadPosts() {
       };
     });
 
-    renderPosts();
+    renderGroups();
   } catch (error) {
     console.error("Failed to load posts:", error);
     emptyState.textContent = "Failed to load posts. Try again.";
@@ -53,87 +54,187 @@ async function loadPosts() {
   }
 }
 
-function renderPosts() {
-  const filter = filterSelect.value;
-  const visiblePosts = allPosts.filter(function (post) {
-    if (filter === "published") return post.published;
-    if (filter === "draft") return !post.published;
-    return true;
-  });
+function renderGroups() {
+  groups.textContent = "";
 
-  postList.innerHTML = "";
-
-  if (visiblePosts.length === 0) {
+  if (allPosts.length === 0) {
     emptyState.hidden = false;
     return;
   }
 
   emptyState.hidden = true;
 
-  visiblePosts.forEach(function (post) {
-    const li = document.createElement("li");
-    li.className = "admin-list-item";
+  const published = allPosts.filter(function (post) {
+    return post.published;
+  });
+  const drafts = allPosts.filter(function (post) {
+    return !post.published;
+  });
 
-    const info = document.createElement("div");
-    info.className = "admin-list-info";
+  groups.appendChild(buildGroup("Published", published));
+  groups.appendChild(buildGroup("Drafts", drafts));
+}
 
-    const title = document.createElement("h2");
-    title.className = "admin-list-title";
-    title.textContent = post.title;
+function buildGroup(name, posts) {
+  const group = document.createElement("details");
+  group.className = "admin-group";
+  if (posts.length > 0) {
+    group.open = true;
+  }
 
-    const meta = document.createElement("p");
-    meta.className = "admin-list-meta";
-    const status = post.published ? "Published" : "Draft";
-    const date = post.publishedAt
-      ? post.publishedAt.toLocaleDateString("en-ZA")
-      : "No date";
-    meta.textContent =
-      status + " | " + date + (post.category ? " | " + post.category : "");
+  const summary = document.createElement("summary");
 
-    info.appendChild(title);
-    info.appendChild(meta);
+  const title = document.createElement("span");
+  title.textContent = name;
 
-    const actions = document.createElement("div");
-    actions.className = "admin-list-actions";
+  const count = document.createElement("span");
+  count.className = "admin-group-count";
+  count.textContent = "(" + posts.length + ")";
 
-    const editLink = document.createElement("a");
-    editLink.className = "button button-secondary";
-    editLink.href = "blog-edit.html?id=" + encodeURIComponent(post.id);
-    editLink.textContent = "Edit";
+  summary.appendChild(chevronSvg());
+  summary.appendChild(title);
+  summary.appendChild(count);
 
-    const deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.className = "button button-danger";
-    deleteButton.textContent = "Delete";
-    deleteButton.addEventListener("click", function () {
-      confirmDelete(post);
+  const list = document.createElement("ul");
+  list.className = "admin-list";
+
+  if (posts.length === 0) {
+    const none = document.createElement("li");
+    none.className = "admin-list-meta";
+    none.textContent = "None yet";
+    list.appendChild(none);
+  } else {
+    posts.forEach(function (post) {
+      list.appendChild(buildRow(post));
     });
+  }
 
-    actions.appendChild(editLink);
-    actions.appendChild(deleteButton);
+  group.appendChild(summary);
+  group.appendChild(list);
+  return group;
+}
 
-    li.appendChild(info);
-    li.appendChild(actions);
-    postList.appendChild(li);
+function buildRow(post) {
+  const li = document.createElement("li");
+  li.className = "admin-list-item";
+
+  const info = document.createElement("div");
+  info.className = "admin-list-info";
+
+  const title = document.createElement("h2");
+  title.className = "admin-list-title";
+  title.textContent = post.title;
+
+  const meta = document.createElement("p");
+  meta.className = "admin-list-meta";
+  const date = post.publishedAt
+    ? post.publishedAt.toLocaleDateString("en-ZA")
+    : "No date";
+  meta.textContent = date + (post.category ? " | " + post.category : "");
+
+  info.appendChild(title);
+  info.appendChild(meta);
+
+  const actions = document.createElement("div");
+  actions.className = "admin-list-actions";
+  actions.appendChild(buildEditLink(post));
+  actions.appendChild(buildDeleteButton(actions, post));
+
+  li.appendChild(info);
+  li.appendChild(actions);
+  return li;
+}
+
+function buildEditLink(post) {
+  const editLink = document.createElement("a");
+  editLink.className = "button button-secondary";
+  editLink.href = "blog-edit.html?id=" + encodeURIComponent(post.id);
+  editLink.textContent = "Edit";
+  return editLink;
+}
+
+function buildDeleteButton(actions, post) {
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.className = "button button-danger";
+  deleteButton.textContent = "Delete";
+  deleteButton.addEventListener("click", function () {
+    askToDelete(actions, post);
+  });
+  return deleteButton;
+}
+
+// The row's buttons give way to a question and two answers. Escape and Cancel
+// put the row back the way it was.
+function askToDelete(actions, post) {
+  actions.textContent = "";
+
+  const question = document.createElement("span");
+  question.className = "admin-list-meta";
+  question.textContent = "Delete this post? This cannot be undone.";
+
+  const yes = document.createElement("button");
+  yes.type = "button";
+  yes.className = "button button-danger";
+  yes.textContent = "Yes, delete";
+
+  const cancel = document.createElement("button");
+  cancel.type = "button";
+  cancel.className = "button button-secondary";
+  cancel.textContent = "Cancel";
+
+  actions.appendChild(question);
+  actions.appendChild(yes);
+  actions.appendChild(cancel);
+
+  cancel.focus();
+
+  function restore() {
+    actions.textContent = "";
+    actions.appendChild(buildEditLink(post));
+    actions.appendChild(buildDeleteButton(actions, post));
+  }
+
+  function deletePost() {
+    deleteDoc(doc(db, "posts", post.id))
+      .then(function () {
+        allPosts = allPosts.filter(function (other) {
+          return other.id !== post.id;
+        });
+        renderGroups();
+      })
+      .catch(function (error) {
+        console.error("Failed to delete post:", error);
+        question.textContent = "Failed to delete. Try again.";
+      });
+  }
+
+  yes.addEventListener("click", deletePost);
+  cancel.addEventListener("click", restore);
+  actions.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      restore();
+    }
   });
 }
 
-async function confirmDelete(post) {
-  const confirmed = window.confirm(
-    'Delete "' + post.title + '"? This cannot be undone.',
-  );
-  if (!confirmed) return;
+function chevronSvg() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "chevron");
+  svg.setAttribute("viewBox", "0 0 16 16");
+  svg.setAttribute("width", "16");
+  svg.setAttribute("height", "16");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
 
-  try {
-    await deleteDoc(doc(db, "posts", post.id));
-    allPosts = allPosts.filter(function (p) {
-      return p.id !== post.id;
-    });
-    renderPosts();
-  } catch (error) {
-    console.error("Failed to delete post:", error);
-    window.alert("Failed to delete the post. Try again.");
-  }
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M3 6l5 5 5-5");
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", "currentColor");
+  path.setAttribute("stroke-width", "2");
+  path.setAttribute("stroke-linecap", "round");
+  path.setAttribute("stroke-linejoin", "round");
+
+  svg.appendChild(path);
+  return svg;
 }
-
-filterSelect.addEventListener("change", renderPosts);
