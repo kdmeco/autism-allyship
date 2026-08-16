@@ -476,13 +476,17 @@
 
         <section class="home-section" aria-labelledby="eventHeading">
           <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card card-placeholder">
+          <div class="card-grid" id="homeEventGrid"></div>
+          <div class="card card-placeholder" id="homeEventPlaceholder">
             <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
             <p data-i18n="homeEventPlaceholderText">
               Our next gathering is being planned. Check back soon for dates and
               details.
             </p>
           </div>
+          <p class="home-event-more">
+            <a href="events.html" data-i18n="homeAllEvents">See all events</a>
+          </p>
         </section>
 
         <section class="contact-strip" aria-labelledby="contactStripHeading">
@@ -627,13 +631,18 @@
       </div>
     </footer>
     <script>
-      // The posts script pulls the Firebase modules, so it starts after the
-      // page has painted rather than competing with the fonts on the network.
+      // Both scripts pull the Firebase modules, so they start after the page
+      // has painted rather than competing with the fonts on the network.
       window.addEventListener("load", function () {
-        var script = document.createElement("script");
-        script.type = "module";
-        script.src = "home-blog.js";
-        document.body.appendChild(script);
+        var blogScript = document.createElement("script");
+        blogScript.type = "module";
+        blogScript.src = "home-blog.js";
+        document.body.appendChild(blogScript);
+
+        var eventScript = document.createElement("script");
+        eventScript.type = "module";
+        eventScript.src = "home-events.js";
+        document.body.appendChild(eventScript);
       });
     </script>
   </body>

@@ -44,6 +44,8 @@ jobs:
             './blog.html'
             './blog-post.html'
             './resources.html'
+            './events.html'
+            './event.html'
           fail: false
 
   lighthouse:
@@ -68,6 +70,7 @@ jobs:
             http://localhost:8080/index.html
             http://localhost:8080/blog.html
             http://localhost:8080/resources.html
+            http://localhost:8080/events.html
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
