@@ -1561,6 +1561,12 @@ ul.feature-list li {
   margin-bottom: var(--space-5);
 }
 
+/* While the posts are loading the grid holds a card's height, so the footer
+   stays where it was instead of jumping when the cards arrive. */
+#blogGrid:empty {
+  min-height: 30rem;
+}
+
 .filter-pill {
   display: inline-flex;
   align-items: center;
