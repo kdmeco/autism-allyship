@@ -17,6 +17,9 @@ import {
 const groups = document.getElementById("postGroups");
 const emptyState = document.getElementById("emptyState");
 
+const WORKER_REMOVE_URL =
+  "https://autism-allyship-upload.kdmeco-dev.workers.dev/remove";
+
 let allPosts = [];
 
 onAuthStateChanged(auth, function (user) {
@@ -41,6 +44,7 @@ async function loadPosts() {
         id: docSnapshot.id,
         title: data.title || "Untitled",
         category: data.category || "",
+        imageUrl: data.imageUrl || "",
         published: data.published === true,
         publishedAt: data.publishedAt ? data.publishedAt.toDate() : null,
       };
@@ -202,6 +206,7 @@ function askToDelete(actions, post) {
           return other.id !== post.id;
         });
         renderGroups();
+        removeUploadedImages(post.imageUrl);
       })
       .catch(function (error) {
         console.error("Failed to delete post:", error);
@@ -218,8 +223,51 @@ function askToDelete(actions, post) {
   });
 }
 
-function chevronSvg() {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+// After a post is deleted, its committed image and thumbnail are removed
+// from the repository through the upload Worker. Best effort only: if this
+// fails the post is still gone, and a leftover file is the smaller problem.
+function removeUploadedImages(imageUrl) {
+  if (!imageUrl) {
+    return;
+  }
+
+  const fullPath = imageUrl.replace(/^\//, "");
+  const dot = fullPath.lastIndexOf(".");
+  const paths = [fullPath];
+  if (dot !== -1) {
+    paths.push(fullPath.slice(0, dot) + "-thumb" + fullPath.slice(dot));
+  }
+
+  const branch = uploadBranch();
+
+  auth.currentUser
+    .getIdToken()
+    .then(function (token) {
+      return fetch(WORKER_REMOVE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({ paths: paths, branch: branch }),
+      });
+    })
+    .catch(function (error) {
+      console.error("Failed to remove the uploaded image:", error);
+    });
+}
+
+// Images should be removed from the branch this page was served from, the
+// same rule the upload in blog-edit.js follows.
+function uploadBranch() {
+  const host = window.location.hostname;
+  if (host === "staging.autism-allyship.pages.dev") return "staging";
+  if (host === "dev.autism-allyship.pages.dev") return "dev";
+  if (host === "localhost" || host === "127.0.0.1") return "dev";
+  return null;
+}
+
+function chevronSvg() {  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("class", "chevron");
   svg.setAttribute("viewBox", "0 0 16 16");
   svg.setAttribute("width", "16");
