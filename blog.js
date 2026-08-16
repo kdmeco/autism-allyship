@@ -104,12 +104,12 @@ function buildCard(post) {
 
 // The categories are whatever admins have typed on posts, so they are read
 // straight from the published posts rather than kept in a second list.
-async function loadCategories() {
+async function fetchCategories() {
   const snapshot = await getDocs(
     query(collection(db, "posts"), where("published", "==", true)),
   );
 
-  const categories = [
+  return [
     ...new Set(
       snapshot.docs
         .map(function (docSnapshot) {
@@ -120,7 +120,46 @@ async function loadCategories() {
   ].sort(function (first, second) {
     return first.localeCompare(second);
   });
+}
 
+// Firestore has no way to jump straight to a page, so a deep page is built
+// by reading up to that point and keeping the last page worth of posts.
+// Plenty for a blog that publishes a few posts a month.
+async function fetchPosts() {
+  const conditions = [where("published", "==", true)];
+  if (activeCategory) {
+    conditions.push(where("category", "==", activeCategory));
+  }
+  conditions.push(orderBy("publishedAt", "desc"));
+
+  const postsQuery = query(collection(db, "posts"), ...conditions);
+
+  const countSnapshot = await getCountFromServer(postsQuery);
+  const totalPosts = countSnapshot.data().count;
+  const pageCount = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
+  const pageNumber = Math.min(requestedPage, pageCount);
+
+  const snapshot = await getDocs(
+    query(postsQuery, limit(pageNumber * PAGE_SIZE)),
+  );
+
+  const posts = snapshot.docs.slice(-PAGE_SIZE).map(function (docSnapshot) {
+    const data = docSnapshot.data();
+    return {
+      id: docSnapshot.id,
+      title: data.title || "Untitled",
+      body: data.body || "",
+      category: data.category || "",
+      imageAlt: data.imageAlt || "",
+      imageUrl: data.imageUrl || "",
+      publishedAt: data.publishedAt ? data.publishedAt.toDate() : null,
+    };
+  });
+
+  return { posts, totalPosts, pageNumber, pageCount };
+}
+
+function renderPills(categories) {
   if (categories.length === 0) {
     return;
   }
@@ -148,7 +187,7 @@ async function loadCategories() {
   pillBar.hidden = false;
 }
 
-function buildPagination(pageNumber, pageCount) {
+function renderPagination(pageNumber, pageCount) {
   if (pageCount <= 1) {
     return;
   }
@@ -184,53 +223,23 @@ function buildPagination(pageNumber, pageCount) {
   pagination.hidden = false;
 }
 
-async function loadPosts() {
-  const conditions = [where("published", "==", true)];
-  if (activeCategory) {
-    conditions.push(where("category", "==", activeCategory));
-  }
-  conditions.push(orderBy("publishedAt", "desc"));
-
-  const postsQuery = query(collection(db, "posts"), ...conditions);
-
-  // Firestore has no way to jump straight to a page, so a deep page is built
-  // by reading up to that point and keeping the last page worth of posts.
-  // Plenty for a blog that publishes a few posts a month.
-  const countSnapshot = await getCountFromServer(postsQuery);
-  const totalPosts = countSnapshot.data().count;
-  const pageCount = Math.max(1, Math.ceil(totalPosts / PAGE_SIZE));
-  const pageNumber = Math.min(requestedPage, pageCount);
-
-  const snapshot = await getDocs(query(postsQuery, limit(pageNumber * PAGE_SIZE)));
-  const pagePosts = snapshot.docs.slice(-PAGE_SIZE).map(function (docSnapshot) {
-    const data = docSnapshot.data();
-    return {
-      id: docSnapshot.id,
-      title: data.title || "Untitled",
-      body: data.body || "",
-      category: data.category || "",
-      imageAlt: data.imageAlt || "",
-      imageUrl: data.imageUrl || "",
-      publishedAt: data.publishedAt ? data.publishedAt.toDate() : null,
-    };
-  });
-
-  pagePosts.forEach(function (post) {
-    grid.appendChild(buildCard(post));
-  });
-
-  if (totalPosts === 0) {
+// Everything is put on the page in one go, so the pills never appear a beat
+// after the cards and shove the whole grid down.
+Promise.all([fetchCategories(), fetchPosts()])
+  .then(function (results) {
+    renderPills(results[0]);
+    results[1].posts.forEach(function (post) {
+      grid.appendChild(buildCard(post));
+    });
+    if (results[1].totalPosts === 0) {
+      emptyState.hidden = false;
+    }
+    renderPagination(results[1].pageNumber, results[1].pageCount);
+  })
+  .catch(function (error) {
+    // The two posts queries need composite indexes. Until they exist Firestore
+    // refuses the query and logs a console error holding a direct link to
+    // create each one. That link is the fastest way through this.
+    console.error("Failed to load posts:", error);
     emptyState.hidden = false;
-  }
-
-  buildPagination(pageNumber, pageCount);
-}
-
-loadCategories();
-loadPosts().catch(function (error) {
-  // The two posts queries need composite indexes. Until they exist Firestore
-  // refuses the query and logs a console error holding a direct link to
-  // create each one. That link is the fastest way through this.
-  console.error("Failed to load posts:", error);
-  emptyState.hidden = false;
-});
+  });

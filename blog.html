@@ -544,15 +544,6 @@
       </div>
     </footer>
 
-    <script>
-      // The blog script pulls the Firebase modules, so it starts after the
-      // page has painted rather than competing with the fonts on the network.
-      window.addEventListener("load", function () {
-        var script = document.createElement("script");
-        script.type = "module";
-        script.src = "blog.js";
-        document.body.appendChild(script);
-      });
-    </script>
+    <script type="module" src="blog.js"></script>
   </body>
 </html>
