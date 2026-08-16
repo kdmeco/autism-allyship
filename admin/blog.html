@@ -347,19 +347,6 @@
             </div>
           </div>
 
-          <div class="admin-toolbar">
-            <label class="visually-hidden" for="postFilter">Filter posts</label>
-            <select id="postFilter" data-i18n-aria-label="adminBlogFilterLabel">
-              <option value="all" data-i18n="adminBlogFilterAll">All</option>
-              <option value="published" data-i18n="adminBlogFilterPublished">
-                Published
-              </option>
-              <option value="draft" data-i18n="adminBlogFilterDraft">
-                Draft
-              </option>
-            </select>
-          </div>
-
           <p
             class="admin-empty"
             id="emptyState"
@@ -369,7 +356,7 @@
             No posts yet. Create your first post.
           </p>
 
-          <ul class="admin-list" id="postList"></ul>
+          <div id="postGroups"></div>
         </section>
       </div>
     </main>
