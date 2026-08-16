@@ -18,7 +18,9 @@ const form = document.getElementById("resourceForm");
 const nameInput = document.getElementById("name");
 const descriptionInput = document.getElementById("description");
 const categoryInput = document.getElementById("category");
-const provinceInput = document.getElementById("province");
+const provinceBoxes = Array.from(
+  document.querySelectorAll("#provinceOptions input[type='checkbox']"),
+);
 const phoneInput = document.getElementById("phone");
 const emailInput = document.getElementById("email");
 const websiteInput = document.getElementById("website");
@@ -58,7 +60,16 @@ async function loadResource(id) {
     nameInput.value = data.name || "";
     descriptionInput.value = data.description || "";
     categoryInput.value = data.category || "";
-    provinceInput.value = data.province || "";
+    // Older test entries hold a single province string. Reading them back as a
+    // one item list keeps the form working until they are replaced.
+    const savedProvinces = Array.isArray(data.provinces)
+      ? data.provinces
+      : data.province
+        ? [data.province]
+        : [];
+    provinceBoxes.forEach(function (box) {
+      box.checked = savedProvinces.includes(box.value);
+    });
     phoneInput.value = data.phone || "";
     emailInput.value = data.email || "";
     websiteInput.value = data.website || "";
@@ -137,7 +148,13 @@ form.addEventListener("submit", async function (event) {
     name: name,
     description: description,
     category: categoryInput.value.trim(),
-    province: provinceInput.value,
+    provinces: provinceBoxes
+      .filter(function (box) {
+        return box.checked;
+      })
+      .map(function (box) {
+        return box.value;
+      }),
     phone: phoneInput.value.trim(),
     email: emailInput.value.trim(),
     website: website,

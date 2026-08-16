@@ -1907,3 +1907,36 @@ ul.feature-list li {
 .resources-clear a {
   font-weight: 600;
 }
+
+.province-fieldset {
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin: 0;
+}
+
+.province-fieldset legend {
+  padding-inline: var(--space-2);
+  font-weight: 600;
+  font-size: var(--size-sm);
+}
+
+.province-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-1) var(--space-3);
+}
+
+.province-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.5rem;
+  cursor: pointer;
+}
+
+.province-option input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--colour-accent-fill);
+}

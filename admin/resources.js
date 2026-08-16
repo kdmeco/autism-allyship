@@ -37,7 +37,11 @@ async function loadResources() {
           id: docSnapshot.id,
           name: data.name || "Untitled",
           category: data.category || "",
-          province: data.province || "",
+          provinces: Array.isArray(data.provinces)
+            ? data.provinces
+            : data.province
+              ? [data.province]
+              : [],
           published: data.published === true,
         };
       })
@@ -126,7 +130,7 @@ function buildRow(resource) {
 
   const meta = document.createElement("p");
   meta.className = "admin-list-meta";
-  meta.textContent = [resource.category, resource.province]
+  meta.textContent = [resource.category, resource.provinces.join(" \u00b7 ")]
     .filter(Boolean)
     .join(" | ");
 

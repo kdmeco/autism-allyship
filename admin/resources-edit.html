@@ -391,31 +391,56 @@
               </p>
             </div>
 
-            <div class="form-field">
-              <label for="province" data-i18n="adminResourcesProvince"
-                >Province</label
-              >
-              <select id="province" name="province">
-                <option value="" data-i18n="adminResourcesProvinceNone"
-                  >Not set</option
+            <fieldset class="form-field province-fieldset">
+              <legend data-i18n="adminResourcesProvince">Provinces</legend>
+              <div class="province-options" id="provinceOptions">
+                <label class="province-option"
+                  ><input type="checkbox" value="Eastern Cape" /> Eastern
+                  Cape</label
                 >
-                <option value="Eastern Cape">Eastern Cape</option>
-                <option value="Free State">Free State</option>
-                <option value="Gauteng">Gauteng</option>
-                <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-                <option value="Limpopo">Limpopo</option>
-                <option value="Mpumalanga">Mpumalanga</option>
-                <option value="Northern Cape">Northern Cape</option>
-                <option value="North West">North West</option>
-                <option value="Western Cape">Western Cape</option>
-                <option value="National" data-i18n="resourcesProvinceNational"
-                  >National</option
+                <label class="province-option"
+                  ><input type="checkbox" value="Free State" /> Free State</label
                 >
-                <option value="Not applicable" data-i18n="resourcesProvinceNotApplicable"
-                  >Not applicable</option
+                <label class="province-option"
+                  ><input type="checkbox" value="Gauteng" /> Gauteng</label
                 >
-              </select>
-            </div>
+                <label class="province-option"
+                  ><input type="checkbox" value="KwaZulu-Natal" />
+                  KwaZulu-Natal</label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="Limpopo" /> Limpopo</label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="Mpumalanga" /> Mpumalanga</label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="Northern Cape" /> Northern
+                  Cape</label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="North West" /> North West</label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="Western Cape" /> Western
+                  Cape</label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="National" />
+                  <span data-i18n="resourcesProvinceNational">National</span></label
+                >
+                <label class="province-option"
+                  ><input type="checkbox" value="Not applicable" />
+                  <span data-i18n="resourcesProvinceNotApplicable"
+                    >Not applicable</span
+                  ></label
+                >
+              </div>
+              <p class="form-field-note" data-i18n="adminResourcesProvincesNote">
+                Tick every province the service covers, or National, or Not
+                applicable.
+              </p>
+            </fieldset>
 
             <div class="form-field">
               <label for="phone" data-i18n="adminResourcesPhone">Phone</label>
