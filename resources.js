@@ -12,7 +12,7 @@ import {
   where,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { translated } from "./shared.js";
+import { translated, chevronSvg } from "./shared.js";
 
 const toolbar = document.getElementById("resourcesToolbar");
 const list = document.getElementById("resourceList");
@@ -36,26 +36,6 @@ function excerpt(description) {
   return flat.slice(0, 157).trimEnd() + "...";
 }
 
-function chevronSvg() {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("class", "chevron");
-  svg.setAttribute("viewBox", "0 0 16 16");
-  svg.setAttribute("width", "16");
-  svg.setAttribute("height", "16");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M3 6l5 5 5-5");
-  path.setAttribute("fill", "none");
-  path.setAttribute("stroke", "currentColor");
-  path.setAttribute("stroke-width", "2");
-  path.setAttribute("stroke-linecap", "round");
-  path.setAttribute("stroke-linejoin", "round");
-
-  svg.appendChild(path);
-  return svg;
-}
 
 function contactLink(kind, value) {
   const link = document.createElement("a");
