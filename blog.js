@@ -13,6 +13,7 @@ import {
   getDocs,
   getCountFromServer,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { thumbPath } from "./shared.js";
 
 const PAGE_SIZE = 9;
 
@@ -40,16 +41,6 @@ function pageLink(pageNumber, category) {
     params.set("category", category);
   }
   return "blog.html?" + params.toString();
-}
-
-// The stored path points at the full image. The 400px thumbnail sits beside it
-// with a -thumb suffix before the file extension.
-function thumbPath(imageUrl) {
-  const dot = imageUrl.lastIndexOf(".");
-  if (dot === -1) {
-    return imageUrl;
-  }
-  return imageUrl.slice(0, dot) + "-thumb" + imageUrl.slice(dot);
 }
 
 function excerpt(body) {

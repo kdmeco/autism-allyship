@@ -10,19 +10,10 @@ import {
   limit,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { thumbPath } from "./shared.js";
 
 const grid = document.getElementById("homeBlogGrid");
 const placeholder = document.getElementById("homeBlogPlaceholder");
-
-// Same thumbnail rule as the blog page: the stored path points at the full
-// image and the 400px copy sits beside it with a -thumb suffix.
-function thumbPath(imageUrl) {
-  const dot = imageUrl.lastIndexOf(".");
-  if (dot === -1) {
-    return imageUrl;
-  }
-  return imageUrl.slice(0, dot) + "-thumb" + imageUrl.slice(dot);
-}
 
 function buildCard(post) {
   const card = document.createElement("article");
