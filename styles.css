@@ -1940,3 +1940,187 @@ ul.feature-list li {
   height: 1.25rem;
   accent-color: var(--colour-accent-fill);
 }
+
+/* Events */
+
+.events-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.events-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.events-filter-group-label {
+  font-size: var(--size-sm);
+  font-weight: 600;
+}
+
+.events-filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.events-filter-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0 var(--space-4);
+  background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--colour-text);
+  font-size: var(--size-sm);
+  cursor: pointer;
+}
+
+.events-filter-button:hover {
+  border-color: var(--colour-accent-fill);
+  color: var(--colour-accent-text);
+}
+
+.events-filter-button[aria-pressed="true"] {
+  background-color: var(--colour-accent-fill);
+  border-color: var(--colour-accent-fill);
+  color: var(--colour-on-accent);
+  font-weight: 600;
+}
+
+.events-count {
+  font-size: var(--size-sm);
+  color: var(--colour-text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.events-section-heading {
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-2);
+}
+
+.events-section-heading:first-of-type {
+  margin-top: 0;
+}
+
+/* While events are loading each grid holds a card's height, so the footer
+   stays where it was instead of jumping when the cards arrive. */
+#eventsUpcomingList:empty,
+#eventsPastList:empty {
+  min-height: 30rem;
+}
+
+.events-clear {
+  margin-bottom: var(--space-7);
+}
+
+.events-clear a {
+  font-weight: 600;
+}
+
+.event-card-badge {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--size-xs);
+  font-weight: 600;
+}
+
+.event-article {
+  padding-block: var(--space-7);
+}
+
+.event-article h1 {
+  margin-bottom: var(--space-2);
+}
+
+.event-meta {
+  font-size: var(--size-sm);
+  color: var(--colour-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.event-image {
+  display: block;
+  width: 100%;
+  max-width: 48rem;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-5);
+}
+
+/* Capacity is text plus a border, never colour alone or an animated bar.
+   Sensory mode strips shadows and motion with !important, so a state shown
+   only by colour or a shadow fails exactly when it matters most. */
+.event-capacity {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--size-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-5);
+}
+
+.event-capacity-sold-out {
+  border-color: var(--colour-accent-fill);
+  color: var(--colour-accent-text);
+}
+
+ul.event-attachments {
+  list-style: disc;
+  padding-inline-start: var(--space-5);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+ul.event-attachments li {
+  margin-bottom: var(--space-2);
+}
+
+.event-attachments a {
+  font-weight: 600;
+}
+
+.home-event-more {
+  margin-top: var(--space-4);
+}
+
+.home-event-more a {
+  font-weight: 600;
+}
+
+/* Admin events */
+
+.event-attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.event-attachment-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-md);
+}
+
+.event-attachment-name {
+  overflow-wrap: anywhere;
+}

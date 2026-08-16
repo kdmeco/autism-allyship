@@ -8,6 +8,7 @@ import {
   getDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { translated } from "./shared.js";
 
 const article = document.getElementById("blogArticle");
 const titleSlot = document.getElementById("postTitle");
@@ -20,12 +21,6 @@ const copyLinkButton = document.getElementById("copyLinkButton");
 const copyConfirmation = document.getElementById("copyConfirmation");
 
 const postId = new URLSearchParams(window.location.search).get("id");
-
-function translated(key) {
-  const language = document.documentElement.getAttribute("lang") || "en";
-  const dictionary = translations[language] || translations.en;
-  return dictionary[key] || translations.en[key];
-}
 
 function showMissing() {
   article.hidden = true;

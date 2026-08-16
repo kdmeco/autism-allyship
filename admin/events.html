@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
     <meta
       name="theme-color"
       content="#FBFAFA"
@@ -13,51 +14,35 @@
       content="#141213"
       media="(prefers-color-scheme: dark)"
     />
-
     <link
       rel="preload"
-      href="assets/fonts/poppins-400.woff2"
+      href="../assets/fonts/poppins-400.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="assets/fonts/poppins-600.woff2"
+      href="../assets/fonts/poppins-600.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
-
-    <link rel="stylesheet" href="styles.css" />
-
-    <script src="translations.js" defer></script>
-    <script src="main.js" defer></script>
-
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../translations.js" defer></script>
+    <script src="../main.js" defer></script>
     <script>
-      // Resolves the saved settings before the browser paints anything, so a
-      // returning visitor never sees a flash of the wrong theme or text size.
-      // Deliberately inline and tiny. If you change a storage key here, change it
-      // in main.js too.
       (function () {
         var root = document.documentElement;
         var saved = {};
-
-        // CSS only hides the accessibility panel when this class is present. If this
-        // script never runs, the panel stays visible and open rather than vanishing.
         root.classList.add("js");
-
         try {
           saved.theme = localStorage.getItem("aaf-theme");
           saved.textSize = localStorage.getItem("aaf-text-size");
           saved.sensory = localStorage.getItem("aaf-sensory-mode");
           saved.plainText = localStorage.getItem("aaf-plain-text");
           saved.language = localStorage.getItem("aaf-language");
-        } catch (error) {
-          // Private browsing and pages opened straight off the file system can
-          // block storage. Fall back to defaults rather than breaking the page.
-        }
-
+        } catch (error) {}
         var prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)",
         ).matches;
@@ -66,33 +51,23 @@
           saved.theme || (prefersDark ? "dark" : "light"),
         );
         root.setAttribute("data-text-size", saved.textSize || "1");
-
-        if (saved.sensory === "on") {
-          root.classList.add("sensory-mode");
-        }
-
-        if (saved.plainText === "on") {
-          root.classList.add("plain-text");
-        }
-
-        if (saved.language) {
-          root.setAttribute("lang", saved.language);
-        }
+        if (saved.sensory === "on") root.classList.add("sensory-mode");
+        if (saved.plainText === "on") root.classList.add("plain-text");
+        if (saved.language) root.setAttribute("lang", saved.language);
       })();
     </script>
-    <title>Autism Allyship Foundation</title>
+    <title>Events | Admin | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
       <a class="skip-link" href="#main" data-i18n="skipToContent"
         >Skip to main content</a
       >
-
       <div class="header-bar">
-        <a class="brand" href="index.html">
+        <a class="brand" href="../index.html">
           <img
             class="brand-mark"
-            src="assets/brand/logo-placeholder.jpg"
+            src="../assets/brand/logo-placeholder.jpg"
             alt=""
             width="512"
             height="512"
@@ -104,7 +79,6 @@
             >
           </span>
         </a>
-
         <nav
           class="primary-nav"
           id="primaryNav"
@@ -112,55 +86,18 @@
           aria-label="Main"
         >
           <ul class="nav-list">
-            <li><a href="index.html" data-i18n="navHome">Home</a></li>
-
-            <li class="nav-dropdown">
-              <button
-                type="button"
-                class="nav-dropdown-trigger"
-                id="communityTrigger"
-                aria-expanded="false"
-                aria-controls="communityMenu"
-              >
-                <span data-i18n="navCommunity">Community</span>
-                <svg
-                  class="chevron"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  height="16"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path
-                    d="M3 6l5 5 5-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-              <ul class="nav-dropdown-menu" id="communityMenu" hidden>
-                <li><a href="about.html" data-i18n="navAbout">About</a></li>
-                <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
-                <li>
-                  <a href="gallery.html" data-i18n="navGallery"
-                    >Image gallery</a
-                  >
-                </li>
-                <li><a href="events.html" data-i18n="navEvents">Events</a></li>
-              </ul>
-            </li>
-
+            <li><a href="../index.html" data-i18n="navHome">Home</a></li>
+            <li><a href="../about.html" data-i18n="navAbout">About</a></li>
+            <li><a href="../blog.html" data-i18n="navBlog">Blog</a></li>
             <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
+              <a href="../resources.html" data-i18n="navResources">Resources</a>
             </li>
-            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
-            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+            <li><a href="../events.html" data-i18n="navEvents">Events</a></li>
+            <li>
+              <a href="../contact.html" data-i18n="navContact">Contact</a>
+            </li>
           </ul>
         </nav>
-
         <div class="header-controls" id="headerControls">
           <button
             type="button"
@@ -185,7 +122,6 @@
             </svg>
             <span class="control-label" data-i18n="darkMode">Dark mode</span>
           </button>
-
           <div class="accessibility-menu">
             <button
               type="button"
@@ -229,13 +165,11 @@
                 />
               </svg>
             </button>
-
             <div class="accessibility-panel" id="accessibilityPanel">
               <p class="panel-intro" data-i18n="accessibilityIntro">
                 Change how this site looks and reads. Your choices are
                 remembered.
               </p>
-
               <div class="panel-row">
                 <button
                   type="button"
@@ -268,7 +202,6 @@
                   </span>
                 </button>
               </div>
-
               <div class="panel-row">
                 <button
                   type="button"
@@ -303,7 +236,6 @@
                   </span>
                 </button>
               </div>
-
               <div
                 class="panel-row"
                 role="group"
@@ -355,7 +287,6 @@
                   </button>
                 </div>
               </div>
-
               <div class="panel-row">
                 <label
                   class="panel-row-label"
@@ -372,11 +303,9 @@
             </div>
           </div>
         </div>
-
-        <a class="donate-button" href="donate.html" data-i18n="navDonate"
+        <a class="donate-button" href="../donate.html" data-i18n="navDonate"
           >Donate</a
         >
-
         <button
           type="button"
           class="menu-toggle"
@@ -391,126 +320,43 @@
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1 class="hero-heading" data-i18n="homeHeroHeading">Be Kind</h1>
-          <p class="hero-tagline" data-i18n="homeHeroTagline">
-            Where every mind belongs
-          </p>
-          <p class="hero-mission" data-i18n="homeHeroMission">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
-          </p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              href="donate.html"
-              data-i18n="homeHeroDonate"
-              >Donate</a
-            >
-            <a
-              class="button button-secondary"
-              href="about.html"
-              data-i18n="homeHeroAbout"
-              >Learn about us</a
-            >
-          </div>
-        </div>
-      </section>
-
       <div class="container">
-        <section class="home-section" aria-labelledby="whatWeDoHeading">
-          <h2 id="whatWeDoHeading" data-i18n="homeWhatWeDoHeading">
-            What we do
-          </h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3 data-i18n="homeCardAboutTitle">About us</h3>
-              <p data-i18n="homeCardAboutText">
-                Learn about our mission, vision and the people behind the
-                foundation.
+        <section class="admin-page" aria-labelledby="eventListHeading">
+          <div class="admin-page-header">
+            <div>
+              <h1 id="eventListHeading" data-i18n="adminEventsHeading">
+                Events
+              </h1>
+              <p class="admin-page-intro" data-i18n="adminEventsIntro">
+                Upcoming and past, published and not published.
               </p>
-              <a href="about.html" data-i18n="homeCardAboutLink"
-                >Find out more</a
+            </div>
+            <div class="admin-page-actions">
+              <a
+                class="button button-secondary"
+                href="index.html"
+                data-i18n="adminBackToDashboard"
+                >Back to dashboard</a
               >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardResourcesTitle">Resources</h3>
-              <p data-i18n="homeCardResourcesText">
-                Find support services, information and help across South Africa.
-              </p>
-              <a href="resources.html" data-i18n="homeCardResourcesLink"
-                >Browse resources</a
+              <a
+                class="button button-primary"
+                href="events-edit.html"
+                data-i18n="adminEventsNew"
+                >New event</a
               >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardCommunityTitle">Community</h3>
-              <p data-i18n="homeCardCommunityText">
-                Join our events and connect with other families and allies.
-              </p>
-              <a href="events.html" data-i18n="homeCardCommunityLink"
-                >See our events</a
-              >
-            </article>
+            </div>
           </div>
-        </section>
 
-        <section class="home-section" aria-labelledby="blogHeading">
-          <h2 id="blogHeading" data-i18n="homeBlogHeading">
-            Latest from our blog
-          </h2>
-          <div class="card-grid" id="homeBlogGrid"></div>
-          <div class="card card-placeholder" id="homeBlogPlaceholder">
-            <h3 data-i18n="homeBlogPlaceholderTitle">
-              Blog posts coming soon
-            </h3>
-            <p data-i18n="homeBlogPlaceholderText">
-              We are working on our first posts. Check back soon for news and
-              stories from the community.
-            </p>
-          </div>
-          <p class="home-blog-more">
-            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
+          <p
+            class="admin-empty"
+            id="emptyState"
+            hidden
+            data-i18n="adminEventsEmpty"
+          >
+            No events yet. Add the first one.
           </p>
-        </section>
 
-        <section class="home-section" aria-labelledby="eventHeading">
-          <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card-grid" id="homeEventGrid"></div>
-          <div class="card card-placeholder" id="homeEventPlaceholder">
-            <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
-            <p data-i18n="homeEventPlaceholderText">
-              Our next gathering is being planned. Check back soon for dates and
-              details.
-            </p>
-          </div>
-          <p class="home-event-more">
-            <a href="events.html" data-i18n="homeAllEvents">See all events</a>
-          </p>
-        </section>
-
-        <section class="contact-strip" aria-labelledby="contactStripHeading">
-          <h2 id="contactStripHeading" data-i18n="homeContactHeading">
-            Get in touch
-          </h2>
-          <p data-i18n="homeContactText">
-            We would love to hear from you. Whether you have a question, want to
-            volunteer, or need support, reach out.
-          </p>
-          <div class="contact-strip-actions">
-            <a
-              class="button button-secondary"
-              href="contact.html"
-              data-i18n="homeContactLink"
-              >Contact us</a
-            >
-            <a
-              class="button button-whatsapp"
-              href="https://wa.me/27663859936"
-              data-i18n="homeWhatsAppLink"
-              >Message us on WhatsApp</a
-            >
-          </div>
+          <div id="eventGroups"></div>
         </section>
       </div>
     </main>
@@ -518,10 +364,10 @@
     <footer class="site-footer">
       <div class="footer-columns">
         <div class="footer-column footer-about">
-          <a class="brand brand-footer" href="index.html">
+          <a class="brand brand-footer" href="../index.html">
             <img
               class="brand-mark"
-              src="assets/brand/logo-placeholder.jpg"
+              src="../assets/brand/logo-placeholder.jpg"
               alt=""
               width="512"
               height="512"
@@ -539,7 +385,6 @@
             <strong>000-000 NPO</strong>
           </p>
         </div>
-
         <nav
           class="footer-column"
           data-i18n-aria-label="footerQuickLinks"
@@ -549,16 +394,17 @@
             Quick links
           </h2>
           <ul class="footer-list">
-            <li><a href="about.html" data-i18n="navAbout">About</a></li>
+            <li><a href="../about.html" data-i18n="navAbout">About</a></li>
             <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
+              <a href="../resources.html" data-i18n="navResources">Resources</a>
             </li>
-            <li><a href="events.html" data-i18n="navEvents">Events</a></li>
-            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
-            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+            <li><a href="../events.html" data-i18n="navEvents">Events</a></li>
+            <li><a href="../shop.html" data-i18n="navShop">Shop</a></li>
+            <li>
+              <a href="../contact.html" data-i18n="navContact">Contact</a>
+            </li>
           </ul>
         </nav>
-
         <nav
           class="footer-column"
           data-i18n-aria-label="footerSocials"
@@ -592,7 +438,6 @@
             </li>
           </ul>
         </nav>
-
         <nav
           class="footer-column"
           data-i18n-aria-label="footerLegal"
@@ -601,21 +446,24 @@
           <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
           <ul class="footer-list">
             <li>
-              <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
+              <a href="../privacy.html" data-i18n="legalPrivacy"
+                >Privacy policy</a
+              >
             </li>
             <li>
-              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
+              <a href="../terms.html" data-i18n="legalTerms">Terms of use</a>
             </li>
             <li>
-              <a href="accessibility.html" data-i18n="legalAccessibility"
+              <a href="../accessibility.html" data-i18n="legalAccessibility"
                 >Accessibility statement</a
               >
             </li>
-            <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
+            <li>
+              <a href="../paia.html" data-i18n="legalPaia">PAIA manual</a>
+            </li>
           </ul>
         </nav>
       </div>
-
       <div class="footer-baseline">
         <p>
           &copy; <span id="footerYear">2026</span> Autism Allyship Foundation.
@@ -630,20 +478,7 @@
         </p>
       </div>
     </footer>
-    <script>
-      // Both scripts pull the Firebase modules, so they start after the page
-      // has painted rather than competing with the fonts on the network.
-      window.addEventListener("load", function () {
-        var blogScript = document.createElement("script");
-        blogScript.type = "module";
-        blogScript.src = "home-blog.js";
-        document.body.appendChild(blogScript);
 
-        var eventScript = document.createElement("script");
-        eventScript.type = "module";
-        eventScript.src = "home-events.js";
-        document.body.appendChild(eventScript);
-      });
-    </script>
+    <script type="module" src="events.js"></script>
   </body>
 </html>

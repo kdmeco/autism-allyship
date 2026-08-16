@@ -13,6 +13,7 @@ import {
   getDocs,
   getCountFromServer,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { thumbPath, translated } from "./shared.js";
 
 const PAGE_SIZE = 9;
 
@@ -25,14 +26,6 @@ const urlParams = new URLSearchParams(window.location.search);
 const activeCategory = urlParams.get("category") || "";
 const requestedPage = parseInt(urlParams.get("page"), 10) || 1;
 
-// Strings built in JavaScript miss applyLanguage, so they are looked up here
-// for the language already resolved by main.js.
-function translated(key) {
-  const language = document.documentElement.getAttribute("lang") || "en";
-  const dictionary = translations[language] || translations.en;
-  return dictionary[key] || translations.en[key];
-}
-
 function pageLink(pageNumber, category) {
   const params = new URLSearchParams();
   params.set("page", String(pageNumber));
@@ -40,16 +33,6 @@ function pageLink(pageNumber, category) {
     params.set("category", category);
   }
   return "blog.html?" + params.toString();
-}
-
-// The stored path points at the full image. The 400px thumbnail sits beside it
-// with a -thumb suffix before the file extension.
-function thumbPath(imageUrl) {
-  const dot = imageUrl.lastIndexOf(".");
-  if (dot === -1) {
-    return imageUrl;
-  }
-  return imageUrl.slice(0, dot) + "-thumb" + imageUrl.slice(dot);
 }
 
 function excerpt(body) {

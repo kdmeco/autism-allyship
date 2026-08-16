@@ -31,6 +31,9 @@
 
     <link rel="stylesheet" href="styles.css" />
 
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
 
@@ -80,7 +83,7 @@
         }
       })();
     </script>
-    <title>Autism Allyship Foundation</title>
+    <title>Event | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -391,127 +394,92 @@
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1 class="hero-heading" data-i18n="homeHeroHeading">Be Kind</h1>
-          <p class="hero-tagline" data-i18n="homeHeroTagline">
-            Where every mind belongs
-          </p>
-          <p class="hero-mission" data-i18n="homeHeroMission">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
-          </p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              href="donate.html"
-              data-i18n="homeHeroDonate"
-              >Donate</a
-            >
-            <a
-              class="button button-secondary"
-              href="about.html"
-              data-i18n="homeHeroAbout"
-              >Learn about us</a
-            >
-          </div>
-        </div>
-      </section>
-
       <div class="container">
-        <section class="home-section" aria-labelledby="whatWeDoHeading">
-          <h2 id="whatWeDoHeading" data-i18n="homeWhatWeDoHeading">
-            What we do
-          </h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3 data-i18n="homeCardAboutTitle">About us</h3>
-              <p data-i18n="homeCardAboutText">
-                Learn about our mission, vision and the people behind the
-                foundation.
-              </p>
-              <a href="about.html" data-i18n="homeCardAboutLink"
-                >Find out more</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardResourcesTitle">Resources</h3>
-              <p data-i18n="homeCardResourcesText">
-                Find support services, information and help across South Africa.
-              </p>
-              <a href="resources.html" data-i18n="homeCardResourcesLink"
-                >Browse resources</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardCommunityTitle">Community</h3>
-              <p data-i18n="homeCardCommunityText">
-                Join our events and connect with other families and allies.
-              </p>
-              <a href="events.html" data-i18n="homeCardCommunityLink"
-                >See our events</a
-              >
-            </article>
-          </div>
-        </section>
+        <article class="event-article" id="eventArticle" hidden>
+          <a class="back-link" href="events.html" data-i18n="eventBackToEvents"
+            >Back to events</a
+          >
 
-        <section class="home-section" aria-labelledby="blogHeading">
-          <h2 id="blogHeading" data-i18n="homeBlogHeading">
-            Latest from our blog
-          </h2>
-          <div class="card-grid" id="homeBlogGrid"></div>
-          <div class="card card-placeholder" id="homeBlogPlaceholder">
-            <h3 data-i18n="homeBlogPlaceholderTitle">
-              Blog posts coming soon
-            </h3>
-            <p data-i18n="homeBlogPlaceholderText">
-              We are working on our first posts. Check back soon for news and
-              stories from the community.
-            </p>
-          </div>
-          <p class="home-blog-more">
-            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
-          </p>
-        </section>
+          <h1 id="eventTitle">Event</h1>
+          <p class="event-meta" id="eventMeta"></p>
+          <p class="event-capacity" id="eventCapacity" hidden></p>
 
-        <section class="home-section" aria-labelledby="eventHeading">
-          <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card-grid" id="homeEventGrid"></div>
-          <div class="card card-placeholder" id="homeEventPlaceholder">
-            <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
-            <p data-i18n="homeEventPlaceholderText">
-              Our next gathering is being planned. Check back soon for dates and
-              details.
-            </p>
-          </div>
-          <p class="home-event-more">
-            <a href="events.html" data-i18n="homeAllEvents">See all events</a>
-          </p>
-        </section>
+          <div class="event-body" id="eventBody"></div>
 
-        <section class="contact-strip" aria-labelledby="contactStripHeading">
-          <h2 id="contactStripHeading" data-i18n="homeContactHeading">
-            Get in touch
-          </h2>
-          <p data-i18n="homeContactText">
-            We would love to hear from you. Whether you have a question, want to
-            volunteer, or need support, reach out.
+          <div id="eventAttachmentsSection" hidden>
+            <h2 data-i18n="eventAttachmentsHeading">Attachments</h2>
+            <ul class="event-attachments" id="eventAttachmentsList"></ul>
+          </div>
+
+          <p>
+            <button
+              type="button"
+              class="button button-secondary"
+              id="addToCalendarButton"
+              data-i18n="eventAddToCalendar"
+            >
+              Add to calendar
+            </button>
           </p>
-          <div class="contact-strip-actions">
+
+          <!-- Registration goes here in Section 6, after attachments. -->
+
+          <div class="share-row">
+            <h2 class="share-heading" data-i18n="eventShareHeading">
+              Share this event
+            </h2>
+            <button
+              type="button"
+              class="button button-secondary"
+              id="shareButton"
+              data-i18n="eventShare"
+              hidden
+            >
+              Share
+            </button>
             <a
               class="button button-secondary"
-              href="contact.html"
-              data-i18n="homeContactLink"
-              >Contact us</a
+              id="whatsappShare"
+              href="https://wa.me/"
+              rel="noopener"
+              target="_blank"
+              data-i18n="eventShareWhatsApp"
             >
-            <a
-              class="button button-whatsapp"
-              href="https://wa.me/27663859936"
-              data-i18n="homeWhatsAppLink"
-              >Message us on WhatsApp</a
+              Share on WhatsApp
+            </a>
+            <button
+              type="button"
+              class="button button-secondary"
+              id="copyLinkButton"
+              data-i18n="eventCopyLink"
             >
+              Copy link
+            </button>
+            <span class="share-copied" id="copyConfirmation" role="status" hidden>
+              <span data-i18n="eventLinkCopied">Link copied</span>
+            </span>
           </div>
+        </article>
+
+        <section class="page-heading" id="eventMissing" hidden>
+          <h1 data-i18n="eventNotFoundTitle">This event is not available</h1>
+          <p class="page-lede" data-i18n="eventNotFoundText">
+            It may have been removed, or it may not be published yet.
+          </p>
+          <a
+            class="button button-secondary"
+            href="events.html"
+            data-i18n="eventBackToEvents"
+          >
+            Back to events
+          </a>
         </section>
+
+        <noscript>
+          <p class="blog-empty">
+            Events need JavaScript to load. Please enable it to read them.
+          </p>
+        </noscript>
       </div>
     </main>
 
@@ -603,9 +571,7 @@
             <li>
               <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
             </li>
-            <li>
-              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
-            </li>
+            <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
             <li>
               <a href="accessibility.html" data-i18n="legalAccessibility"
                 >Accessibility statement</a
@@ -630,20 +596,7 @@
         </p>
       </div>
     </footer>
-    <script>
-      // Both scripts pull the Firebase modules, so they start after the page
-      // has painted rather than competing with the fonts on the network.
-      window.addEventListener("load", function () {
-        var blogScript = document.createElement("script");
-        blogScript.type = "module";
-        blogScript.src = "home-blog.js";
-        document.body.appendChild(blogScript);
 
-        var eventScript = document.createElement("script");
-        eventScript.type = "module";
-        eventScript.src = "home-events.js";
-        document.body.appendChild(eventScript);
-      });
-    </script>
+    <script type="module" src="event.js"></script>
   </body>
 </html>
