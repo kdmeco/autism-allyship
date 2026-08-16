@@ -87,7 +87,7 @@ function buildCard(resource) {
   const card = document.createElement("details");
   card.className = "resource-card";
   card.dataset.category = resource.category;
-  card.dataset.province = resource.province;
+  card.dataset.provinces = resource.provinces.join(",");
   card.dataset.searchText = (
     resource.name +
     " " +
@@ -100,7 +100,7 @@ function buildCard(resource) {
   name.className = "resource-name";
   name.textContent = resource.name;
 
-  const metaParts = [resource.category, resource.province].filter(Boolean);
+  const metaParts = [resource.category, resource.provinces.join(" \u00b7 ")].filter(Boolean);
   let meta = null;
   if (metaParts.length > 0) {
     meta = document.createElement("span");
@@ -221,7 +221,7 @@ function applyFilters() {
       const matches =
         (!term || card.dataset.searchText.includes(term)) &&
         (!activeCategory || card.dataset.category === activeCategory) &&
-        (!province || card.dataset.province === province);
+        (!province || card.dataset.provinces.split(",").includes(province));
 
       card.hidden = !matches;
       if (matches) {
@@ -285,7 +285,11 @@ async function loadResources() {
         name: data.name || "Untitled",
         description: data.description || "",
         category: (data.category || "").trim(),
-        province: data.province || "",
+        provinces: Array.isArray(data.provinces)
+          ? data.provinces
+          : data.province
+            ? [data.province]
+            : [],
         phone: data.phone || "",
         email: data.email || "",
         website: data.website || "",
