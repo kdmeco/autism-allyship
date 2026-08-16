@@ -456,6 +456,44 @@
               </p>
             </div>
 
+            <div class="form-field">
+              <label for="image" data-i18n="adminEventsImage"
+                >Poster image</label
+              >
+              <input type="file" id="image" name="image" accept="image/*" />
+              <p class="form-field-note" data-i18n="adminEventsImageNote">
+                Optional. Resized to 1600px WebP and a 400px thumbnail. Takes
+                about a minute to appear on the site.
+              </p>
+              <div class="image-preview" id="imagePreview" hidden>
+                <p
+                  class="form-field-note"
+                  id="imageUploadStatus"
+                  data-i18n="adminEventsImageUploading"
+                >
+                  Uploading image...
+                </p>
+              </div>
+              <p
+                class="form-error"
+                id="imageError"
+                hidden
+                data-i18n="adminEventsImageError"
+              >
+                Failed to upload the image. Try again.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="imageAlt" data-i18n="adminEventsImageAltLabel"
+                >Image description</label
+              >
+              <input type="text" id="imageAlt" name="imageAlt" />
+              <p class="form-field-note" data-i18n="adminEventsImageAltNote">
+                Optional. Describes the poster image for screen readers.
+              </p>
+            </div>
+
             <div class="form-field form-field-toggle">
               <label for="published" class="toggle-label">
                 <span data-i18n="adminEventsPublished">Published</span>
