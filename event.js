@@ -8,6 +8,7 @@ import {
   getDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { translated } from "./shared.js";
 
 const article = document.getElementById("eventArticle");
 const titleSlot = document.getElementById("eventTitle");
@@ -24,14 +25,6 @@ const copyLinkButton = document.getElementById("copyLinkButton");
 const copyConfirmation = document.getElementById("copyConfirmation");
 
 const eventId = new URLSearchParams(window.location.search).get("id");
-
-// Strings built in JavaScript miss applyLanguage, so they are looked up here
-// for the language already resolved by main.js.
-function translated(key) {
-  const language = document.documentElement.getAttribute("lang") || "en";
-  const dictionary = translations[language] || translations.en;
-  return dictionary[key] || translations.en[key];
-}
 
 function showMissing() {
   article.hidden = true;

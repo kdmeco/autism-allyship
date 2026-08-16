@@ -11,3 +11,11 @@ export function thumbPath(imageUrl) {
   }
   return imageUrl.slice(0, dot) + "-thumb" + imageUrl.slice(dot);
 }
+
+// Strings built in JavaScript miss applyLanguage, so they are looked up here
+// for the language already resolved by main.js.
+export function translated(key) {
+  const language = document.documentElement.getAttribute("lang") || "en";
+  const dictionary = translations[language] || translations.en;
+  return dictionary[key] || translations.en[key];
+}

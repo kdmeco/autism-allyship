@@ -13,7 +13,7 @@ import {
   getDocs,
   getCountFromServer,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { thumbPath } from "./shared.js";
+import { thumbPath, translated } from "./shared.js";
 
 const PAGE_SIZE = 9;
 
@@ -25,14 +25,6 @@ const emptyState = document.getElementById("blogEmpty");
 const urlParams = new URLSearchParams(window.location.search);
 const activeCategory = urlParams.get("category") || "";
 const requestedPage = parseInt(urlParams.get("page"), 10) || 1;
-
-// Strings built in JavaScript miss applyLanguage, so they are looked up here
-// for the language already resolved by main.js.
-function translated(key) {
-  const language = document.documentElement.getAttribute("lang") || "en";
-  const dictionary = translations[language] || translations.en;
-  return dictionary[key] || translations.en[key];
-}
 
 function pageLink(pageNumber, category) {
   const params = new URLSearchParams();
