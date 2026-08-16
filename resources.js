@@ -12,6 +12,7 @@ import {
   where,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { translated } from "./shared.js";
 
 const toolbar = document.getElementById("resourcesToolbar");
 const list = document.getElementById("resourceList");
@@ -26,14 +27,6 @@ const noneEmpty = document.getElementById("resourcesNone");
 
 let totalResources = 0;
 let activeCategory = "";
-
-// Strings built in JavaScript miss applyLanguage, so they are looked up here
-// for the language already resolved by main.js.
-function translated(key) {
-  const language = document.documentElement.getAttribute("lang") || "en";
-  const dictionary = translations[language] || translations.en;
-  return dictionary[key] || translations.en[key];
-}
 
 function excerpt(description) {
   const flat = description.replace(/\s+/g, " ").trim();
