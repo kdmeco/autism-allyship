@@ -17,10 +17,7 @@ import {
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { resizeImage, fileToBase64 } from "./resize-helper.js";
-
-// The Worker serves its placeholder page at the root, so the upload endpoint
-// answers at /upload.
-const WORKER_URL = "https://autism-allyship-upload.kdmeco-dev.workers.dev/upload";
+import { WORKER_UPLOAD_URL, uploadBranch } from "./upload.js";
 
 // Matches the Worker's own limits, so a rejection is explained here rather
 // than arriving as a bare 413 with no context.
@@ -151,22 +148,6 @@ function clearImageError() {
   imageError.textContent = "";
 }
 
-// Uploads should land on the branch this page was served from, so an admin
-// working against a preview does not commit images to production.
-function uploadBranch() {
-  const host = window.location.hostname;
-  if (host === "staging.autism-allyship.pages.dev") {
-    return "staging";
-  }
-  if (host === "dev.autism-allyship.pages.dev") {
-    return "dev";
-  }
-  if (host === "localhost" || host === "127.0.0.1") {
-    return "dev";
-  }
-  return null;
-}
-
 // When an image is selected, resize it in the browser and send it to the
 // upload Worker with the admin's ID token. The committed path is remembered
 // and stored on save.
@@ -187,7 +168,7 @@ imageInput.addEventListener("change", async function () {
     const branch = uploadBranch();
 
     // Send the full image and its thumbnail in one commit.
-    const response = await fetch(WORKER_URL, {
+    const response = await fetch(WORKER_UPLOAD_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -332,7 +313,7 @@ attachmentsInput.addEventListener("change", async function () {
     const token = await auth.currentUser.getIdToken();
     const branch = uploadBranch();
 
-    const response = await fetch(WORKER_URL, {
+    const response = await fetch(WORKER_UPLOAD_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

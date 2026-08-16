@@ -13,12 +13,10 @@ import {
   deleteDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { WORKER_REMOVE_URL, uploadBranch } from "./upload.js";
 
 const groups = document.getElementById("eventGroups");
 const emptyState = document.getElementById("emptyState");
-
-const WORKER_REMOVE_URL =
-  "https://autism-allyship-upload.kdmeco-dev.workers.dev/remove";
 
 let allEvents = [];
 
@@ -297,22 +295,6 @@ function removeUploadedFiles(eventItem) {
     .catch(function (error) {
       console.error("Failed to remove the uploaded files:", error);
     });
-}
-
-// Images and attachments should be removed from the branch this page was
-// served from, the same rule the upload in events-edit.js follows.
-function uploadBranch() {
-  const host = window.location.hostname;
-  if (host === "staging.autism-allyship.pages.dev") {
-    return "staging";
-  }
-  if (host === "dev.autism-allyship.pages.dev") {
-    return "dev";
-  }
-  if (host === "localhost" || host === "127.0.0.1") {
-    return "dev";
-  }
-  return null;
 }
 
 function chevronSvg() {
