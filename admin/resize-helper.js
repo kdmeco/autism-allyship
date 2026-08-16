@@ -27,6 +27,26 @@ export async function resizeImage(file) {
   };
 }
 
+// Reads a file exactly as it is and returns its base64 content, for files
+// that cannot be put through a canvas, such as a PDF attachment.
+export function fileToBase64(file) {
+  return new Promise(function (resolve, reject) {
+    const reader = new FileReader();
+
+    reader.onload = function () {
+      // reader.result is a data URL, so only the part after the comma is
+      // the base64 payload the Worker expects.
+      resolve(reader.result.split(",")[1]);
+    };
+
+    reader.onerror = function () {
+      reject(new Error("Failed to read the file."));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+
 // Loads a File into an HTMLImageElement so we can read its natural size.
 function readImage(file) {
   return new Promise(function (resolve, reject) {
