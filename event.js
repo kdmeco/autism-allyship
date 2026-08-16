@@ -16,6 +16,7 @@ const capacitySlot = document.getElementById("eventCapacity");
 const bodySlot = document.getElementById("eventBody");
 const attachmentsSection = document.getElementById("eventAttachmentsSection");
 const attachmentsList = document.getElementById("eventAttachmentsList");
+const addToCalendarButton = document.getElementById("addToCalendarButton");
 const missing = document.getElementById("eventMissing");
 const shareButton = document.getElementById("shareButton");
 const whatsappShare = document.getElementById("whatsappShare");
@@ -87,6 +88,67 @@ function renderAttachments(attachments) {
   attachmentsSection.hidden = false;
 }
 
+// RFC 5545 wants CRLF, escaped text and UTC stamps. No DTEND: SCHEMA.md has
+// startsAt and deliberately no end time, and inventing one would put a made
+// up duration in somebody's calendar.
+function icsEscape(text) {
+  return text
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\n/g, "\\n");
+}
+
+function icsStamp(date) {
+  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+}
+
+// Anything past 75 octets continues on the next line with one leading space.
+function foldLine(line) {
+  if (line.length <= 75) {
+    return line;
+  }
+  const parts = [line.slice(0, 75)];
+  let rest = line.slice(75);
+  while (rest.length > 74) {
+    parts.push(" " + rest.slice(0, 74));
+    rest = rest.slice(74);
+  }
+  parts.push(" " + rest);
+  return parts.join("\r\n");
+}
+
+function buildIcsContent(data, startsAt) {
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Autism Allyship Foundation//Events//EN",
+    "BEGIN:VEVENT",
+    "UID:" + eventId + "@autismallyship.org",
+    "DTSTAMP:" + icsStamp(new Date()),
+    "DTSTART:" + icsStamp(startsAt),
+    "SUMMARY:" + icsEscape(data.title || "Untitled"),
+    "DESCRIPTION:" + icsEscape(data.description || ""),
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ];
+
+  return lines.map(foldLine).join("\r\n") + "\r\n";
+}
+
+function downloadIcs(data, startsAt) {
+  const content = buildIcsContent(data, startsAt);
+  const blob = new Blob([content], { type: "text/calendar" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "event.ics";
+  link.click();
+
+  URL.revokeObjectURL(url);
+}
+
 function renderEvent(data) {
   titleSlot.textContent = data.title || "Untitled";
   document.title = (data.title || "Event") + " | Autism Allyship Foundation";
@@ -105,6 +167,16 @@ function renderEvent(data) {
   }
   metaParts.push(formatPrice(data));
   metaSlot.textContent = metaParts.join(" · ");
+
+  // startsAt is required by the admin form, so this only matters for a
+  // record edited by hand into an invalid state. The button stays visible
+  // either way, it just does nothing without a date to build from.
+  addToCalendarButton.addEventListener("click", function () {
+    if (!startsAt) {
+      return;
+    }
+    downloadIcs(data, startsAt);
+  });
 
   if (data.imageUrl) {
     // Built here rather than shipped empty in the page, because an img with
