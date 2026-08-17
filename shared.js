@@ -95,9 +95,11 @@ export function downloadIcs(eventData, filename) {
 // reworded, fires on an ordinary refresh as readily as on someone actually
 // leaving, and a sudden system interruption is exactly what the sensory
 // rules elsewhere on this site exist to avoid. The insistence here comes
-// from layout and copy instead: the panel stays visually prominent until
-// the visitor either uses one of the save actions or explicitly
-// acknowledges it, at which point it quietly collapses.
+// from layout and copy instead: the panel stays visually prominent, and
+// every action stays available for as long as the visitor is on the page.
+// It deliberately never collapses or marks itself done, even after a save
+// action runs: a misclick on the wrong option must not read as "handled"
+// and take the others off the table.
 export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
   const panel = document.createElement("div");
   panel.className = "save-ticket-panel";
@@ -115,12 +117,6 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
   const actions = document.createElement("div");
   actions.className = "save-ticket-actions";
 
-  function acknowledgeSave() {
-    panel.classList.add("save-ticket-panel-acknowledged");
-    acknowledgeButton.setAttribute("aria-pressed", "true");
-    acknowledgeButton.textContent = translated("saveTicketAcknowledged");
-  }
-
   const copyButton = document.createElement("button");
   copyButton.type = "button";
   copyButton.className = "button button-secondary";
@@ -134,7 +130,6 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
     try {
       await navigator.clipboard.writeText(ticketUrl);
       copyConfirmation.hidden = false;
-      acknowledgeSave();
       setTimeout(function () {
         copyConfirmation.hidden = true;
       }, 4000);
@@ -149,21 +144,38 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
   whatsappLink.target = "_blank";
   whatsappLink.rel = "noopener";
   whatsappLink.textContent = translated("saveTicketWhatsApp");
-  whatsappLink.addEventListener("click", acknowledgeSave);
 
-  const emailLink = document.createElement("a");
-  emailLink.className = "button button-secondary";
   const subject = translated("saveTicketEmailSubject").replace(
     "{event}",
     eventTitle || "",
   );
-  emailLink.href =
+  const mailtoHref =
     "mailto:?subject=" +
     encodeURIComponent(subject) +
     "&body=" +
     encodeURIComponent(ticketUrl);
-  emailLink.textContent = translated("saveTicketEmailSelf");
-  emailLink.addEventListener("click", acknowledgeSave);
+
+  // navigator.share opens the OS share sheet, which lists every app
+  // registered to handle a shared link, Gmail included where it is
+  // installed, rather than forcing whatever the OS picked as the default
+  // mail handler. mailto is the fallback where no share sheet exists,
+  // mainly desktop browsers.
+  const emailButton = document.createElement("button");
+  emailButton.type = "button";
+  emailButton.className = "button button-secondary";
+  emailButton.textContent = translated("saveTicketEmailSelf");
+  emailButton.addEventListener("click", async function () {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: subject, text: ticketUrl, url: ticketUrl });
+      } catch (error) {
+        // Closing the share sheet is not an error worth showing, matching
+        // the pattern the event page's own share button already uses.
+      }
+      return;
+    }
+    window.location.href = mailtoHref;
+  });
 
   const calendarButton = document.createElement("button");
   calendarButton.type = "button";
@@ -177,12 +189,10 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
       return;
     }
     downloadIcs(icsData, "ticket.ics");
-    acknowledgeSave();
   });
 
   // Inert until the app is on the Play Store: Section 10 of the notes
-  // tracks wiring the real link. Do not fake a store URL in the meantime,
-  // and this one does not count as a save action since it goes nowhere yet.
+  // tracks wiring the real link. Do not fake a store URL in the meantime.
   const appLink = document.createElement("a");
   appLink.className = "button button-secondary";
   appLink.href = "#";
@@ -192,19 +202,11 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
     copyButton,
     copyConfirmation,
     whatsappLink,
-    emailLink,
+    emailButton,
     calendarButton,
     appLink,
   );
   panel.appendChild(actions);
-
-  const acknowledgeButton = document.createElement("button");
-  acknowledgeButton.type = "button";
-  acknowledgeButton.className = "save-ticket-acknowledge";
-  acknowledgeButton.setAttribute("aria-pressed", "false");
-  acknowledgeButton.textContent = translated("saveTicketAcknowledge");
-  acknowledgeButton.addEventListener("click", acknowledgeSave);
-  panel.appendChild(acknowledgeButton);
 
   return panel;
 }
