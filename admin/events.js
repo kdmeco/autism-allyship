@@ -13,12 +13,11 @@ import {
   deleteDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { WORKER_REMOVE_URL, uploadBranch } from "./upload.js";
+import { chevronSvg } from "../shared.js";
 
 const groups = document.getElementById("eventGroups");
 const emptyState = document.getElementById("emptyState");
-
-const WORKER_REMOVE_URL =
-  "https://autism-allyship-upload.kdmeco-dev.workers.dev/remove";
 
 let allEvents = [];
 
@@ -299,39 +298,3 @@ function removeUploadedFiles(eventItem) {
     });
 }
 
-// Images and attachments should be removed from the branch this page was
-// served from, the same rule the upload in events-edit.js follows.
-function uploadBranch() {
-  const host = window.location.hostname;
-  if (host === "staging.autism-allyship.pages.dev") {
-    return "staging";
-  }
-  if (host === "dev.autism-allyship.pages.dev") {
-    return "dev";
-  }
-  if (host === "localhost" || host === "127.0.0.1") {
-    return "dev";
-  }
-  return null;
-}
-
-function chevronSvg() {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("class", "chevron");
-  svg.setAttribute("viewBox", "0 0 16 16");
-  svg.setAttribute("width", "16");
-  svg.setAttribute("height", "16");
-  svg.setAttribute("aria-hidden", "true");
-  svg.setAttribute("focusable", "false");
-
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", "M3 6l5 5 5-5");
-  path.setAttribute("fill", "none");
-  path.setAttribute("stroke", "currentColor");
-  path.setAttribute("stroke-width", "2");
-  path.setAttribute("stroke-linecap", "round");
-  path.setAttribute("stroke-linejoin", "round");
-
-  svg.appendChild(path);
-  return svg;
-}
