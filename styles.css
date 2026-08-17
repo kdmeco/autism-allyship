@@ -2144,3 +2144,31 @@ ul.event-attachments li {
 .event-attachment-name {
   overflow-wrap: anywhere;
 }
+
+.contact-section {
+  padding-block: var(--space-7);
+}
+
+.contact-section h2 {
+  margin-bottom: var(--space-3);
+}
+
+.contact-form {
+  max-width: 30rem;
+}
+
+.contact-form select {
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--colour-surface);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--colour-text);
+  cursor: pointer;
+}
+
+.contact-form select:focus-visible {
+  outline: 3px solid var(--colour-focus);
+  outline-offset: 2px;
+}
