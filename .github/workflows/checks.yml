@@ -46,6 +46,7 @@ jobs:
             './resources.html'
             './events.html'
             './event.html'
+            './ticket.html'
           fail: false
 
   lighthouse:
