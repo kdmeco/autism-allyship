@@ -8,7 +8,7 @@ import {
   getDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { translated } from "./shared.js";
+import { translated, downloadIcs, buildSavePanel } from "./shared.js";
 import { API_TICKET_URL } from "./api.js";
 
 const article = document.getElementById("eventArticle");
@@ -42,6 +42,9 @@ const registrationConfirmation = document.getElementById(
   "registrationConfirmation",
 );
 const ticketLink = document.getElementById("ticketLink");
+const ticketConfirmationEmailSent = document.getElementById(
+  "ticketConfirmationEmailSent",
+);
 const soldOutNotice = document.getElementById("ticketSoldOutNotice");
 const pastNotice = document.getElementById("ticketPastNotice");
 
@@ -203,8 +206,35 @@ function setUpRegistration(data, startsAt) {
       ticketLink.href = url.href;
       // The link's visible text is the address itself, not a generic
       // "click here", so it can be read out, copied or texted on even if a
-      // screen reader announces only the link text.
+      // screen reader announces only the link text. This is also the
+      // fallback if the save panel below it fails for any reason: plain
+      // text and a real href, nothing that depends on JavaScript running
+      // twice.
       ticketLink.textContent = url.href;
+
+      // Only claim the email went out when the Worker actually confirms it.
+      // Brevo can be unreachable, misconfigured or simply not set up yet,
+      // and the visible link above is correct either way.
+      ticketConfirmationEmailSent.hidden = !result.emailSent;
+
+      registrationConfirmation
+        .querySelectorAll(".save-ticket-panel")
+        .forEach(function (existing) {
+          existing.remove();
+        });
+      registrationConfirmation.appendChild(
+        buildSavePanel({
+          ticketUrl: url.href,
+          eventTitle: data.title,
+          icsData: {
+            uid: eventId,
+            title: data.title,
+            description: data.description,
+            startsAt: startsAt,
+          },
+        }),
+      );
+
       registrationConfirmation.hidden = false;
     } catch (error) {
       console.error("Registration failed:", error);
@@ -249,67 +279,6 @@ function renderAttachments(attachments) {
   attachmentsSection.hidden = false;
 }
 
-// RFC 5545 wants CRLF, escaped text and UTC stamps. No DTEND: SCHEMA.md has
-// startsAt and deliberately no end time, and inventing one would put a made
-// up duration in somebody's calendar.
-function icsEscape(text) {
-  return text
-    .replace(/\\/g, "\\\\")
-    .replace(/;/g, "\\;")
-    .replace(/,/g, "\\,")
-    .replace(/\n/g, "\\n");
-}
-
-function icsStamp(date) {
-  return date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
-}
-
-// Anything past 75 octets continues on the next line with one leading space.
-function foldLine(line) {
-  if (line.length <= 75) {
-    return line;
-  }
-  const parts = [line.slice(0, 75)];
-  let rest = line.slice(75);
-  while (rest.length > 74) {
-    parts.push(" " + rest.slice(0, 74));
-    rest = rest.slice(74);
-  }
-  parts.push(" " + rest);
-  return parts.join("\r\n");
-}
-
-function buildIcsContent(data, startsAt) {
-  const lines = [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Autism Allyship Foundation//Events//EN",
-    "BEGIN:VEVENT",
-    "UID:" + eventId + "@autismallyship.org",
-    "DTSTAMP:" + icsStamp(new Date()),
-    "DTSTART:" + icsStamp(startsAt),
-    "SUMMARY:" + icsEscape(data.title || "Untitled"),
-    "DESCRIPTION:" + icsEscape(data.description || ""),
-    "END:VEVENT",
-    "END:VCALENDAR",
-  ];
-
-  return lines.map(foldLine).join("\r\n") + "\r\n";
-}
-
-function downloadIcs(data, startsAt) {
-  const content = buildIcsContent(data, startsAt);
-  const blob = new Blob([content], { type: "text/calendar" });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "event.ics";
-  link.click();
-
-  URL.revokeObjectURL(url);
-}
-
 function renderEvent(data) {
   titleSlot.textContent = data.title || "Untitled";
   document.title = (data.title || "Event") + " | Autism Allyship Foundation";
@@ -336,7 +305,15 @@ function renderEvent(data) {
     if (!startsAt) {
       return;
     }
-    downloadIcs(data, startsAt);
+    downloadIcs(
+      {
+        uid: eventId,
+        title: data.title,
+        description: data.description,
+        startsAt: startsAt,
+      },
+      "event.ics",
+    );
   });
 
   if (data.imageUrl) {

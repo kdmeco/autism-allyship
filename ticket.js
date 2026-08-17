@@ -10,7 +10,7 @@ import {
   getDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { translated } from "./shared.js";
+import { translated, buildSavePanel } from "./shared.js";
 
 const article = document.getElementById("ticketArticle");
 const eventTitleSlot = document.getElementById("ticketEventTitle");
@@ -69,7 +69,28 @@ function renderTicket(data) {
     redeemedNotice.hidden = false;
   }
 
-  renderQr(token);
+  // The full page URL, not the bare token: a phone camera has to see a
+  // link it can open, not a string it offers to search for.
+  const ticketUrl = window.location.href;
+  renderQr(ticketUrl);
+
+  // Offered here too, not only right after registering: a visitor can
+  // land on this exact page from a forwarded link or an old email with
+  // nothing saved anywhere yet.
+  article.appendChild(
+    buildSavePanel({
+      ticketUrl: ticketUrl,
+      eventTitle: data.eventTitle,
+      icsData: {
+        uid: data.eventId,
+        title: data.eventTitle,
+        // The ticket document carries no event description, unlike the
+        // confirmation on event.html, which has the full event to hand.
+        description: "",
+        startsAt: data.eventStartsAt ? data.eventStartsAt.toDate() : null,
+      },
+    }),
+  );
 
   article.hidden = false;
 }

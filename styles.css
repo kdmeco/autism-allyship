@@ -2232,6 +2232,70 @@ ul.event-attachments li {
   color: var(--colour-text-muted);
 }
 
+/* Save-your-ticket panel: shared between the event page confirmation and
+   the ticket page. Deliberately prominent (accent border, not just a plain
+   box) until acknowledged, because there is no account behind this link to
+   recover it from later. */
+.save-ticket-panel {
+  margin-block: var(--space-5);
+  padding: var(--space-5);
+  border: 2px solid var(--colour-accent-fill);
+  border-radius: var(--radius-md);
+  background-color: var(--colour-surface-alt);
+}
+
+.save-ticket-panel h3 {
+  margin-bottom: var(--space-2);
+}
+
+.save-ticket-panel p {
+  color: var(--colour-text-muted);
+  margin-bottom: var(--space-4);
+}
+
+.save-ticket-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.save-ticket-acknowledge {
+  background: transparent;
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-5);
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--colour-text);
+}
+
+.save-ticket-acknowledge:hover {
+  background: var(--colour-surface);
+}
+
+.save-ticket-acknowledge[aria-pressed="true"] {
+  border-color: var(--colour-accent-fill);
+  color: var(--colour-accent-text);
+}
+
+/* Collapses to a quiet line once the visitor has saved the ticket one way
+   or another. A transition here is fine: it only ever runs in response to
+   the visitor's own click, and sensory mode's blanket rule already zeroes
+   every transition and animation on the page regardless. */
+.save-ticket-panel-acknowledged {
+  border-color: var(--colour-line);
+  background-color: transparent;
+  padding-block: var(--space-3);
+  transition: padding var(--speed-quick) ease;
+}
+
+.save-ticket-panel-acknowledged p,
+.save-ticket-panel-acknowledged .save-ticket-actions {
+  display: none;
+}
+
 /* Admin events */
 
 .event-attachment-list {
