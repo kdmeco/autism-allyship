@@ -16,19 +16,10 @@ import {
   where,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+import { thumbPath } from "./shared.js";
 
 const grid = document.getElementById("homeEventGrid");
 const placeholder = document.getElementById("homeEventPlaceholder");
-
-// The stored path points at the full image. The 400px thumbnail sits beside
-// it with a -thumb suffix before the file extension.
-function thumbPath(imageUrl) {
-  const dot = imageUrl.lastIndexOf(".");
-  if (dot === -1) {
-    return imageUrl;
-  }
-  return imageUrl.slice(0, dot) + "-thumb" + imageUrl.slice(dot);
-}
 
 function buildCard(eventItem) {
   const card = document.createElement("article");
