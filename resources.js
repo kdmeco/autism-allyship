@@ -28,15 +28,6 @@ const noneEmpty = document.getElementById("resourcesNone");
 let totalResources = 0;
 let activeCategory = "";
 
-function excerpt(description) {
-  const flat = description.replace(/\s+/g, " ").trim();
-  if (flat.length <= 160) {
-    return flat;
-  }
-  return flat.slice(0, 157).trimEnd() + "...";
-}
-
-
 function contactLink(kind, value) {
   const link = document.createElement("a");
 
@@ -73,24 +64,34 @@ function buildCard(resource) {
   name.className = "resource-name";
   name.textContent = resource.name;
 
-  const metaParts = [resource.category, resource.provinces.join(" \u00b7 ")].filter(Boolean);
-  let meta = null;
-  if (metaParts.length > 0) {
-    meta = document.createElement("span");
-    meta.className = "resource-meta";
-    meta.textContent = metaParts.join(" \u00b7 ");
+  // The collapsed card carries the name, the category as a pill and the
+  // provinces. The description waits until the card is opened, so it is
+  // never shown twice.
+  const pillRow = document.createElement("span");
+  pillRow.className = "resource-pill-row";
+  if (resource.category) {
+    const pill = document.createElement("span");
+    pill.className = "resource-pill";
+    pill.textContent = resource.category;
+    pillRow.appendChild(pill);
   }
 
-  const summaryExcerpt = document.createElement("p");
-  summaryExcerpt.className = "resource-excerpt";
-  summaryExcerpt.textContent = excerpt(resource.description);
+  const provinceText = resource.provinces.join(" \u00b7 ");
+  let meta = null;
+  if (provinceText) {
+    meta = document.createElement("span");
+    meta.className = "resource-meta";
+    meta.textContent = provinceText;
+  }
 
   summary.appendChild(chevronSvg());
   summary.appendChild(name);
+  if (pillRow.childNodes.length > 0) {
+    summary.appendChild(pillRow);
+  }
   if (meta) {
     summary.appendChild(meta);
   }
-  summary.appendChild(summaryExcerpt);
 
   const details = document.createElement("div");
   details.className = "resource-details";
