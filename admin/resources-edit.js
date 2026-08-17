@@ -129,14 +129,22 @@ form.addEventListener("submit", async function (event) {
 
   const website = normaliseWebsite(websiteInput.value);
   if (website) {
-    try {
-      const parsed = new URL(website);
-      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
-        throw new Error("Not a web address.");
-      }
-    } catch (error) {
+    // Chrome's URL parser happily encodes a space instead of rejecting the
+    // address, so "not a url" would otherwise save. Whitespace is never
+    // valid in a web address; refuse it here.
+    if (/\s/.test(website)) {
       showError(websiteError, "That web address does not look right.");
       valid = false;
+    } else {
+      try {
+        const parsed = new URL(website);
+        if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+          throw new Error("Not a web address.");
+        }
+      } catch (error) {
+        showError(websiteError, "That web address does not look right.");
+        valid = false;
+      }
     }
   }
 
