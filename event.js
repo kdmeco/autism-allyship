@@ -124,7 +124,7 @@ function setUpRegistration(data, startsAt) {
     quantityNote.textContent =
       effectiveMax === 1
         ? translated("ticketQuantityCapNoteSingular")
-        : translated("ticketQuantityCapNotePlural").replace(
+        : translated("ticketQuantityCapNotePlural").replaceAll(
             "{count}",
             String(effectiveMax),
           );
@@ -158,7 +158,7 @@ function setUpRegistration(data, startsAt) {
         quantityError,
         effectiveMax === 1
           ? translated("ticketQuantityCapNoteSingular")
-          : translated("ticketQuantityCapNotePlural").replace(
+          : translated("ticketQuantityCapNotePlural").replaceAll(
               "{count}",
               String(effectiveMax),
             ),
