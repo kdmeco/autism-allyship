@@ -83,7 +83,7 @@
         }
       })();
     </script>
-    <title>Event | Autism Allyship</title>
+    <title>Your ticket | Autism Allyship Foundation</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -395,234 +395,51 @@
 
     <main id="main">
       <div class="container">
-        <article class="event-article" id="eventArticle" hidden>
+        <article class="ticket-article" id="ticketArticle" hidden>
           <a class="back-link" href="events.html" data-i18n="eventBackToEvents"
             >Back to events</a
           >
 
-          <h1 id="eventTitle">Event</h1>
-          <p class="event-meta" id="eventMeta"></p>
-          <p class="event-capacity" id="eventCapacity" hidden></p>
+          <h1 data-i18n="ticketPageHeading">Your ticket</h1>
+          <p class="ticket-event-title" id="ticketEventTitle"></p>
+          <p class="ticket-event-date" id="ticketEventDate"></p>
 
-          <div class="event-body" id="eventBody"></div>
-
-          <div id="eventAttachmentsSection" hidden>
-            <h2 data-i18n="eventAttachmentsHeading">Attachments</h2>
-            <ul class="event-attachments" id="eventAttachmentsList"></ul>
-          </div>
-
-          <p>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="addToCalendarButton"
-              data-i18n="eventAddToCalendar"
-            >
-              Add to calendar
-            </button>
-          </p>
-
-          <section class="ticket-registration" id="ticketRegistration" hidden>
-            <h2 data-i18n="ticketRegisterHeading">Register for this event</h2>
-            <p class="page-lede" data-i18n="ticketRegisterIntro">
-              Free to attend. Fill in your details below and we'll send you a
-              ticket with a QR code to show at the door.
-            </p>
-
-            <form class="registration-form" id="registrationForm" novalidate>
-              <div class="form-field">
-                <label for="attendeeName">
-                  <span data-i18n="ticketNameLabel">Name</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="text"
-                  id="attendeeName"
-                  name="attendeeName"
-                  autocomplete="name"
-                  required
-                />
-                <p
-                  class="form-error"
-                  id="attendeeNameError"
-                  hidden
-                  data-i18n="ticketNameError"
-                >
-                  Enter your name.
-                </p>
-              </div>
-
-              <div class="form-field">
-                <label for="attendeeEmail">
-                  <span data-i18n="ticketEmailLabel">Email</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="email"
-                  id="attendeeEmail"
-                  name="attendeeEmail"
-                  autocomplete="email"
-                  required
-                />
-                <p
-                  class="form-error"
-                  id="attendeeEmailError"
-                  hidden
-                  data-i18n="ticketEmailError"
-                >
-                  Enter a valid email address.
-                </p>
-              </div>
-
-              <div class="form-field">
-                <label for="attendeeQuantity">
-                  <span data-i18n="ticketQuantityLabel">Quantity</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="number"
-                  id="attendeeQuantity"
-                  name="quantity"
-                  min="1"
-                  step="1"
-                  value="1"
-                  required
-                />
-                <p class="form-field-note" id="quantityNote" hidden></p>
-                <p
-                  class="form-error"
-                  id="attendeeQuantityError"
-                  hidden
-                  data-i18n="ticketQuantityError"
-                >
-                  Enter how many people are coming.
-                </p>
-              </div>
-
-              <p class="popia-notice">
-                <span data-i18n="ticketPopiaNotice"
-                  >Your name and email address are used only to create your
-                  ticket and to contact you about this event. See our</span
-                >
-                <a href="privacy.html" data-i18n="ticketPopiaNoticeLink"
-                  >privacy policy</a
-                >.
-              </p>
-
-              <div class="form-actions">
-                <button
-                  type="submit"
-                  class="button button-primary"
-                  id="registerButton"
-                  data-i18n="ticketRegisterButton"
-                >
-                  Register
-                </button>
-              </div>
-
-              <p
-                class="form-error form-error-general"
-                id="registrationFormError"
-                role="status"
-                hidden
-              ></p>
-            </form>
-
-            <div
-              class="registration-confirmation"
-              id="registrationConfirmation"
-              role="status"
-              hidden
-            >
-              <h3 data-i18n="ticketConfirmationHeading">You're registered!</h3>
-              <p data-i18n="ticketConfirmationText">
-                We've sent your ticket by email. If it doesn't arrive, use the
-                link below, it works either way.
-              </p>
-              <p>
-                <a id="ticketLink" href="#"></a>
-              </p>
-            </div>
-          </section>
+          <p class="ticket-booked-by" id="ticketBookedBy"></p>
 
           <p
-            class="ticket-registration-notice"
-            id="ticketSoldOutNotice"
+            class="ticket-redeemed-notice"
+            id="ticketRedeemedNotice"
+            role="status"
             hidden
-            data-i18n="ticketSoldOutNotice"
-          >
-            This event is sold out.
-          </p>
+          ></p>
 
-          <p
-            class="ticket-registration-notice"
-            id="ticketPastNotice"
-            hidden
-            data-i18n="ticketPastNotice"
-          >
-            This event has already happened, so registration is closed.
-          </p>
-
-          <div class="share-row">
-            <h2 class="share-heading" data-i18n="eventShareHeading">
-              Share this event
-            </h2>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="shareButton"
-              data-i18n="eventShare"
-              hidden
-            >
-              Share
-            </button>
-            <a
-              class="button button-secondary"
-              id="whatsappShare"
-              href="https://wa.me/"
-              rel="noopener"
-              target="_blank"
-              data-i18n="eventShareWhatsApp"
-            >
-              Share on WhatsApp
-            </a>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="copyLinkButton"
-              data-i18n="eventCopyLink"
-            >
-              Copy link
-            </button>
-            <span class="share-copied" id="copyConfirmation" role="status" hidden>
-              <span data-i18n="eventLinkCopied">Link copied</span>
-            </span>
+          <!-- White background is fixed, not theme-aware: a QR on a dark
+               background will not scan, and this has to work at a venue
+               door regardless of the visitor's chosen theme or mode. -->
+          <div class="ticket-qr-wrapper" id="ticketQrWrapper">
+            <canvas id="ticketQrCanvas"></canvas>
           </div>
+
+          <p class="ticket-transfer-note" data-i18n="ticketTransferNote">
+            Anyone with this link can show it at the door. Forwarding it to
+            someone else who is coming in your place is fine.
+          </p>
         </article>
 
-        <section class="page-heading" id="eventMissing" hidden>
-          <h1 data-i18n="eventNotFoundTitle">This event is not available</h1>
-          <p class="page-lede" data-i18n="eventNotFoundText">
-            It may have been removed, or it may not be published yet.
+        <section class="page-heading" id="ticketMissing" hidden>
+          <h1 data-i18n="ticketNotFoundTitle">This ticket could not be found</h1>
+          <p class="page-lede" data-i18n="ticketNotFoundText">
+            The link may be incomplete, or the ticket may have been removed.
+            Check the link and try again.
           </p>
-          <a
-            class="button button-secondary"
-            href="events.html"
-            data-i18n="eventBackToEvents"
-          >
-            Back to events
+          <a class="button button-secondary" href="index.html" data-i18n="ticketBackToHome">
+            Back to home
           </a>
         </section>
 
         <noscript>
           <p class="blog-empty">
-            Events need JavaScript to load. Please enable it to read them.
+            Tickets need JavaScript to load. Please enable it to read them.
           </p>
         </noscript>
       </div>
@@ -742,6 +559,7 @@
       </div>
     </footer>
 
-    <script type="module" src="event.js"></script>
+    <script src="assets/vendor/qrcode.min.js" defer></script>
+    <script type="module" src="ticket.js"></script>
   </body>
 </html>

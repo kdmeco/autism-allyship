@@ -9,6 +9,7 @@ import {
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { translated } from "./shared.js";
+import { API_TICKET_URL } from "./api.js";
 
 const article = document.getElementById("eventArticle");
 const titleSlot = document.getElementById("eventTitle");
@@ -23,6 +24,32 @@ const shareButton = document.getElementById("shareButton");
 const whatsappShare = document.getElementById("whatsappShare");
 const copyLinkButton = document.getElementById("copyLinkButton");
 const copyConfirmation = document.getElementById("copyConfirmation");
+
+const registrationSection = document.getElementById("ticketRegistration");
+const registrationForm = document.getElementById("registrationForm");
+const nameInput = document.getElementById("attendeeName");
+const nameError = document.getElementById("attendeeNameError");
+const emailInput = document.getElementById("attendeeEmail");
+const emailError = document.getElementById("attendeeEmailError");
+const quantityInput = document.getElementById("attendeeQuantity");
+const quantityError = document.getElementById("attendeeQuantityError");
+const quantityNote = document.getElementById("quantityNote");
+const registerButton = document.getElementById("registerButton");
+const registrationFormError = document.getElementById(
+  "registrationFormError",
+);
+const registrationConfirmation = document.getElementById(
+  "registrationConfirmation",
+);
+const ticketLink = document.getElementById("ticketLink");
+const soldOutNotice = document.getElementById("ticketSoldOutNotice");
+const pastNotice = document.getElementById("ticketPastNotice");
+
+// Mirrors the Worker's own cap. A family arrives together, so this stops
+// looking like a family well before it stops looking like a script; the
+// Worker enforces the real limit regardless of what this page allows typing.
+const MAX_GROUP_SIZE = 10;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const eventId = new URLSearchParams(window.location.search).get("id");
 
@@ -60,6 +87,147 @@ function renderCapacity(data) {
   }
 
   capacitySlot.hidden = false;
+}
+
+// Decides which of three states the registration area is in: the form, a
+// sold-out notice, or a past-event notice. Ticketed events get none of
+// these; the paid path is Section 7's Paystack work, and until it exists
+// this page says nothing at all about buying a ticket, rather than
+// half-offering a flow that does not work yet.
+function setUpRegistration(data, startsAt) {
+  if (data.isTicketed) {
+    return;
+  }
+
+  const isPast = !startsAt || startsAt.getTime() <= Date.now();
+  if (isPast) {
+    pastNotice.hidden = false;
+    return;
+  }
+
+  const capacity = typeof data.capacity === "number" ? data.capacity : 0;
+  const ticketsSold =
+    typeof data.ticketsSold === "number" ? data.ticketsSold : 0;
+
+  if (capacity !== 0 && ticketsSold >= capacity) {
+    soldOutNotice.hidden = false;
+    return;
+  }
+
+  const remaining = capacity === 0 ? MAX_GROUP_SIZE : capacity - ticketsSold;
+  const effectiveMax = Math.min(MAX_GROUP_SIZE, remaining);
+  quantityInput.max = String(effectiveMax);
+
+  // Only worth a note when the event's own capacity is the thing doing the
+  // capping. Below the group max for its own sake needs no explanation.
+  if (capacity !== 0 && remaining < MAX_GROUP_SIZE) {
+    quantityNote.textContent =
+      effectiveMax === 1
+        ? translated("ticketQuantityCapNoteSingular")
+        : translated("ticketQuantityCapNotePlural").replace(
+            "{count}",
+            String(effectiveMax),
+          );
+    quantityNote.hidden = false;
+  }
+
+  registrationSection.hidden = false;
+
+  registrationForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    clearRegistrationErrors();
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const quantity = parseInt(quantityInput.value, 10);
+
+    let valid = true;
+    if (!name) {
+      showRegistrationError(nameError, translated("ticketNameError"));
+      valid = false;
+    }
+    if (!email || !EMAIL_PATTERN.test(email)) {
+      showRegistrationError(emailError, translated("ticketEmailError"));
+      valid = false;
+    }
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      showRegistrationError(quantityError, translated("ticketQuantityError"));
+      valid = false;
+    } else if (quantity > effectiveMax) {
+      showRegistrationError(
+        quantityError,
+        effectiveMax === 1
+          ? translated("ticketQuantityCapNoteSingular")
+          : translated("ticketQuantityCapNotePlural").replace(
+              "{count}",
+              String(effectiveMax),
+            ),
+      );
+      valid = false;
+    }
+    if (!valid) {
+      return;
+    }
+
+    registerButton.disabled = true;
+    registerButton.textContent = translated("ticketRegistering");
+
+    try {
+      const response = await fetch(API_TICKET_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          eventId: eventId,
+          attendeeName: name,
+          attendeeEmail: email,
+          quantity: quantity,
+        }),
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.ok) {
+        showRegistrationError(
+          registrationFormError,
+          result.error || translated("ticketRegisterFailed"),
+        );
+        registerButton.disabled = false;
+        registerButton.textContent = translated("ticketRegisterButton");
+        return;
+      }
+
+      registrationForm.hidden = true;
+      const url = new URL(
+        "ticket.html?token=" + encodeURIComponent(result.token),
+        window.location.href,
+      );
+      ticketLink.href = url.href;
+      // The link's visible text is the address itself, not a generic
+      // "click here", so it can be read out, copied or texted on even if a
+      // screen reader announces only the link text.
+      ticketLink.textContent = url.href;
+      registrationConfirmation.hidden = false;
+    } catch (error) {
+      console.error("Registration failed:", error);
+      showRegistrationError(
+        registrationFormError,
+        translated("ticketRegisterFailed"),
+      );
+      registerButton.disabled = false;
+      registerButton.textContent = translated("ticketRegisterButton");
+    }
+  });
+}
+
+function showRegistrationError(element, message) {
+  element.textContent = message;
+  element.hidden = false;
+}
+
+function clearRegistrationErrors() {
+  nameError.hidden = true;
+  emailError.hidden = true;
+  quantityError.hidden = true;
+  registrationFormError.hidden = true;
 }
 
 function renderAttachments(attachments) {
@@ -184,6 +352,7 @@ function renderEvent(data) {
   }
 
   renderCapacity(data);
+  setUpRegistration(data, startsAt);
 
   // Each line break in the textarea becomes its own paragraph, and the text
   // goes in through textContent so nothing in an event can run as markup.
