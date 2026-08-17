@@ -1758,6 +1758,18 @@ ul.feature-list li {
   color: var(--colour-text-muted);
 }
 
+.resources-disclaimer p {
+  margin: 0;
+}
+
+.resources-suggest {
+  margin-top: var(--space-2);
+}
+
+.resources-suggest a {
+  font-weight: 600;
+}
+
 .resources-toolbar {
   display: flex;
   flex-wrap: wrap;
