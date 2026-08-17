@@ -160,6 +160,9 @@ const translations = {
       "Support services, organisations and information across South Africa.",
     resourcesDisclaimer:
       "Listing a service here does not mean we recommend or endorse it. Please check that anything you find is right for you and your family.",
+    resourcesSuggestPrompt:
+      "Know a service we should add, something that needs correcting, or a listing that should come off?",
+    resourcesSuggestLink: "Tell us on the contact page",
     resourcesSearchLabel: "Search by name or description",
     resourcesSearchPlaceholder: "Search by name or description",
     resourcesFilterLabel: "Filter by category",
@@ -450,6 +453,8 @@ const translations = {
     resourcesPageTitle: "",
     resourcesPageLede: "",
     resourcesDisclaimer: "",
+    resourcesSuggestPrompt: "",
+    resourcesSuggestLink: "",
     resourcesSearchLabel: "",
     resourcesSearchPlaceholder: "",
     resourcesFilterLabel: "",
@@ -722,6 +727,8 @@ const translations = {
     resourcesPageTitle: "",
     resourcesPageLede: "",
     resourcesDisclaimer: "",
+    resourcesSuggestPrompt: "",
+    resourcesSuggestLink: "",
     resourcesSearchLabel: "",
     resourcesSearchPlaceholder: "",
     resourcesFilterLabel: "",
