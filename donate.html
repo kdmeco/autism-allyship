@@ -80,7 +80,7 @@
         }
       })();
     </script>
-    <title>Contact us | Autism Allyship</title>
+    <title>Donate | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -392,289 +392,165 @@
 
     <main id="main">
       <div class="container">
-        <section class="page-heading" aria-labelledby="contactHeading">
-          <h1 id="contactHeading" data-i18n="contactPageTitle">Contact us</h1>
-          <p class="page-lede" data-i18n="contactPageLede">
-            Choose the category that best fits your query so it reaches the
-            right person.
+        <section class="page-heading" aria-labelledby="donateHeading">
+          <h1 id="donateHeading" data-i18n="donatePageTitle">Support Autism Allyship</h1>
+          <p class="page-lede" data-i18n="donatePageLede">
+            Your support helps us create inclusive spaces and share resources for autistic and neurodivergent people and their families.
           </p>
         </section>
 
-        <section class="contact-section" aria-labelledby="contactFormHeading">
-          <h2 id="contactFormHeading" data-i18n="contactFormHeading">
-            Send us a message
-          </h2>
-
-                                              <form class="contact-form" id="contactForm">
-            <p class="form-note" data-i18n="contactRequiredNote">
-              Only your phone number is optional. Everything else is needed so we
-              can reply.
-            </p>
-            <div class="form-field">
-              <label for="contactCategory" data-i18n="contactCategoryLabel"
-                >Category</label
-              >
-              <select
-                  id="contactCategory"
-                  name="category"
-                  aria-describedby="contactCategoryError"
-                >
-                <option value="" data-i18n="contactCategoryPlaceholder"
-                  >Choose a category</option
-                >
-                <option value="General" data-i18n="contactCategoryGeneral"
-                  >General</option
-                >
-                <option value="volunteer" data-i18n="contactCategoryVolunteer"
-                  >Volunteer</option
-                >
-                <option value="partnership" data-i18n="contactCategoryPartnership"
-                  >Partnership</option
-                >
-                <option value="media" data-i18n="contactCategoryMedia"
-                  >Media</option
-                >
-                <option
-                  value="resource suggestion"
-                  data-i18n="contactCategoryResourceSuggestion"
-                  >Resource suggestion</option
-                >
-                <option
-                  value="accessibility"
-                  data-i18n="contactCategoryAccessibilityFeedback"
-                  >Accessibility feedback</option
-                >
-              </select>
-<p id="contactCategoryError" class="form-error" hidden data-i18n="contactCategoryError">
-                Choose a category.
+        <section class="donate-layout" aria-label="Donation information and form">
+          <div class="donate-content">
+            <section class="donate-why" aria-labelledby="donateWhyHeading">
+              <h2 id="donateWhyHeading" data-i18n="donateWhyHeading">Why support us?</h2>
+              <p data-i18n="donateWhyText">
+                Autism Allyship works to promote understanding, support and advocacy for individuals with autism. We create inclusive spaces and promote awareness through resources and events for autistic people and their allies.
               </p>
-            </div>
+            </section>
 
-            <div class="form-field">
-              <label for="contactName" data-i18n="contactNameLabel"
-                >Name</label
-              >
-              <input
-                type="text"
-                id="contactName"
-                name="name"
-                required
-                aria-describedby="contactNameError"
-              />
-              <p id="contactNameError" class="form-error" hidden data-i18n="contactNameError">
-                Enter your name.
-              </p>
-            </div>
+            <details class="donate-eft">
+              <summary data-i18n="donateEftHeading">Donate by EFT</summary>
+              <div class="donate-eft-content">
+                <p data-i18n="donateEftPending">
+                  Official banking details will be added once they have been supplied and approved by the project team.
+                </p>
+                <p data-i18n="donateEftWarning">
+                  Our banking details never change. Confirm the details on this page before making an EFT donation.
+                </p>
+                <p data-i18n="donateEftReferencePending">
+                  The required donation reference format will be added with the approved banking details.
+                </p>
+              </div>
+            </details>
+          </div>
+
+          <form class="donate-form" id="donateForm" novalidate>
+            <h2 data-i18n="donateFormHeading">Choose your donation</h2>
+            <fieldset class="donate-fieldset">
+              <legend data-i18n="donateAmountLegend">Donation amount</legend>
+              <div class="donate-amount-options">
+                <label class="donate-amount-option">
+                  <input type="radio" name="amountChoice" value="50" />
+                  <span data-i18n="donateAmount50">R50</span>
+                </label>
+                <label class="donate-amount-option">
+                  <input type="radio" name="amountChoice" value="150" />
+                  <span data-i18n="donateAmount150">R150</span>
+                </label>
+                <label class="donate-amount-option">
+                  <input type="radio" name="amountChoice" value="300" />
+                  <span data-i18n="donateAmount300">R300</span>
+                </label>
+                <label class="donate-amount-option">
+                  <input type="radio" name="amountChoice" value="custom" />
+                  <span data-i18n="donateAmountCustom">Other amount</span>
+                </label>
+              </div>
+              <div class="form-field">
+                <label for="donateAmount" data-i18n="donateCustomAmountLabel">Custom amount in rand</label>
+                <input type="number" id="donateAmount" name="amount" min="1" step="0.01" inputmode="decimal" aria-describedby="donateAmountError" />
+                <p id="donateAmountError" class="form-error" hidden data-i18n="donateAmountError">Choose a donation amount greater than R0.</p>
+              </div>
+            </fieldset>
+
+            <fieldset class="donate-fieldset">
+              <legend data-i18n="donateFrequencyLegend">Donation frequency</legend>
+              <div class="donate-frequency-options">
+                <label><input type="radio" name="frequency" value="once" checked /> <span data-i18n="donateOnce">One-off donation</span></label>
+                <label><input type="radio" name="frequency" value="monthly" /> <span data-i18n="donateMonthly">Monthly donation</span></label>
+              </div>
+            </fieldset>
 
             <div class="form-field">
-              <label for="contactEmail" data-i18n="contactEmailLabel"
-                >Email</label
-              >
-              <input
-                type="email"
-                id="contactEmail"
-                name="email"
-                required
-                aria-describedby="contactEmailError"
-              />
-              <p id="contactEmailError" class="form-error" hidden data-i18n="contactEmailError">
-                Enter a valid email address.
-              </p>
+              <label for="donorName" data-i18n="donateNameLabel">Name</label>
+              <input type="text" id="donorName" name="donorName" autocomplete="name" aria-describedby="donorNameError" />
+              <p id="donorNameError" class="form-error" hidden data-i18n="donateNameError">Enter your name.</p>
             </div>
-
             <div class="form-field">
-              <label for="contactPhone" data-i18n="contactPhoneLabel"
-                >Phone</label
-              >
-              <input
-                type="tel"
-                id="contactPhone"
-                name="phone"
-                aria-describedby="contactPhoneError"
-              />
-              <p id="contactPhoneError" class="form-error" hidden data-i18n="contactPhoneError">
-                Enter a valid phone number.
-              </p>
+              <label for="donorEmail" data-i18n="donateEmailLabel">Email</label>
+              <input type="email" id="donorEmail" name="donorEmail" autocomplete="email" aria-describedby="donorEmailError" />
+              <p id="donorEmailError" class="form-error" hidden data-i18n="donateEmailError">Enter a valid email address.</p>
             </div>
-
             <div class="form-field">
-              <label for="contactMessage" data-i18n="contactMessageLabel"
-                >Message</label
-              >
-              <textarea
-                id="contactMessage"
-                name="message"
-                rows="8"
-              ></textarea>
-              <p id="contactMessageError" class="form-error" hidden data-i18n="contactMessageError">
-                Enter a message.
-              </p>
+              <label for="donorMessage" data-i18n="donateMessageLabel">Message (optional)</label>
+              <textarea id="donorMessage" name="message" rows="5"></textarea>
             </div>
-          <div class="form-field">
-              <input
-                type="checkbox"
-                id="contactPopiaConsent"
-                name="popiaConsent"
-                required
-              />
-              <label for="contactPopiaConsent">
-                <span
-                  data-i18n="contactPopiaConsentLabel"
-                  >I agree that the foundation may use my details to reply to my
-                  message. See our</span
-                >
-                <a href="privacy.html" data-i18n="contactPopiaPrivacyLink"
-                  >privacy policy</a
-                >.
-              </label>
-              <p id="contactPopiaError" class="form-error" hidden data-i18n="contactPopiaError">
-                You must agree to the privacy policy to submit.
-              </p>
+            <div class="form-checkbox-field">
+              <input type="checkbox" id="donorAnonymous" name="anonymous" />
+              <label for="donorAnonymous" data-i18n="donateAnonymousLabel">Make this donation anonymous</label>
             </div>
-
-            <button type="submit" class="button" data-i18n="contactSubmitButton">
-              Send message
-            </button>
+            <div class="form-checkbox-field">
+              <input type="checkbox" id="donorPopia" name="popiaConsent" aria-describedby="donorPopiaError" />
+              <label for="donorPopia" data-i18n="donatePopiaLabel">I agree that the foundation may use these details to process my donation.</label>
+              <p id="donorPopiaError" class="form-error" hidden data-i18n="donatePopiaError">You must agree before continuing.</p>
+            </div>
+            <div class="form-checkbox-field">
+              <input type="checkbox" id="donorEmailOptIn" name="emailOptIn" />
+              <label for="donorEmailOptIn" data-i18n="donateEmailOptInLabel">I would like to hear from the foundation about future updates.</label>
+            </div>
+            <p class="form-note" data-i18n="donateFrontendNote">This form is a frontend preview. No payment or donation record is created yet.</p>
+            <button type="submit" class="button" data-i18n="donateContinueButton">Continue</button>
           </form>
-
-          <section class="contact-details" aria-labelledby="contactDetailsHeading">
-            <h2 id="contactDetailsHeading" data-i18n="contactDetailsHeading">
-              Reach us directly
-            </h2>
-            <ul class="contact-details-list">
-              <li>
-                <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>
-              </li>
-              <li>
-                <a href="tel:+27663859936">+27 66 385 9936</a>
-              </li>
-              <li>
-                <span>Pretoria, Gauteng, South Africa</span>
-              </li>
-            </ul>
-          </section>
-
-          <section class="contact-success" aria-labelledby="contactSuccessTitle" hidden>
-            <h2 id="contactSuccessTitle" data-i18n="contactSuccessTitle">
-              Thanks for reaching out
-            </h2>
-            <p data-i18n="contactSuccessMessage">
-              We'll review your message and get back to you soon.
-            </p>
-            <a href="contact.html" class="button button-secondary" data-i18n="contactSuccessRetry"
-              >Send another message</a
-            >
-          </section>
-
-          <a
-            class="button button-whatsapp"
-            href="https://wa.me/27663859936"
-            data-i18n="homeWhatsAppLink"
-            target="_blank"
-            rel="noopener"
-          >
-            Message us on WhatsApp
-          </a>
         </section>
       </div>
-    <script>
-          // The message placeholder changes with the selected category, so a
-          // volunteer is asked for availability and skills rather than a
-          // general question.
-          const categorySelect = document.getElementById("contactCategory");
-          const messageField = document.getElementById("contactMessage");
+      <script>
+        const donateForm = document.getElementById("donateForm");
+        const amountInput = document.getElementById("donateAmount");
+        const amountOptions = document.querySelectorAll('input[name="amountChoice"]');
 
-          const categoryPlaceholders = {
-            volunteer: "contactPlaceholderVolunteer",
-            partnership: "contactPlaceholderPartnership",
-            media: "contactPlaceholderMedia",
-            "resource suggestion": "contactPlaceholderResourceSuggestion",
-            accessibility: "contactPlaceholderAccessibilityFeedback",
-          };
-
-          function updateMessagePlaceholder() {
-            const key =
-              categoryPlaceholders[categorySelect.value] ||
-              "contactPlaceholderGeneral";
-            const text = translations.en[key];
-            if (text) {
-              messageField.placeholder = text;
+        amountOptions.forEach(function (option) {
+          option.addEventListener("change", function () {
+            if (option.value !== "custom") {
+              amountInput.value = option.value;
             }
-          }
-
-          // translations.js is deferred, so it is not available yet when this
-          // script runs. Set the first placeholder once the translations load.
-          document.addEventListener("DOMContentLoaded", updateMessagePlaceholder);
-          categorySelect.addEventListener("change", updateMessagePlaceholder);
-        </script>
-
-        <script>
-          // Client-side validation only. Nothing is written to Firestore yet;
-          // the backend task saves the submission and then reveals the success
-          // state.
-          const contactForm = document.getElementById("contactForm");
-          const successSection = document.querySelector(".contact-success");
-
-          contactForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const errors = {
-              contactNameError: document.getElementById("contactNameError"),
-              contactEmailError: document.getElementById("contactEmailError"),
-              contactPhoneError: document.getElementById("contactPhoneError"),
-              contactMessageError: document.getElementById("contactMessageError"),
-              contactCategoryError: document.getElementById("contactCategoryError"),
-              contactPopiaError: document.getElementById("contactPopiaError"),
-            };
-            Object.values(errors).forEach(function (error) {
-              error.hidden = true;
-            });
-
-            const name = document.getElementById("contactName");
-            const email = document.getElementById("contactEmail");
-            const phone = document.getElementById("contactPhone");
-            const message = document.getElementById("contactMessage");
-            const consent = document.getElementById("contactPopiaConsent");
-            const category = document.getElementById("contactCategory");
-
-            let valid = true;
-
-            if (!name.value.trim()) {
-              errors.contactNameError.hidden = false;
-              valid = false;
-            }
-
-            const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-                                    if (!email.value.trim() || !/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email.value.trim())) {
-              errors.contactEmailError.hidden = false;
-              valid = false;
-            }
-
-            if (phone.value.trim() && !/^[0-9 +()-]+$/.test(phone.value.trim())) {
-              errors.contactPhoneError.hidden = false;
-              valid = false;
-            }
-
-            if (!message.value.trim()) {
-              errors.contactMessageError.hidden = false;
-              valid = false;
-            }
-
-            if (!category.value) {
-              errors.contactCategoryError.hidden = false;
-              valid = false;
-            }
-
-            if (!consent.checked) {
-              errors.contactPopiaError.hidden = false;
-              valid = false;
-            }
-
-            if (!valid) {
-              return;
-            }
+            amountInput.focus();
           });
-        </script>
+        });
+
+        donateForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          const fields = {
+            amount: document.getElementById("donateAmount"),
+            name: document.getElementById("donorName"),
+            email: document.getElementById("donorEmail"),
+            popia: document.getElementById("donorPopia"),
+          };
+          const errors = {
+            amount: document.getElementById("donateAmountError"),
+            name: document.getElementById("donorNameError"),
+            email: document.getElementById("donorEmailError"),
+            popia: document.getElementById("donorPopiaError"),
+          };
+          Object.values(errors).forEach(function (error) { error.hidden = true; });
+          Object.values(fields).forEach(function (field) { field.removeAttribute("aria-invalid"); });
+          let valid = true;
+
+          if (!Number.isFinite(Number(fields.amount.value)) || Number(fields.amount.value) <= 0) {
+            errors.amount.hidden = false;
+            fields.amount.setAttribute("aria-invalid", "true");
+            valid = false;
+          }
+          if (!fields.name.value.trim()) {
+            errors.name.hidden = false;
+            fields.name.setAttribute("aria-invalid", "true");
+            valid = false;
+          }
+          if (!fields.email.validity.valid || !fields.email.value.trim()) {
+            errors.email.hidden = false;
+            fields.email.setAttribute("aria-invalid", "true");
+            valid = false;
+          }
+          if (!fields.popia.checked) {
+            errors.popia.hidden = false;
+            fields.popia.setAttribute("aria-invalid", "true");
+            valid = false;
+          }
+          if (!valid) {
+            const firstInvalid = donateForm.querySelector('[aria-invalid="true"]');
+            if (firstInvalid) firstInvalid.focus();
+          }
+        });
+      </script>
     </main>
 
     <footer class="site-footer">
