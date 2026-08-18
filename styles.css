@@ -2341,3 +2341,48 @@ ul.event-attachments li {
   outline: 3px solid var(--colour-focus);
   outline-offset: 2px;
 }
+.contact-form .form-field input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  min-height: auto;
+  padding: 0;
+}
+
+.contact-details {
+  margin-top: var(--space-6);
+  padding-block: var(--space-5);
+  border-top: 1px solid var(--colour-line);
+}
+
+.contact-details h2 {
+  margin-bottom: var(--space-3);
+}
+
+.contact-details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.contact-details-list a {
+  color: var(--colour-accent-text);
+}
+
+.contact-success {
+  margin-top: var(--space-6);
+  padding: var(--space-5);
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-md);
+  background-color: var(--colour-surface);
+}
+
+.contact-success h2 {
+  margin-bottom: var(--space-2);
+}
+
+.contact-success p {
+  margin-bottom: var(--space-4);
+}
