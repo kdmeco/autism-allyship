@@ -171,12 +171,22 @@ function buildRow(eventItem) {
 
   const actions = document.createElement("div");
   actions.className = "admin-list-actions";
+  actions.appendChild(buildAttendeesLink(eventItem));
   actions.appendChild(buildEditLink(eventItem));
   actions.appendChild(buildDeleteButton(actions, eventItem));
 
   li.appendChild(info);
   li.appendChild(actions);
   return li;
+}
+
+function buildAttendeesLink(eventItem) {
+  const attendeesLink = document.createElement("a");
+  attendeesLink.className = "button button-secondary";
+  attendeesLink.href =
+    "event-attendees.html?id=" + encodeURIComponent(eventItem.id);
+  attendeesLink.textContent = "Attendees";
+  return attendeesLink;
 }
 
 function buildEditLink(eventItem) {
@@ -225,6 +235,7 @@ function askToDelete(actions, eventItem) {
 
   function restore() {
     actions.textContent = "";
+    actions.appendChild(buildAttendeesLink(eventItem));
     actions.appendChild(buildEditLink(eventItem));
     actions.appendChild(buildDeleteButton(actions, eventItem));
   }
