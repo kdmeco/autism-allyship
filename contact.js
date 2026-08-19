@@ -60,6 +60,12 @@ function showError(element) {
   element.hidden = false;
 }
 
+function showSubmitFailure() {
+  submitError.textContent = translated("contactSubmitError");
+  submitError.hidden = false;
+  submitButton.disabled = false;
+}
+
 function validateForm() {
   let valid = true;
 
@@ -110,6 +116,14 @@ contactForm.addEventListener("submit", async function (event) {
     return;
   }
 
+  // Firestore queues writes when the tab is offline and never rejects, which
+  // left the button disabled and hid the connection error. Refuse before we
+  // call addDoc, so nothing is queued.
+  if (navigator.onLine === false) {
+    showSubmitFailure();
+    return;
+  }
+
   submitButton.disabled = true;
 
   try {
@@ -129,8 +143,6 @@ contactForm.addEventListener("submit", async function (event) {
     // Log a code, never the form values. POPIA: no personal information in
     // the console, even while debugging.
     console.error("Contact submit failed:", error.code || "unknown");
-    submitError.textContent = translated("contactSubmitError");
-    submitError.hidden = false;
-    submitButton.disabled = false;
+    showSubmitFailure();
   }
 });
