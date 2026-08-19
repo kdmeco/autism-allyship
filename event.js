@@ -38,6 +38,18 @@ const registerButton = document.getElementById("registerButton");
 const registrationFormError = document.getElementById(
   "registrationFormError",
 );
+const registrationEmailConfirmation = document.getElementById(
+  "registrationEmailConfirmation",
+);
+const registrationEmailConfirmationText = document.getElementById(
+  "registrationEmailConfirmationText",
+);
+const confirmRegistrationButton = document.getElementById(
+  "confirmRegistrationButton",
+);
+const changeRegistrationEmailButton = document.getElementById(
+  "changeRegistrationEmailButton",
+);
 const registrationConfirmation = document.getElementById(
   "registrationConfirmation",
 );
@@ -98,7 +110,7 @@ function renderCapacity(data) {
 // this page says nothing at all about buying a ticket, rather than
 // half-offering a flow that does not work yet.
 function setUpRegistration(data, startsAt) {
-  if (data.isTicketed) {
+  if (data.isTicketed && data.price > 0) {
     return;
   }
 
@@ -172,6 +184,25 @@ function setUpRegistration(data, startsAt) {
       return;
     }
 
+    registrationEmailConfirmationText.textContent =
+      translated("ticketEmailConfirmation").replace("{email}", email);
+    registrationForm.hidden = true;
+    registrationEmailConfirmation.hidden = false;
+    confirmRegistrationButton.focus();
+
+    confirmRegistrationButton.onclick = async function () {
+      await submitRegistration(name, email, quantity);
+    };
+  });
+
+  changeRegistrationEmailButton.addEventListener("click", function () {
+    registrationEmailConfirmation.hidden = true;
+    registrationForm.hidden = false;
+    emailInput.focus();
+  });
+
+  async function submitRegistration(name, email, quantity) {
+    registrationEmailConfirmation.hidden = true;
     registerButton.disabled = true;
     registerButton.textContent = translated("ticketRegistering");
 
@@ -193,6 +224,7 @@ function setUpRegistration(data, startsAt) {
           registrationFormError,
           result.error || translated("ticketRegisterFailed"),
         );
+        registrationForm.hidden = false;
         registerButton.disabled = false;
         registerButton.textContent = translated("ticketRegisterButton");
         return;
@@ -242,10 +274,11 @@ function setUpRegistration(data, startsAt) {
         registrationFormError,
         translated("ticketRegisterFailed"),
       );
+      registrationForm.hidden = false;
       registerButton.disabled = false;
       registerButton.textContent = translated("ticketRegisterButton");
     }
-  });
+  }
 }
 
 function showRegistrationError(element, message) {
