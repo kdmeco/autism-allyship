@@ -535,6 +535,33 @@
             </form>
 
             <div
+              class="registration-email-confirmation"
+              id="registrationEmailConfirmation"
+              role="alert"
+              hidden
+            >
+              <p id="registrationEmailConfirmationText"></p>
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="button button-primary"
+                  id="confirmRegistrationButton"
+                  data-i18n="ticketConfirmEmailButton"
+                >
+                  Confirm email and register
+                </button>
+                <button
+                  type="button"
+                  class="button button-secondary"
+                  id="changeRegistrationEmailButton"
+                  data-i18n="ticketChangeEmailButton"
+                >
+                  Change email
+                </button>
+              </div>
+            </div>
+
+            <div
               class="registration-confirmation"
               id="registrationConfirmation"
               role="status"
