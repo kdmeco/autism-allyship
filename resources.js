@@ -10,7 +10,7 @@ import {
   collection,
   query,
   where,
-  getDocs,
+  getDocsFromServer,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { translated, chevronSvg } from "./shared.js";
 
@@ -24,6 +24,9 @@ const filterEmpty = document.getElementById("resourcesEmpty");
 const clearRow = document.getElementById("clearFilters");
 const clearLink = document.getElementById("clearFiltersLink");
 const noneEmpty = document.getElementById("resourcesNone");
+const loadingState = document.getElementById("resourcesLoading");
+const errorState = document.getElementById("resourcesError");
+const retryButton = document.getElementById("resourcesRetry");
 
 let totalResources = 0;
 let activeCategory = "";
@@ -247,48 +250,59 @@ provinceSelect.addEventListener("change", applyFilters);
 clearLink.addEventListener("click", clearEverything);
 
 async function loadResources() {
-  const snapshot = await getDocs(
-    query(collection(db, "resources"), where("published", "==", true)),
-  );
+  loadingState.hidden = false;
+  errorState.hidden = true;
+  noneEmpty.hidden = true;
 
-  const resources = snapshot.docs
-    .map(function (docSnapshot) {
-      const data = docSnapshot.data();
-      return {
-        id: docSnapshot.id,
-        name: data.name || "Untitled",
-        description: data.description || "",
-        category: (data.category || "").trim(),
-        provinces: Array.isArray(data.provinces)
-          ? data.provinces
-          : data.province
-            ? [data.province]
-            : [],
-        phone: data.phone || "",
-        email: data.email || "",
-        website: data.website || "",
-      };
-    })
-    .sort(function (first, second) {
-      return first.name.localeCompare(second.name);
+  try {
+    const snapshot = await getDocsFromServer(
+      query(collection(db, "resources"), where("published", "==", true)),
+    );
+
+    const resources = snapshot.docs
+      .map(function (docSnapshot) {
+        const data = docSnapshot.data();
+        return {
+          id: docSnapshot.id,
+          name: data.name || "Untitled",
+          description: data.description || "",
+          category: (data.category || "").trim(),
+          provinces: Array.isArray(data.provinces)
+            ? data.provinces
+            : data.province
+              ? [data.province]
+              : [],
+          phone: data.phone || "",
+          email: data.email || "",
+          website: data.website || "",
+        };
+      })
+      .sort(function (first, second) {
+        return first.name.localeCompare(second.name);
+      });
+
+    totalResources = resources.length;
+    loadingState.hidden = true;
+
+    if (resources.length === 0) {
+      noneEmpty.hidden = false;
+      toolbar.hidden = true;
+      return;
+    }
+
+    toolbar.hidden = false;
+    buildPills(resources);
+    resources.forEach(function (resource) {
+      list.appendChild(buildCard(resource));
     });
-
-  totalResources = resources.length;
-
-  if (resources.length === 0) {
-    noneEmpty.hidden = false;
+    applyFilters();
+  } catch (error) {
+    loadingState.hidden = true;
     toolbar.hidden = true;
-    return;
+    errorState.hidden = false;
+    console.error("Failed to load resources:", error);
   }
-
-  buildPills(resources);
-  resources.forEach(function (resource) {
-    list.appendChild(buildCard(resource));
-  });
-  applyFilters();
 }
 
-loadResources().catch(function (error) {
-  console.error("Failed to load resources:", error);
-  noneEmpty.hidden = false;
-});
+retryButton.addEventListener("click", loadResources);
+loadResources();
