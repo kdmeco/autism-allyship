@@ -379,6 +379,34 @@
             hidden
           ></p>
 
+          <div class="attendee-filters" id="attendeeFilters" hidden>
+            <div class="form-field">
+              <label for="attendeeSearch" data-i18n="adminAttendeesSearchLabel">
+                Search attendees
+              </label>
+              <input
+                type="search"
+                id="attendeeSearch"
+                data-i18n-placeholder="adminAttendeesSearchPlaceholder"
+                placeholder="Name or email"
+              />
+            </div>
+            <div class="form-field">
+              <label for="attendeeStatusFilter" data-i18n="adminAttendeesStatusLabel">
+                Registration status
+              </label>
+              <select id="attendeeStatusFilter">
+                <option value="all" data-i18n="adminAttendeesStatusAll">Everyone</option>
+                <option value="unused" data-i18n="adminAttendeesStatusUnused">Not used yet</option>
+                <option value="used" data-i18n="adminAttendeesStatusUsed">Used</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="admin-loading" id="attendeesLoading" data-i18n="adminAttendeesLoading">
+            Loading attendees...
+          </p>
+
           <ul class="admin-list" id="attendeesList"></ul>
         </section>
       </div>
