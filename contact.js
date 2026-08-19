@@ -1,10 +1,12 @@
 // Public contact form. Validates in the browser, then writes one document to
 // the submissions collection. The POPIA checkbox is a gate only: SCHEMA.md
-// has no consent field, so it is never stored. Notification email and the
-// admin inbox are later tasks; this page only needs the write to succeed
-// before it shows the thank-you state.
+// has no consent field, so it is never stored. After a successful write the
+// page asks the api Worker to email the foundation. Thank-you means the
+// document exists: mail failure must not hide it. The admin inbox is a
+// later task.
 
 import { db } from "./firebase.js";
+import { API_CONTACT_NOTIFY_URL } from "./api.js";
 import {
   addDoc,
   collection,
@@ -127,15 +129,32 @@ contactForm.addEventListener("submit", async function (event) {
   submitButton.disabled = true;
 
   try {
-    await addDoc(collection(db, "submissions"), {
+    const submission = {
       name: nameInput.value.trim(),
       email: emailInput.value.trim(),
       phone: phoneInput.value.trim(),
       category: categorySelect.value,
       message: messageField.value.trim(),
+    };
+
+    await addDoc(collection(db, "submissions"), {
+      ...submission,
       handled: false,
       createdAt: serverTimestamp(),
     });
+
+    try {
+      const response = await fetch(API_CONTACT_NOTIFY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submission),
+      });
+      if (!response.ok) {
+        console.error("Contact notify failed:", response.status);
+      }
+    } catch (notifyError) {
+      console.error("Contact notify failed:", notifyError.code || notifyError.name || "unknown");
+    }
 
     contactForm.hidden = true;
     successSection.hidden = false;
