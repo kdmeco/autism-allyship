@@ -2,6 +2,8 @@
 // filters by category in the browser so a category-plus-createdAt query does
 // not need a composite Firestore index. Marking handled is a client write of
 // that one field. Unhandled stays the obvious state; there is no reverse.
+// Rows are grouped Unhandled and Handled, the same collapsible groups the
+// other admin lists use for published and not published.
 
 import { auth, db } from "../firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
@@ -11,14 +13,14 @@ import {
   doc,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { translated } from "../shared.js";
+import { translated, chevronSvg } from "../shared.js";
 
 const categoryFilter = document.getElementById("inboxCategoryFilter");
 const emptyState = document.getElementById("emptyState");
 const filterEmptyState = document.getElementById("filterEmptyState");
 const permissionState = document.getElementById("permissionState");
 const inboxError = document.getElementById("inboxError");
-const list = document.getElementById("inboxList");
+const groups = document.getElementById("inboxGroups");
 const toolbar = document.querySelector(".inbox-toolbar");
 
 const categoryKeys = {
@@ -79,7 +81,7 @@ async function loadSubmissions() {
 
 function showLoadFailure(error) {
   hideNotices();
-  list.textContent = "";
+  groups.textContent = "";
   toolbar.hidden = true;
 
   if (error.code === "permission-denied") {
@@ -111,7 +113,7 @@ function visibleSubmissions() {
 
 function renderList() {
   hideNotices();
-  list.textContent = "";
+  groups.textContent = "";
   toolbar.hidden = false;
 
   if (allSubmissions.length === 0) {
@@ -125,15 +127,64 @@ function renderList() {
     return;
   }
 
-  visible.forEach(function (item) {
-    list.appendChild(buildRow(item));
+  const unhandled = visible.filter(function (item) {
+    return !item.handled;
   });
+  const handled = visible.filter(function (item) {
+    return item.handled;
+  });
+
+  groups.appendChild(
+    buildGroup(translated("adminInboxUnhandled"), unhandled, false),
+  );
+  groups.appendChild(
+    buildGroup(translated("adminInboxHandled"), handled, true),
+  );
 }
 
-function buildRow(item) {
+function buildGroup(name, items, isHandledGroup) {
+  const group = document.createElement("details");
+  group.className = "admin-group";
+  if (items.length > 0) {
+    group.open = true;
+  }
+
+  const summary = document.createElement("summary");
+
+  const title = document.createElement("span");
+  title.textContent = name;
+
+  const count = document.createElement("span");
+  count.className = "admin-group-count";
+  count.textContent = "(" + items.length + ")";
+
+  summary.appendChild(chevronSvg());
+  summary.appendChild(title);
+  summary.appendChild(count);
+
+  const list = document.createElement("ul");
+  list.className = "admin-list";
+
+  if (items.length === 0) {
+    const none = document.createElement("li");
+    none.className = "admin-list-meta";
+    none.textContent = translated("adminInboxNoneYet");
+    list.appendChild(none);
+  } else {
+    items.forEach(function (item) {
+      list.appendChild(buildRow(item, isHandledGroup));
+    });
+  }
+
+  group.appendChild(summary);
+  group.appendChild(list);
+  return group;
+}
+
+function buildRow(item, isHandledGroup) {
   const li = document.createElement("li");
   li.className = "admin-list-item inbox-item";
-  if (!item.handled) {
+  if (!isHandledGroup) {
     li.classList.add("inbox-item-unhandled");
   }
 
@@ -163,24 +214,15 @@ function buildRow(item) {
   const dateText = formatCreatedAt(item.createdAt);
   metaLine.textContent = [categoryText, dateText].filter(Boolean).join(" | ");
 
-  const statusLine = document.createElement("p");
-  statusLine.className = "admin-list-meta inbox-status";
-  if (item.handled) {
-    statusLine.textContent = translated("adminInboxHandled");
-  } else {
-    statusLine.textContent = translated("adminInboxUnhandled");
-    statusLine.classList.add("inbox-status-unhandled");
-  }
-
   const messageLine = document.createElement("p");
   messageLine.className = "inbox-message";
   messageLine.textContent = item.message;
 
-  info.append(metaLine, statusLine, messageLine);
+  info.append(metaLine, messageLine);
 
   const actions = document.createElement("div");
   actions.className = "admin-list-actions";
-  if (!item.handled) {
+  if (!isHandledGroup) {
     actions.appendChild(buildMarkHandledButton(item));
   }
 
