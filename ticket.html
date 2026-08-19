@@ -395,6 +395,13 @@
 
     <main id="main">
       <div class="container">
+        <section class="page-heading" id="ticketLoading">
+          <h1 data-i18n="ticketLoadingTitle">Loading your ticket</h1>
+          <p class="page-lede" data-i18n="ticketLoadingText">
+            Please wait while we find your ticket.
+          </p>
+        </section>
+
         <article class="ticket-article" id="ticketArticle" hidden>
           <a class="back-link" href="events.html" data-i18n="eventBackToEvents"
             >Back to events</a
@@ -424,6 +431,9 @@
             Anyone with this link can show it at the door. Forwarding it to
             someone else who is coming in your place is fine.
           </p>
+          <p class="ticket-present-note" data-i18n="ticketPresentNote">
+            Show this page with the QR code visible when you arrive.
+          </p>
         </article>
 
         <section class="page-heading" id="ticketMissing" hidden>
@@ -435,6 +445,16 @@
           <a class="button button-secondary" href="index.html" data-i18n="ticketBackToHome">
             Back to home
           </a>
+        </section>
+
+        <section class="page-heading" id="ticketError" hidden>
+          <h1 data-i18n="ticketErrorTitle">We could not load this ticket</h1>
+          <p class="page-lede" data-i18n="ticketErrorText">
+            Something went wrong while loading the ticket. Please try again.
+          </p>
+          <button type="button" class="button button-secondary" id="ticketRetryButton" data-i18n="ticketRetryButton">
+            Try again
+          </button>
         </section>
 
         <noscript>
