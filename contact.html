@@ -532,9 +532,24 @@
               </p>
             </div>
 
-            <button type="submit" class="button" data-i18n="contactSubmitButton">
+            <button
+              type="submit"
+              class="button"
+              id="contactSubmitButton"
+              data-i18n="contactSubmitButton"
+            >
               Send message
             </button>
+            <p
+              class="form-error form-error-general"
+              id="contactSubmitError"
+              role="status"
+              hidden
+              data-i18n="contactSubmitError"
+            >
+              Your message could not be sent. Check your connection and try
+              again.
+            </p>
           </form>
 
           <section class="contact-details" aria-labelledby="contactDetailsHeading">
@@ -577,104 +592,6 @@
           </a>
         </section>
       </div>
-    <script>
-          // The message placeholder changes with the selected category, so a
-          // volunteer is asked for availability and skills rather than a
-          // general question.
-          const categorySelect = document.getElementById("contactCategory");
-          const messageField = document.getElementById("contactMessage");
-
-          const categoryPlaceholders = {
-            volunteer: "contactPlaceholderVolunteer",
-            partnership: "contactPlaceholderPartnership",
-            media: "contactPlaceholderMedia",
-            "resource suggestion": "contactPlaceholderResourceSuggestion",
-            accessibility: "contactPlaceholderAccessibilityFeedback",
-          };
-
-          function updateMessagePlaceholder() {
-            const key =
-              categoryPlaceholders[categorySelect.value] ||
-              "contactPlaceholderGeneral";
-            const text = translations.en[key];
-            if (text) {
-              messageField.placeholder = text;
-            }
-          }
-
-          // translations.js is deferred, so it is not available yet when this
-          // script runs. Set the first placeholder once the translations load.
-          document.addEventListener("DOMContentLoaded", updateMessagePlaceholder);
-          categorySelect.addEventListener("change", updateMessagePlaceholder);
-        </script>
-
-        <script>
-          // Client-side validation only. Nothing is written to Firestore yet;
-          // the backend task saves the submission and then reveals the success
-          // state.
-          const contactForm = document.getElementById("contactForm");
-          const successSection = document.querySelector(".contact-success");
-
-          contactForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            const errors = {
-              contactNameError: document.getElementById("contactNameError"),
-              contactEmailError: document.getElementById("contactEmailError"),
-              contactPhoneError: document.getElementById("contactPhoneError"),
-              contactMessageError: document.getElementById("contactMessageError"),
-              contactCategoryError: document.getElementById("contactCategoryError"),
-              contactPopiaError: document.getElementById("contactPopiaError"),
-            };
-            Object.values(errors).forEach(function (error) {
-              error.hidden = true;
-            });
-
-            const name = document.getElementById("contactName");
-            const email = document.getElementById("contactEmail");
-            const phone = document.getElementById("contactPhone");
-            const message = document.getElementById("contactMessage");
-            const consent = document.getElementById("contactPopiaConsent");
-            const category = document.getElementById("contactCategory");
-
-            let valid = true;
-
-            if (!name.value.trim()) {
-              errors.contactNameError.hidden = false;
-              valid = false;
-            }
-
-            const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-                                    if (!email.value.trim() || !/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(email.value.trim())) {
-              errors.contactEmailError.hidden = false;
-              valid = false;
-            }
-
-            if (phone.value.trim() && !/^[0-9 +()-]+$/.test(phone.value.trim())) {
-              errors.contactPhoneError.hidden = false;
-              valid = false;
-            }
-
-            if (!message.value.trim()) {
-              errors.contactMessageError.hidden = false;
-              valid = false;
-            }
-
-            if (!category.value) {
-              errors.contactCategoryError.hidden = false;
-              valid = false;
-            }
-
-            if (!consent.checked) {
-              errors.contactPopiaError.hidden = false;
-              valid = false;
-            }
-
-            if (!valid) {
-              return;
-            }
-          });
-        </script>
     </main>
 
     <footer class="site-footer">
@@ -792,5 +709,7 @@
         </p>
       </div>
     </footer>
+
+    <script type="module" src="contact.js"></script>
   </body>
 </html>
