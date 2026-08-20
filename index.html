@@ -535,6 +535,31 @@
           </div>
         </section>
 
+        <section class="home-section" aria-labelledby="homeInstagramHeading">
+          <h2 id="homeInstagramHeading" data-i18n="homeInstagramHeading">
+            From our Instagram
+          </h2>
+          <p data-i18n="homeInstagramText">
+            Recent posts from Autism Allyship on Instagram.
+          </p>
+          <div
+            class="instagram-embed-grid"
+            id="homeInstagramGrid"
+            hidden
+          ></div>
+          <p
+            class="instagram-fallback"
+            id="homeInstagramFallback"
+            hidden
+          >
+            <a
+              href="https://www.instagram.com/autismallyship/"
+              data-i18n="homeInstagramProfileLink"
+              >Follow us on Instagram</a
+            >
+          </p>
+        </section>
+
         <section class="contact-strip" aria-labelledby="contactStripHeading">
           <h2 id="contactStripHeading" data-i18n="homeContactHeading">
             Get in touch
@@ -689,6 +714,11 @@
         eventScript.type = "module";
         eventScript.src = "home-events.js";
         document.body.appendChild(eventScript);
+
+        var instagramScript = document.createElement("script");
+        instagramScript.type = "module";
+        instagramScript.src = "home-instagram.js";
+        document.body.appendChild(instagramScript);
       });
     </script>
   </body>
