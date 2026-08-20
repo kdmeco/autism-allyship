@@ -1,7 +1,9 @@
 // Public single event. Reads the id from the URL and does one Firestore
 // read. A missing id, a deleted event and a draft the security rules
 // rightly refuse all land on the same plain message rather than a broken
-// page, the same shape blog-post.js uses.
+// page, the same shape blog-post.js uses. Free events create a ticket
+// through POST /ticket; paid events initialise Paystack, then verify before
+// the Worker creates the ticket.
 
 import { db } from "./firebase.js";
 import {
@@ -9,7 +11,11 @@ import {
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { translated, downloadIcs, buildSavePanel } from "./shared.js";
-import { API_TICKET_URL } from "./api.js";
+import {
+  API_TICKET_URL,
+  API_TICKET_INITIALIZE_URL,
+  API_TICKET_VERIFY_URL,
+} from "./api.js";
 
 const article = document.getElementById("eventArticle");
 const titleSlot = document.getElementById("eventTitle");
@@ -26,6 +32,9 @@ const copyLinkButton = document.getElementById("copyLinkButton");
 const copyConfirmation = document.getElementById("copyConfirmation");
 
 const registrationSection = document.getElementById("ticketRegistration");
+const registrationIntro = document.getElementById("ticketRegisterIntro");
+const ticketPriceTotal = document.getElementById("ticketPriceTotal");
+const ticketPayTotalConfirm = document.getElementById("ticketPayTotalConfirm");
 const registrationForm = document.getElementById("registrationForm");
 const nameInput = document.getElementById("attendeeName");
 const nameError = document.getElementById("attendeeNameError");
@@ -66,7 +75,25 @@ const pastNotice = document.getElementById("ticketPastNotice");
 const MAX_GROUP_SIZE = 10;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-const eventId = new URLSearchParams(window.location.search).get("id");
+const pageParams = new URLSearchParams(window.location.search);
+const eventId = pageParams.get("id");
+const isAppEmbed = pageParams.get("app") === "1";
+
+// The Android app opens this page inside a WebView and adds app=1. Same
+// reason as blog-post.js: the app already has a toolbar and back control.
+if (isAppEmbed) {
+  const root = document.documentElement;
+  root.classList.add("app-embed");
+
+  const theme = pageParams.get("theme");
+  if (theme === "dark" || theme === "light") {
+    root.setAttribute("data-theme", theme);
+  }
+
+  if (pageParams.get("sensory") === "on") {
+    root.classList.add("sensory-mode");
+  }
+}
 
 function showMissing() {
   article.hidden = true;
@@ -75,6 +102,14 @@ function showMissing() {
 
 function formatPrice(data) {
   return data.isTicketed ? "R" + data.price : translated("eventsPriceFree");
+}
+
+function formatRands(amount) {
+  return amount % 1 === 0 ? String(amount) : amount.toFixed(2);
+}
+
+function isPaidEvent(data) {
+  return data.isTicketed === true && typeof data.price === "number" && data.price > 0;
 }
 
 // Capacity is always shown as text plus a border, never colour alone,
@@ -104,16 +139,168 @@ function renderCapacity(data) {
   capacitySlot.hidden = false;
 }
 
-// Decides which of three states the registration area is in: the form, a
-// sold-out notice, or a past-event notice. Ticketed events get none of
-// these; the paid path is Section 7's Paystack work, and until it exists
-// this page says nothing at all about buying a ticket, rather than
-// half-offering a flow that does not work yet.
-function setUpRegistration(data, startsAt) {
-  if (data.isTicketed && data.price > 0) {
+function updatePriceTotal(data, quantity) {
+  if (!isPaidEvent(data)) {
+    ticketPriceTotal.hidden = true;
+    ticketPayTotalConfirm.hidden = true;
+    return;
+  }
+  const total = data.price * quantity;
+  const label = translated("ticketPriceTotal").replace(
+    "{amount}",
+    formatRands(total),
+  );
+  ticketPriceTotal.textContent = label;
+  ticketPriceTotal.hidden = false;
+  ticketPayTotalConfirm.textContent = label;
+  ticketPayTotalConfirm.hidden = false;
+}
+
+function showRegistrationSuccess(data, startsAt, token, emailSent) {
+  const url = new URL(
+    "ticket.html?token=" + encodeURIComponent(token),
+    window.location.href,
+  );
+
+  // Inside the app WebView the native ticket screen takes over once this
+  // URL loads, so navigate rather than only showing an inline link.
+  if (isAppEmbed) {
+    window.location.href = url.href;
     return;
   }
 
+  registrationForm.hidden = true;
+  registrationEmailConfirmation.hidden = true;
+  ticketLink.href = url.href;
+  ticketLink.textContent = url.href;
+  ticketConfirmationEmailSent.hidden = !emailSent;
+
+  registrationConfirmation
+    .querySelectorAll(".save-ticket-panel")
+    .forEach(function (existing) {
+      existing.remove();
+    });
+  registrationConfirmation.appendChild(
+    buildSavePanel({
+      ticketUrl: url.href,
+      eventTitle: data.title,
+      icsData: {
+        uid: eventId,
+        title: data.title,
+        description: data.description,
+        startsAt: startsAt,
+      },
+    }),
+  );
+
+  registrationConfirmation.hidden = false;
+}
+
+function resetRegistrationControls(paid) {
+  registerButton.disabled = false;
+  registerButton.textContent = paid
+    ? translated("ticketBuyButton")
+    : translated("ticketRegisterButton");
+  confirmRegistrationButton.disabled = false;
+  confirmRegistrationButton.textContent = paid
+    ? translated("ticketConfirmEmailPayButton")
+    : translated("ticketConfirmEmailButton");
+}
+
+async function submitFreeRegistration(data, startsAt, name, email, quantity) {
+  const response = await fetch(API_TICKET_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      eventId: eventId,
+      attendeeName: name,
+      attendeeEmail: email,
+      quantity: quantity,
+    }),
+  });
+  const result = await response.json();
+
+  if (!response.ok || !result.ok) {
+    throw new Error(result.error || translated("ticketRegisterFailed"));
+  }
+
+  showRegistrationSuccess(data, startsAt, result.token, result.emailSent);
+}
+
+async function verifyPaidTicket(reference) {
+  const response = await fetch(API_TICKET_VERIFY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reference: reference }),
+  });
+  const result = await response.json();
+  if (!response.ok || !result.ok) {
+    throw new Error(result.error || translated("ticketPaymentFailed"));
+  }
+  return result;
+}
+
+async function submitPaidRegistration(data, startsAt, name, email, quantity) {
+  const initResponse = await fetch(API_TICKET_INITIALIZE_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      eventId: eventId,
+      attendeeName: name,
+      attendeeEmail: email,
+      quantity: quantity,
+    }),
+  });
+  const initResult = await initResponse.json();
+
+  if (!initResponse.ok || !initResult.ok) {
+    throw new Error(initResult.error || translated("ticketPaymentFailed"));
+  }
+
+  if (typeof PaystackPop === "undefined") {
+    throw new Error(translated("ticketPaymentFailed"));
+  }
+
+  return new Promise(function (resolve, reject) {
+    const popup = new PaystackPop();
+    popup.resumeTransaction(initResult.accessCode, {
+      onSuccess: async function () {
+        try {
+          confirmRegistrationButton.textContent = translated(
+            "ticketConfirmingPayment",
+          );
+          const verified = await verifyPaidTicket(initResult.reference);
+          if (verified.status !== "success" || !verified.token) {
+            reject(
+              new Error(
+                verified.gatewayResponse || translated("ticketPaymentFailed"),
+              ),
+            );
+            return;
+          }
+          showRegistrationSuccess(
+            data,
+            startsAt,
+            verified.token,
+            verified.emailSent,
+          );
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      },
+      onCancel: function () {
+        reject(new Error(translated("ticketPaymentCancelled")));
+      },
+      onError: function (error) {
+        console.error("Paystack popup error:", error && error.message);
+        reject(new Error(translated("ticketPaymentFailed")));
+      },
+    });
+  });
+}
+
+function setUpRegistration(data, startsAt) {
   const isPast = !startsAt || startsAt.getTime() <= Date.now();
   if (isPast) {
     pastNotice.hidden = false;
@@ -131,10 +318,9 @@ function setUpRegistration(data, startsAt) {
 
   const remaining = capacity === 0 ? MAX_GROUP_SIZE : capacity - ticketsSold;
   const effectiveMax = Math.min(MAX_GROUP_SIZE, remaining);
+  const paid = isPaidEvent(data);
   quantityInput.max = String(effectiveMax);
 
-  // Only worth a note when the event's own capacity is the thing doing the
-  // capping. Below the group max for its own sake needs no explanation.
   if (capacity !== 0 && remaining < MAX_GROUP_SIZE) {
     quantityNote.textContent =
       effectiveMax === 1
@@ -145,6 +331,24 @@ function setUpRegistration(data, startsAt) {
           );
     quantityNote.hidden = false;
   }
+
+  registrationIntro.textContent = paid
+    ? translated("ticketRegisterIntroPaid")
+    : translated("ticketRegisterIntro");
+  registerButton.textContent = paid
+    ? translated("ticketBuyButton")
+    : translated("ticketRegisterButton");
+  confirmRegistrationButton.textContent = paid
+    ? translated("ticketConfirmEmailPayButton")
+    : translated("ticketConfirmEmailButton");
+  updatePriceTotal(data, parseInt(quantityInput.value, 10) || 1);
+
+  quantityInput.addEventListener("input", function () {
+    const quantity = parseInt(quantityInput.value, 10);
+    if (Number.isInteger(quantity) && quantity >= 1) {
+      updatePriceTotal(data, quantity);
+    }
+  });
 
   registrationSection.hidden = false;
 
@@ -184,8 +388,12 @@ function setUpRegistration(data, startsAt) {
       return;
     }
 
-    registrationEmailConfirmationText.textContent =
-      translated("ticketEmailConfirmation").replace("{email}", email);
+    updatePriceTotal(data, quantity);
+    registrationEmailConfirmationText.textContent = (
+      paid
+        ? translated("ticketEmailConfirmationPaid")
+        : translated("ticketEmailConfirmation")
+    ).replace("{email}", email);
     registrationForm.hidden = true;
     registrationEmailConfirmation.hidden = false;
     confirmRegistrationButton.focus();
@@ -204,79 +412,28 @@ function setUpRegistration(data, startsAt) {
   async function submitRegistration(name, email, quantity) {
     registrationEmailConfirmation.hidden = true;
     registerButton.disabled = true;
-    registerButton.textContent = translated("ticketRegistering");
+    confirmRegistrationButton.disabled = true;
+    registerButton.textContent = paid
+      ? translated("ticketPaying")
+      : translated("ticketRegistering");
+    confirmRegistrationButton.textContent = paid
+      ? translated("ticketPaying")
+      : translated("ticketRegistering");
 
     try {
-      const response = await fetch(API_TICKET_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventId: eventId,
-          attendeeName: name,
-          attendeeEmail: email,
-          quantity: quantity,
-        }),
-      });
-      const result = await response.json();
-
-      if (!response.ok || !result.ok) {
-        showRegistrationError(
-          registrationFormError,
-          result.error || translated("ticketRegisterFailed"),
-        );
-        registrationForm.hidden = false;
-        registerButton.disabled = false;
-        registerButton.textContent = translated("ticketRegisterButton");
-        return;
+      if (paid) {
+        await submitPaidRegistration(data, startsAt, name, email, quantity);
+      } else {
+        await submitFreeRegistration(data, startsAt, name, email, quantity);
       }
-
-      registrationForm.hidden = true;
-      const url = new URL(
-        "ticket.html?token=" + encodeURIComponent(result.token),
-        window.location.href,
-      );
-      ticketLink.href = url.href;
-      // The link's visible text is the address itself, not a generic
-      // "click here", so it can be read out, copied or texted on even if a
-      // screen reader announces only the link text. This is also the
-      // fallback if the save panel below it fails for any reason: plain
-      // text and a real href, nothing that depends on JavaScript running
-      // twice.
-      ticketLink.textContent = url.href;
-
-      // Only claim the email went out when the Worker actually confirms it.
-      // Brevo can be unreachable, misconfigured or simply not set up yet,
-      // and the visible link above is correct either way.
-      ticketConfirmationEmailSent.hidden = !result.emailSent;
-
-      registrationConfirmation
-        .querySelectorAll(".save-ticket-panel")
-        .forEach(function (existing) {
-          existing.remove();
-        });
-      registrationConfirmation.appendChild(
-        buildSavePanel({
-          ticketUrl: url.href,
-          eventTitle: data.title,
-          icsData: {
-            uid: eventId,
-            title: data.title,
-            description: data.description,
-            startsAt: startsAt,
-          },
-        }),
-      );
-
-      registrationConfirmation.hidden = false;
     } catch (error) {
       console.error("Registration failed:", error);
       showRegistrationError(
         registrationFormError,
-        translated("ticketRegisterFailed"),
+        (error && error.message) || translated("ticketRegisterFailed"),
       );
       registrationForm.hidden = false;
-      registerButton.disabled = false;
-      registerButton.textContent = translated("ticketRegisterButton");
+      resetRegistrationControls(paid);
     }
   }
 }
