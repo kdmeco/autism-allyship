@@ -118,7 +118,9 @@ function buildImageButton(image, imageIndex, album) {
   thumbnail.alt = image.alt;
   thumbnail.width = 400;
   thumbnail.height = 267;
-  thumbnail.loading = "lazy";
+  // Not lazy: these sit inside a closed details element until someone opens
+  // the album, and a lazy image that starts inside a hidden ancestor is not
+  // reliably picked up by the browser once it becomes visible.
   thumbnail.addEventListener("error", function () {
     button.remove();
     const imageGrid = button.parentElement;
