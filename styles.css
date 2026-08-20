@@ -3173,10 +3173,13 @@ ul.event-attachments li {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  min-height: 100%;
   padding: var(--space-3);
   cursor: pointer;
   list-style: none;
+}
+
+.gallery-album:not([open]) .gallery-album-summary {
+  min-height: 100%;
 }
 
 .gallery-album-summary::-webkit-details-marker {
@@ -3275,21 +3278,6 @@ ul.event-attachments li {
 
 .gallery-album-empty {
   color: var(--colour-text-muted);
-}
-
-.gallery-plain-text-state {
-  display: none;
-}
-
-:root.plain-text .gallery-plain-text-state {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-  padding: var(--space-4);
-  border: 1px solid var(--colour-line-strong);
-  border-radius: var(--radius-md);
 }
 
 .gallery-lightbox[hidden] {
