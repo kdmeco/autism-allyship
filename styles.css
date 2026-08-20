@@ -3464,3 +3464,49 @@ body.gallery-lightbox-open {
   flex-wrap: wrap;
   gap: var(--space-2);
 }
+.not-found-heading {
+  text-align: center;
+}
+
+.not-found-code {
+  font-size: calc(var(--size-2xl) * 2.4);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.06em;
+  color: var(--colour-accent-text);
+}
+
+.not-found-heading h1 {
+  margin-top: var(--space-4);
+}
+
+.not-found-actions {
+  margin-top: var(--space-6);
+}
+
+.not-found-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.not-found-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--colour-text);
+}
+
+.not-found-links a:hover,
+.not-found-links a:focus-visible {
+  border-color: var(--colour-accent-text);
+  color: var(--colour-accent-text);
+}
