@@ -98,105 +98,59 @@ function buildCover(album) {
   return image;
 }
 
-function buildImageButton(image, imageIndex, album) {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "gallery-image-button";
-  button.setAttribute(
-    "aria-label",
-    translated("galleryOpenImage")
-      .replace("{number}", String(imageIndex + 1))
-      .replace("{title}", album.title),
-  );
-  button.dataset.fullUrl = image.url;
-  button.dataset.imageAlt = image.alt;
-  button.dataset.albumTitle = album.title;
-  button.dataset.imageIndex = String(imageIndex);
-
-  const thumbnail = document.createElement("img");
-  thumbnail.src = image.thumbUrl;
-  thumbnail.alt = image.alt;
-  thumbnail.width = 400;
-  thumbnail.height = 267;
-  // Not lazy: these sit inside a closed details element until someone opens
-  // the album, and a lazy image that starts inside a hidden ancestor is not
-  // reliably picked up by the browser once it becomes visible.
-  thumbnail.addEventListener("error", function () {
-    button.remove();
-    const imageGrid = button.parentElement;
-    if (imageGrid && imageGrid.children.length === 0) {
-      const unavailable = document.createElement("p");
-      unavailable.className = "gallery-album-empty";
-      unavailable.textContent = translated("galleryImagesUnavailable");
-      imageGrid.replaceWith(unavailable);
-    }
-  });
-  button.appendChild(thumbnail);
-
-  button.addEventListener("click", function () {
-    openLightbox(album.images, imageIndex, album.title, button);
-  });
-
-  return button;
-}
-
 function buildAlbum(album) {
-  const details = document.createElement("details");
-  details.className = "gallery-album";
-
-  const summary = document.createElement("summary");
-  summary.className = "gallery-album-summary";
+  const card = document.createElement("article");
+  card.className = "gallery-album";
 
   const cover = buildCover(album);
   if (cover) {
-    summary.appendChild(cover);
+    card.appendChild(cover);
   } else {
-    summary.appendChild(buildCoverFallback());
+    card.appendChild(buildCoverFallback());
   }
 
-  const summaryContent = document.createElement("span");
-  summaryContent.className = "gallery-album-summary-content";
+  const cardContent = document.createElement("div");
+  cardContent.className = "gallery-album-card-content";
 
-  const title = document.createElement("span");
+  const title = document.createElement("h3");
   title.className = "gallery-album-title";
   title.textContent = album.title;
-  summaryContent.appendChild(title);
+  cardContent.appendChild(title);
 
   if (album.eventName) {
-    const eventName = document.createElement("span");
+    const eventName = document.createElement("p");
     eventName.className = "gallery-album-event";
     eventName.textContent = album.eventName;
-    summaryContent.appendChild(eventName);
+    cardContent.appendChild(eventName);
   }
 
-  const count = document.createElement("span");
+  const count = document.createElement("p");
   count.className = "gallery-album-count";
   count.textContent = imageCountText(album.images.length);
-  summaryContent.appendChild(count);
-
-  summary.appendChild(summaryContent);
-  details.appendChild(summary);
-
-  const content = document.createElement("div");
-  content.className = "gallery-album-content";
+  cardContent.appendChild(count);
 
   if (album.images.length > 0) {
-    const imageGrid = document.createElement("div");
-    imageGrid.className = "gallery-image-grid";
-    imageGrid.setAttribute("aria-label", album.title);
-    album.images.forEach(function (image, imageIndex) {
-      imageGrid.appendChild(buildImageButton(image, imageIndex, album));
+    const viewButton = document.createElement("button");
+    viewButton.type = "button";
+    viewButton.className = "button button-secondary gallery-album-view";
+    viewButton.textContent = translated("galleryViewAlbum");
+    viewButton.setAttribute(
+      "aria-label",
+      translated("galleryViewAlbumLabel").replace("{title}", album.title),
+    );
+    viewButton.addEventListener("click", function () {
+      openLightbox(album.images, 0, album.title, viewButton);
     });
-    content.appendChild(imageGrid);
+    cardContent.appendChild(viewButton);
   } else {
     const noImages = document.createElement("p");
     noImages.className = "gallery-album-empty";
     noImages.textContent = translated("galleryAlbumEmpty");
-    content.appendChild(noImages);
+    cardContent.appendChild(noImages);
   }
 
-  details.appendChild(content);
-  return details;
+  card.appendChild(cardContent);
+  return card;
 }
 
 function renderAlbums(albums) {
