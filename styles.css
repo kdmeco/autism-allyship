@@ -3277,21 +3277,6 @@ ul.event-attachments li {
   color: var(--colour-text-muted);
 }
 
-.gallery-plain-text-state {
-  display: none;
-}
-
-:root.plain-text .gallery-plain-text-state {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-  padding: var(--space-4);
-  border: 1px solid var(--colour-line-strong);
-  border-radius: var(--radius-md);
-}
-
 .gallery-lightbox[hidden] {
   display: none;
 }
