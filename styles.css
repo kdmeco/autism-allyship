@@ -3159,44 +3159,21 @@ ul.event-attachments li {
 }
 
 .gallery-album {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
   background-color: var(--colour-surface);
   border: 1px solid var(--colour-line);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
 
-.gallery-album[open] {
-  border-color: var(--colour-line-strong);
-}
-
-.gallery-album-summary {
+.gallery-album-card-content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  cursor: pointer;
-  list-style: none;
-}
-
-.gallery-album:not([open]) .gallery-album-summary {
-  min-height: 100%;
-}
-
-.gallery-album-summary::-webkit-details-marker {
-  display: none;
-}
-
-.gallery-album-summary::after {
-  content: "+";
-  align-self: flex-end;
-  color: var(--colour-accent-text);
-  font-size: var(--size-lg);
-  font-weight: 600;
-  line-height: 1;
-}
-
-.gallery-album[open] .gallery-album-summary::after {
-  content: "-";
+  flex: 1;
+  gap: var(--space-1);
 }
 
 .gallery-album-cover {
@@ -3220,13 +3197,8 @@ ul.event-attachments li {
   text-align: center;
 }
 
-.gallery-album-summary-content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
 .gallery-album-title {
+  margin: 0;
   font-size: var(--size-md);
   font-weight: 600;
   line-height: var(--line-height-heading);
@@ -3234,46 +3206,14 @@ ul.event-attachments li {
 
 .gallery-album-event,
 .gallery-album-count {
+  margin: 0;
   color: var(--colour-text-muted);
   font-size: var(--size-sm);
 }
 
-/* The browser's native details/summary collapse is not reliable enough on
-   its own here, so the closed state is forced explicitly. */
-.gallery-album:not([open]) .gallery-album-content {
-  display: none;
-}
-
-.gallery-album-content {
-  padding: 0 var(--space-3) var(--space-3);
-}
-
-.gallery-image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 12rem));
-  gap: var(--space-2);
-}
-
-.gallery-image-button {
-  display: block;
-  width: 100%;
-  min-height: 3rem;
-  padding: 0;
-  background-color: var(--colour-surface-alt);
-  border: 1px solid var(--colour-line);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  overflow: hidden;
-}
-
-.gallery-image-button:hover {
-  border-color: var(--colour-accent-fill);
-}
-
-.gallery-image-button img {
-  width: 100%;
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
+.gallery-album-view {
+  align-self: flex-start;
+  margin-top: var(--space-3);
 }
 
 .gallery-album-empty {
@@ -3287,7 +3227,7 @@ ul.event-attachments li {
 .gallery-lightbox {
   position: fixed;
   inset: 0;
-  z-index: 20;
+  z-index: 100;
   display: grid;
   place-items: center;
   padding: var(--space-5);
@@ -3366,7 +3306,7 @@ body.gallery-lightbox-open {
 }
 
 :root.plain-text .gallery-album-cover,
-:root.plain-text .gallery-image-button,
+:root.plain-text .gallery-album-view,
 :root.plain-text .gallery-lightbox-image {
   display: none;
 }
