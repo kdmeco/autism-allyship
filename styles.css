@@ -1152,6 +1152,20 @@ textarea {
   position: static !important;
 }
 
+/* The Android app opens blog-post.html inside a WebView and adds app=1. The app
+   supplies its own toolbar, back control and settings, so showing the site's
+   header and footer as well would repeat all of it and let someone browse the
+   whole website from inside a single article. The back link and the share row go
+   for the same reason: the link would strand them on the website's blog list,
+   and the share buttons rely on a new window and the system share sheet, neither
+   of which does anything useful in a WebView. */
+:root.app-embed .site-header,
+:root.app-embed .site-footer,
+:root.app-embed .back-link,
+:root.app-embed .share-row {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
