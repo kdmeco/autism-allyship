@@ -596,6 +596,11 @@ contactPageTitle: "Contact us",
     adminAttendeesLoading: "Loading attendees...",
     adminAttendeesViewTicket: "View ticket",
     requiredField: "(required)",
+    notFoundHeading: "Page not found",
+    notFoundText:
+      "The page you are looking for does not exist, or it may have moved.",
+    notFoundBackHome: "Back to home",
+    notFoundLinksHeading: "Where to next",
   },
 
   af: {
@@ -1091,6 +1096,10 @@ contactRequiredNote: "",
     adminAttendeesLoading: "",
     adminAttendeesViewTicket: "",
     requiredField: "",
+    notFoundHeading: "",
+    notFoundText: "",
+    notFoundBackHome: "",
+    notFoundLinksHeading: "",
   },
 
   st: {
@@ -1586,5 +1595,9 @@ contactRequiredNote: "",
     adminAttendeesLoading: "",
     adminAttendeesViewTicket: "",
     requiredField: "",
+    notFoundHeading: "",
+    notFoundText: "",
+    notFoundBackHome: "",
+    notFoundLinksHeading: "",
   },
 };
