@@ -1507,6 +1507,26 @@ textarea {
   border-radius: var(--radius-lg);
 }
 
+.instagram-embed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  align-items: start;
+}
+
+.instagram-embed-item {
+  min-width: 0;
+}
+
+.instagram-fallback {
+  margin-top: var(--space-4);
+}
+
+:root.sensory-mode .instagram-embed-grid {
+  display: none;
+}
+
 .stand-for-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
