@@ -394,15 +394,17 @@
       <div class="container">
         <section class="page-heading" aria-labelledby="donateSuccessHeading">
           <h1 id="donateSuccessHeading" data-i18n="donateSuccessHeading">Thank you for supporting Autism Allyship</h1>
-          <p class="page-lede" data-i18n="donateSuccessText">Thank you for choosing to support us. A completed payment will be confirmed here once the payment service is connected.</p>
+          <p class="page-lede" id="donateSuccessLede" data-i18n="donateReferenceMissing">No payment reference was found. If you just completed a donation, check your email confirmation or refresh this page.</p>
         </section>
-        <section class="donation-status" aria-labelledby="donateReferenceHeading">
+        <section class="donation-status" id="donateReferenceSection" aria-labelledby="donateReferenceHeading" hidden>
           <h2 id="donateReferenceHeading" data-i18n="donateReferenceHeading">Your payment reference</h2>
-          <p class="donation-reference" data-i18n="donateReferencePending">A payment reference will appear here after the payment service is connected.</p>
+          <p class="donation-reference" id="donateReferenceValue"></p>
+          <p id="donateAmountValue" hidden></p>
           <p data-i18n="donateSuccessNext">After a real payment is completed, the foundation will use the details you provide to process the donation. Keep your payment confirmation for your records.</p>
           <a href="donate.html" class="button button-secondary" data-i18n="donateBackToForm">Return to donations</a>
         </section>
       </div>
+      <script type="module" src="donate-result.js"></script>
     </main>
 
     <footer class="site-footer">
