@@ -10,7 +10,12 @@ import {
   getDoc,
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { translated, downloadIcs, buildSavePanel } from "./shared.js";
+import {
+  translated,
+  downloadIcs,
+  buildSavePanel,
+  endOfLocalDay,
+} from "./shared.js";
 import {
   API_TICKET_URL,
   API_TICKET_INITIALIZE_URL,
@@ -66,6 +71,11 @@ const ticketLink = document.getElementById("ticketLink");
 const ticketConfirmationEmailSent = document.getElementById(
   "ticketConfirmationEmailSent",
 );
+const pendingPaymentPanel = document.getElementById("pendingPaymentPanel");
+const pendingPaymentMessage = document.getElementById("pendingPaymentMessage");
+const checkPendingPaymentButton = document.getElementById(
+  "checkPendingPaymentButton",
+);
 const soldOutNotice = document.getElementById("ticketSoldOutNotice");
 const pastNotice = document.getElementById("ticketPastNotice");
 
@@ -74,6 +84,8 @@ const pastNotice = document.getElementById("ticketPastNotice");
 // Worker enforces the real limit regardless of what this page allows typing.
 const MAX_GROUP_SIZE = 10;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const PENDING_PAYMENT_STORAGE_KEY = "aaf-pending-ticket-payment";
+const PENDING_PAYMENT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
 
 const pageParams = new URLSearchParams(window.location.search);
 const eventId = pageParams.get("id");
@@ -110,6 +122,69 @@ function formatRands(amount) {
 
 function isPaidEvent(data) {
   return data.isTicketed === true && typeof data.price === "number" && data.price > 0;
+}
+
+function readPendingPayment() {
+  try {
+    const raw = localStorage.getItem(PENDING_PAYMENT_STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+    const saved = JSON.parse(raw);
+    const valid =
+      saved &&
+      typeof saved.reference === "string" &&
+      typeof saved.eventId === "string" &&
+      typeof saved.createdAt === "number";
+    if (!valid || Date.now() - saved.createdAt > PENDING_PAYMENT_MAX_AGE_MS) {
+      localStorage.removeItem(PENDING_PAYMENT_STORAGE_KEY);
+      return null;
+    }
+    return saved;
+  } catch (error) {
+    return null;
+  }
+}
+
+function savePendingPayment(reference) {
+  try {
+    localStorage.setItem(
+      PENDING_PAYMENT_STORAGE_KEY,
+      JSON.stringify({ reference: reference, eventId: eventId, createdAt: Date.now() }),
+    );
+  } catch (error) {
+    // Recovery is best effort. A browser that blocks local storage can still
+    // finish through the ordinary Paystack success callback.
+  }
+}
+
+function clearPendingPayment(reference) {
+  try {
+    const saved = readPendingPayment();
+    if (!saved || !reference || saved.reference === reference) {
+      localStorage.removeItem(PENDING_PAYMENT_STORAGE_KEY);
+    }
+  } catch (error) {
+    // Nothing else depends on clearing browser storage successfully.
+  }
+}
+
+function showPendingPayment(message, checkAgain) {
+  registrationForm.hidden = true;
+  registrationEmailConfirmation.hidden = true;
+  registrationConfirmation.hidden = true;
+  pendingPaymentMessage.textContent = message;
+  checkPendingPaymentButton.disabled = false;
+  checkPendingPaymentButton.textContent = translated("ticketPaymentCheckAgain");
+  checkPendingPaymentButton.onclick = checkAgain;
+  pendingPaymentPanel.hidden = false;
+}
+
+function showPendingPaymentChecking() {
+  pendingPaymentMessage.textContent = translated("ticketPaymentChecking");
+  checkPendingPaymentButton.disabled = true;
+  checkPendingPaymentButton.textContent = translated("ticketPaymentChecking");
+  pendingPaymentPanel.hidden = false;
 }
 
 // Capacity is always shown as text plus a border, never colour alone,
@@ -171,6 +246,7 @@ function showRegistrationSuccess(data, startsAt, token, emailSent) {
 
   registrationForm.hidden = true;
   registrationEmailConfirmation.hidden = true;
+  pendingPaymentPanel.hidden = true;
   ticketLink.href = url.href;
   ticketLink.textContent = url.href;
   ticketConfirmationEmailSent.hidden = !emailSent;
@@ -240,6 +316,75 @@ async function verifyPaidTicket(reference) {
   return result;
 }
 
+async function resolvePaidTicket(reference) {
+  try {
+    const result = await verifyPaidTicket(reference);
+    if (result.status === "success" && result.token) {
+      return { kind: "success", result: result };
+    }
+    if (result.status === "failed") {
+      return { kind: "failed", result: result };
+    }
+    return { kind: "pending", result: result };
+  } catch (error) {
+    console.error("Payment verification failed:", error);
+    return { kind: "unavailable" };
+  }
+}
+
+function handlePaidTicketResolution(
+  data,
+  startsAt,
+  reference,
+  resolution,
+  terminalMessage,
+) {
+  if (resolution.kind === "success") {
+    clearPendingPayment(reference);
+    showRegistrationSuccess(
+      data,
+      startsAt,
+      resolution.result.token,
+      resolution.result.emailSent,
+    );
+    return;
+  }
+
+  if (resolution.kind === "failed") {
+    clearPendingPayment(reference);
+    pendingPaymentPanel.hidden = true;
+    throw new Error(
+      resolution.result.gatewayResponse || terminalMessage,
+    );
+  }
+
+  const message =
+    resolution.kind === "pending"
+      ? translated("ticketPaymentPending")
+      : translated("ticketPaymentRecoveryUnavailable");
+  showPendingPayment(message, async function () {
+    showPendingPaymentChecking();
+    const checked = await resolvePaidTicket(reference);
+    try {
+      handlePaidTicketResolution(
+        data,
+        startsAt,
+        reference,
+        checked,
+        translated("ticketPaymentFailed"),
+      );
+    } catch (error) {
+      showRegistrationError(
+        registrationFormError,
+        (error && error.message) || translated("ticketPaymentFailed"),
+      );
+      pendingPaymentPanel.hidden = true;
+      registrationForm.hidden = false;
+      resetRegistrationControls(true);
+    }
+  });
+}
+
 async function submitPaidRegistration(data, startsAt, name, email, quantity) {
   const initResponse = await fetch(API_TICKET_INITIALIZE_URL, {
     method: "POST",
@@ -261,47 +406,66 @@ async function submitPaidRegistration(data, startsAt, name, email, quantity) {
     throw new Error(translated("ticketPaymentFailed"));
   }
 
+  savePendingPayment(initResult.reference);
+
   return new Promise(function (resolve, reject) {
     const popup = new PaystackPop();
     popup.resumeTransaction(initResult.accessCode, {
       onSuccess: async function () {
+        confirmRegistrationButton.textContent = translated(
+          "ticketConfirmingPayment",
+        );
+        const resolution = await resolvePaidTicket(initResult.reference);
         try {
-          confirmRegistrationButton.textContent = translated(
-            "ticketConfirmingPayment",
-          );
-          const verified = await verifyPaidTicket(initResult.reference);
-          if (verified.status !== "success" || !verified.token) {
-            reject(
-              new Error(
-                verified.gatewayResponse || translated("ticketPaymentFailed"),
-              ),
-            );
-            return;
-          }
-          showRegistrationSuccess(
+          handlePaidTicketResolution(
             data,
             startsAt,
-            verified.token,
-            verified.emailSent,
+            initResult.reference,
+            resolution,
+            translated("ticketPaymentFailed"),
           );
           resolve();
         } catch (error) {
           reject(error);
         }
       },
-      onCancel: function () {
-        reject(new Error(translated("ticketPaymentCancelled")));
+      onCancel: async function () {
+        const resolution = await resolvePaidTicket(initResult.reference);
+        try {
+          handlePaidTicketResolution(
+            data,
+            startsAt,
+            initResult.reference,
+            resolution,
+            translated("ticketPaymentCancelled"),
+          );
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
       },
-      onError: function (error) {
+      onError: async function (error) {
         console.error("Paystack popup error:", error && error.message);
-        reject(new Error(translated("ticketPaymentFailed")));
+        const resolution = await resolvePaidTicket(initResult.reference);
+        try {
+          handlePaidTicketResolution(
+            data,
+            startsAt,
+            initResult.reference,
+            resolution,
+            translated("ticketPaymentFailed"),
+          );
+          resolve();
+        } catch (verificationError) {
+          reject(verificationError);
+        }
       },
     });
   });
 }
 
 function setUpRegistration(data, startsAt) {
-  const isPast = !startsAt || startsAt.getTime() <= Date.now();
+  const isPast = !startsAt || endOfLocalDay(startsAt).getTime() < Date.now();
   if (isPast) {
     pastNotice.hidden = false;
     return;
@@ -351,6 +515,30 @@ function setUpRegistration(data, startsAt) {
   });
 
   registrationSection.hidden = false;
+
+  const savedPayment = paid ? readPendingPayment() : null;
+  if (savedPayment && savedPayment.eventId === eventId) {
+    showPendingPaymentChecking();
+    resolvePaidTicket(savedPayment.reference).then(function (resolution) {
+      try {
+        handlePaidTicketResolution(
+          data,
+          startsAt,
+          savedPayment.reference,
+          resolution,
+          translated("ticketPaymentFailed"),
+        );
+      } catch (error) {
+        showRegistrationError(
+          registrationFormError,
+          (error && error.message) || translated("ticketPaymentFailed"),
+        );
+        pendingPaymentPanel.hidden = true;
+        registrationForm.hidden = false;
+        resetRegistrationControls(true);
+      }
+    });
+  }
 
   registrationForm.addEventListener("submit", async function (event) {
     event.preventDefault();

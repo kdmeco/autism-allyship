@@ -31,24 +31,14 @@
 
     <link rel="stylesheet" href="styles.css" />
 
-    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://firestore.googleapis.com" />
-
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
-    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
-      // Resolves the saved settings before the browser paints anything, so a
-      // returning visitor never sees a flash of the wrong theme or text size.
-      // Deliberately inline and tiny. If you change a storage key here, change it
-      // in main.js too.
       (function () {
         var root = document.documentElement;
         var saved = {};
 
-        // CSS only hides the accessibility panel when this class is present. If this
-        // script never runs, the panel stays visible and open rather than vanishing.
         root.classList.add("js");
 
         try {
@@ -58,13 +48,9 @@
           saved.plainText = localStorage.getItem("aaf-plain-text");
           saved.language = localStorage.getItem("aaf-language");
         } catch (error) {
-          // Private browsing and pages opened straight off the file system can
-          // block storage. Fall back to defaults rather than breaking the page.
         }
 
-        var prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         root.setAttribute(
           "data-theme",
           saved.theme || (prefersDark ? "dark" : "light"),
@@ -84,7 +70,8 @@
         }
       })();
     </script>
-    <title>Event | Autism Allyship</title>
+
+    <title>Terms of use | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -149,17 +136,13 @@
                 <li><a href="about.html" data-i18n="navAbout">About</a></li>
                 <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
                 <li>
-                  <a href="gallery.html" data-i18n="navGallery"
-                    >Image gallery</a
-                  >
+                  <a href="gallery.html" data-i18n="navGallery">Image gallery</a>
                 </li>
                 <li><a href="events.html" data-i18n="navEvents">Events</a></li>
               </ul>
             </li>
 
-            <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
-            </li>
+            <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
             <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
             <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
           </ul>
@@ -236,8 +219,7 @@
 
             <div class="accessibility-panel" id="accessibilityPanel">
               <p class="panel-intro" data-i18n="accessibilityIntro">
-                Change how this site looks and reads. Your choices are
-                remembered.
+                Change how this site looks and reads. Your choices are remembered.
               </p>
 
               <div class="panel-row">
@@ -299,9 +281,7 @@
                     <span class="panel-toggle-name" data-i18n="plainTextMode"
                       >Simplified text</span
                     >
-                    <span
-                      class="panel-toggle-note"
-                      data-i18n="plainTextModeNote"
+                    <span class="panel-toggle-note" data-i18n="plainTextModeNote"
                       >Hides images and shows plain text only</span
                     >
                   </span>
@@ -314,9 +294,7 @@
                 data-i18n-aria-label="textSize"
                 aria-label="Text size"
               >
-                <span class="panel-row-label" data-i18n="textSize"
-                  >Text size</span
-                >
+                <span class="panel-row-label" data-i18n="textSize">Text size</span>
                 <div class="text-size-group">
                   <button
                     type="button"
@@ -324,9 +302,7 @@
                     data-text-size="1"
                     aria-pressed="true"
                   >
-                    <span class="text-size-glyph size-1" aria-hidden="true"
-                      >A</span
-                    >
+                    <span class="text-size-glyph size-1" aria-hidden="true">A</span>
                     <span class="visually-hidden" data-i18n="textSizeNormal"
                       >Normal text size</span
                     >
@@ -337,9 +313,7 @@
                     data-text-size="2"
                     aria-pressed="false"
                   >
-                    <span class="text-size-glyph size-2" aria-hidden="true"
-                      >A</span
-                    >
+                    <span class="text-size-glyph size-2" aria-hidden="true">A</span>
                     <span class="visually-hidden" data-i18n="textSizeLarge"
                       >Large text size</span
                     >
@@ -350,9 +324,7 @@
                     data-text-size="3"
                     aria-pressed="false"
                   >
-                    <span class="text-size-glyph size-3" aria-hidden="true"
-                      >A</span
-                    >
+                    <span class="text-size-glyph size-3" aria-hidden="true">A</span>
                     <span class="visually-hidden" data-i18n="textSizeLarger"
                       >Extra large text size</span
                     >
@@ -361,13 +333,10 @@
               </div>
 
               <div class="panel-row">
-                <label
-                  class="panel-row-label"
-                  for="languageSelect"
-                  data-i18n="language"
-                  >Language</label
-                >
-                <select id="languageSelect">
+                <label class="panel-select-label" for="languageSelect">
+                  <span data-i18n="language">Language</span>
+                </label>
+                <select id="languageSelect" class="language-select">
                   <option value="en">English</option>
                   <option value="af">Afrikaans</option>
                   <option value="st">Sesotho</option>
@@ -376,10 +345,6 @@
             </div>
           </div>
         </div>
-
-        <a class="donate-button" href="donate.html" data-i18n="navDonate"
-          >Donate</a
-        >
 
         <button
           type="button"
@@ -395,293 +360,198 @@
     </header>
 
     <main id="main">
-      <div class="container">
-        <article class="event-article" id="eventArticle" hidden>
-          <a class="back-link" href="events.html" data-i18n="eventBackToEvents"
-            >Back to events</a
-          >
-
-          <h1 id="eventTitle">Event</h1>
-          <p class="event-meta" id="eventMeta"></p>
-          <p class="event-capacity" id="eventCapacity" hidden></p>
-
-          <div class="event-body" id="eventBody"></div>
-
-          <div id="eventAttachmentsSection" hidden>
-            <h2 data-i18n="eventAttachmentsHeading">Attachments</h2>
-            <ul class="event-attachments" id="eventAttachmentsList"></ul>
-          </div>
-
-          <p>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="addToCalendarButton"
-              data-i18n="eventAddToCalendar"
-            >
-              Add to calendar
-            </button>
+      <div class="container legal-page">
+        <section class="page-heading" aria-labelledby="termsHeading">
+          <h1 id="termsHeading" data-i18n="termsPageTitle">Terms of use</h1>
+          <p class="page-lede">
+            These draft terms describe proposed conditions for using the Autism
+            Allyship Foundation website and linked services. They require Foundation
+            approval before they can operate as final terms of use.
           </p>
-
-          <section class="ticket-registration" id="ticketRegistration" hidden>
-            <h2 data-i18n="ticketRegisterHeading">Register for this event</h2>
-            <p class="page-lede" id="ticketRegisterIntro">
-              Free to attend. Fill in your details below and we'll send you a
-              ticket with a QR code to show at the door.
-            </p>
-            <p class="form-field-note" id="ticketPriceTotal" hidden></p>
-
-            <div
-              class="registration-email-confirmation"
-              id="pendingPaymentPanel"
-              role="status"
-              hidden
-            >
-              <p id="pendingPaymentMessage"></p>
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="button button-primary"
-                  id="checkPendingPaymentButton"
-                  data-i18n="ticketPaymentCheckAgain"
-                >
-                  Check payment
-                </button>
-              </div>
-            </div>
-
-            <form class="registration-form" id="registrationForm" novalidate>
-              <div class="form-field">
-                <label for="attendeeName">
-                  <span data-i18n="ticketNameLabel">Name</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="text"
-                  id="attendeeName"
-                  name="attendeeName"
-                  autocomplete="name"
-                  required
-                />
-                <p
-                  class="form-error"
-                  id="attendeeNameError"
-                  hidden
-                  data-i18n="ticketNameError"
-                >
-                  Enter your name.
-                </p>
-              </div>
-
-              <div class="form-field">
-                <label for="attendeeEmail">
-                  <span data-i18n="ticketEmailLabel">Email</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="email"
-                  id="attendeeEmail"
-                  name="attendeeEmail"
-                  autocomplete="email"
-                  required
-                />
-                <p
-                  class="form-error"
-                  id="attendeeEmailError"
-                  hidden
-                  data-i18n="ticketEmailError"
-                >
-                  Enter a valid email address.
-                </p>
-              </div>
-
-              <div class="form-field">
-                <label for="attendeeQuantity">
-                  <span data-i18n="ticketQuantityLabel">Quantity</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="number"
-                  id="attendeeQuantity"
-                  name="quantity"
-                  min="1"
-                  step="1"
-                  value="1"
-                  required
-                />
-                <p class="form-field-note" id="quantityNote" hidden></p>
-                <p
-                  class="form-error"
-                  id="attendeeQuantityError"
-                  hidden
-                  data-i18n="ticketQuantityError"
-                >
-                  Enter how many people are coming.
-                </p>
-              </div>
-
-              <p class="popia-notice">
-                <span data-i18n="ticketPopiaNotice"
-                  >Your name and email address are used only to create your
-                  ticket and to contact you about this event. See our</span
-                >
-                <a href="privacy.html" data-i18n="ticketPopiaNoticeLink"
-                  >privacy policy</a
-                >.
-              </p>
-
-              <div class="form-actions">
-                <button
-                  type="submit"
-                  class="button button-primary"
-                  id="registerButton"
-                  data-i18n="ticketRegisterButton"
-                >
-                  Register
-                </button>
-              </div>
-
-              <p
-                class="form-error form-error-general"
-                id="registrationFormError"
-                role="status"
-                hidden
-              ></p>
-            </form>
-
-            <div
-              class="registration-email-confirmation"
-              id="registrationEmailConfirmation"
-              role="alert"
-              hidden
-            >
-              <p id="registrationEmailConfirmationText"></p>
-              <p class="form-field-note" id="ticketPayTotalConfirm" hidden></p>
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="button button-primary"
-                  id="confirmRegistrationButton"
-                  data-i18n="ticketConfirmEmailButton"
-                >
-                  Confirm email and register
-                </button>
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  id="changeRegistrationEmailButton"
-                  data-i18n="ticketChangeEmailButton"
-                >
-                  Change email
-                </button>
-              </div>
-            </div>
-
-            <div
-              class="registration-confirmation"
-              id="registrationConfirmation"
-              role="status"
-              hidden
-            >
-              <h3 data-i18n="ticketConfirmationHeading">You're registered!</h3>
-              <p data-i18n="ticketConfirmationText">
-                This link is your ticket. Save it now, before you do anything
-                else.
-              </p>
-              <p
-                id="ticketConfirmationEmailSent"
-                data-i18n="ticketConfirmationEmailSent"
-                hidden
-              >
-                We've also sent it to your email address, in case you need it
-                later.
-              </p>
-              <p>
-                <a id="ticketLink" href="#"></a>
-              </p>
-            </div>
-          </section>
-
-          <p
-            class="ticket-registration-notice"
-            id="ticketSoldOutNotice"
-            hidden
-            data-i18n="ticketSoldOutNotice"
-          >
-            This event is sold out.
-          </p>
-
-          <p
-            class="ticket-registration-notice"
-            id="ticketPastNotice"
-            hidden
-            data-i18n="ticketPastNotice"
-          >
-            This event has already happened, so registration is closed.
-          </p>
-
-          <div class="share-row">
-            <h2 class="share-heading" data-i18n="eventShareHeading">
-              Share this event
-            </h2>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="shareButton"
-              data-i18n="eventShare"
-              hidden
-            >
-              Share
-            </button>
-            <a
-              class="button button-secondary"
-              id="whatsappShare"
-              href="https://wa.me/"
-              rel="noopener"
-              target="_blank"
-              data-i18n="eventShareWhatsApp"
-            >
-              Share on WhatsApp
-            </a>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="copyLinkButton"
-              data-i18n="eventCopyLink"
-            >
-              Copy link
-            </button>
-            <span class="share-copied" id="copyConfirmation" role="status" hidden>
-              <span data-i18n="eventLinkCopied">Link copied</span>
-            </span>
-          </div>
-        </article>
-
-        <section class="page-heading" id="eventMissing" hidden>
-          <h1 data-i18n="eventNotFoundTitle">This event is not available</h1>
-          <p class="page-lede" data-i18n="eventNotFoundText">
-            It may have been removed, or it may not be published yet.
-          </p>
-          <a
-            class="button button-secondary"
-            href="events.html"
-            data-i18n="eventBackToEvents"
-          >
-            Back to events
-          </a>
         </section>
 
-        <noscript>
-          <p class="blog-empty">
-            Events need JavaScript to load. Please enable it to read them.
+        <section class="legal-section" aria-labelledby="termsScopeHeading">
+          <h2 id="termsScopeHeading">Scope of these terms</h2>
+          <p>
+            These draft terms apply to the use of the Autism Allyship Foundation
+            website, related public pages, and the information, resources, and
+            services made available through it.
           </p>
-        </noscript>
+          <p>
+            The website is operated by Active Autism &amp; Neuro-Diversity Allyship
+            Foundation. Governing law and the final wording in the marked sections
+            below still require the Foundation's approval.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsUseHeading">
+          <h2 id="termsUseHeading">Acceptable use</h2>
+          <p>
+            Under these proposed website terms, visitors may use the website for
+            lawful purposes and for learning about, connecting with, supporting, or
+            participating in the work described on the site.
+          </p>
+          <p>
+            You agree not to use the website to upload, share, or distribute
+            harmful, unlawful, abusive, or misleading material. You must not
+            interfere with the security, operation, or performance of the site, or
+            attempt to access parts of the site or systems that are not intended for
+            public use.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsIPHeading">
+          <h2 id="termsIPHeading">Intellectual property</h2>
+          <p>
+            Unless otherwise stated, content made available through the website may
+            be protected by copyright, trade mark, or other intellectual property
+            rights. Where content is supplied by third parties or contributors,
+            ownership and permitted use may belong to those parties.
+          </p>
+          <p>
+            The Foundation must confirm any ownership or licensing terms that it
+            relies on for website materials:
+          </p>
+          <p class="placeholder-block">
+            Foundation intellectual-property ownership and licensing wording: to
+            be confirmed before launch.
+          </p>
+          <p>
+            You may view and share public materials for personal, informational,
+            and community use, but you should not copy, republish, or reuse
+            protected content without permission from the Foundation or the
+            relevant rights holder.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsResourcesHeading">
+          <h2 id="termsResourcesHeading">Resource directory and non-endorsement</h2>
+          <p>
+            The resource directory lists available services, organisations, and
+            information for public reference. Under these proposed terms, listing a
+            resource would not mean that the Foundation endorses, recommends,
+            guarantees, certifies, or takes responsibility for that organisation or
+            service.
+          </p>
+          <p>
+            People should consider each resource on its own merits and check the
+            provider's information before acting on it. The website is a directory
+            and information source, not an assurance or approval service.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsMedicalHeading">
+          <h2 id="termsMedicalHeading">No medical or professional advice</h2>
+          <p>
+            Information provided through this website, including resource
+            information, event information, community information, and educational
+            material, is for general informational purposes only. It is not medical,
+            clinical, therapeutic, legal, financial, or other professional advice.
+          </p>
+          <p>
+            The website does not provide medical diagnosis, treatment, or clinical
+            advice. If you need professional help, speak to a qualified professional
+            who is appropriate to your situation.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsLiabilityHeading">
+          <h2 id="termsLiabilityHeading">Limitation of liability</h2>
+          <p>
+            The following is proposed website-terms wording and requires Foundation
+            approval. Information on the website may be incomplete, inaccurate, or
+            unavailable at times, and the website may experience errors or
+            interruptions.
+          </p>
+          <p>
+            To the extent permitted by applicable law, the final terms may limit
+            liability for loss arising from use of the website. They cannot exclude
+            liability where applicable law does not allow an exclusion.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsEventsHeading">
+          <h2 id="termsEventsHeading">Events and tickets</h2>
+          <p>
+            Event details are provided for information and planning purposes.
+            Information, event details, and website availability may change. Where
+            changes are made, the website may be updated accordingly.
+          </p>
+          <p>
+            Ticket terms depend on the event and are subject to the Foundation's
+            approved event information and ticket process. Ticket validity and
+            transfer are based on the project design, which allows a ticket link to
+            be shared and used by the person who holds the valid link at the time of
+            entry, subject to the relevant event arrangements and any approved
+            ticketing rules.
+          </p>
+          <p>
+            The Foundation has not yet supplied the final approved ticket refund
+            wording, so the correct policy is:
+          </p>
+          <p class="placeholder-block">Ticket refund policy: to be supplied and approved by the Foundation before launch.</p>
+          <p>
+            The approved wording must replace this placeholder before publication.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsLinksHeading">
+          <h2 id="termsLinksHeading">External links and third-party services</h2>
+          <p>
+            This website may link to external websites, social media pages, payment
+            systems, resource directories, and information services. These links are
+            provided for convenience only.
+          </p>
+          <p>
+            External websites and services are operated by their respective
+            providers. Their content, availability, terms, and privacy practices may
+            differ from this website, so visitors should review the information those
+            providers make available before using them.
+          </p>
+          <p>
+            The current project includes Firebase, Cloudflare, and Paystack
+            integrations. A transactional email provider, including any Brevo use,
+            is not confirmed for the live website and should not be treated as an
+            active service until the Foundation confirms it.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsAvailabilityHeading">
+          <h2 id="termsAvailabilityHeading">Website availability and content changes</h2>
+          <p>
+            Information, design, content, and availability may change as the website
+            evolves. This draft does not establish a Foundation notice period or
+            update policy.
+          </p>
+          <p>
+            The website may be unavailable or experience problems from time to time.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsPrivacyHeading">
+          <h2 id="termsPrivacyHeading">Privacy</h2>
+          <p>
+            The <a href="privacy.html">draft Privacy policy</a> describes the
+            personal-information wording currently proposed for this website.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsGoverningHeading">
+          <h2 id="termsGoverningHeading">Governing law and jurisdiction</h2>
+          <p>
+            The governing law and jurisdiction for these terms must be confirmed
+            and approved by the Foundation before launch.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="termsContactHeading">
+          <h2 id="termsContactHeading">Contact</h2>
+          <p>
+            If you have questions about these terms, please contact the Foundation
+            through the contact page or use the contact details provided on the
+            website.
+          </p>
+        </section>
       </div>
     </main>
 
@@ -701,8 +571,8 @@
             </span>
           </a>
           <p data-i18n="footerDescription">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
+            Building inclusive, accessible spaces for autistic and neurodivergent
+            people and their families.
           </p>
           <p class="footer-npo">
             <span data-i18n="npoLabel">NPO registration number</span>
@@ -715,14 +585,10 @@
           data-i18n-aria-label="footerQuickLinks"
           aria-label="Quick links"
         >
-          <h2 class="footer-heading" data-i18n="footerQuickLinks">
-            Quick links
-          </h2>
+          <h2 class="footer-heading" data-i18n="footerQuickLinks">Quick links</h2>
           <ul class="footer-list">
             <li><a href="about.html" data-i18n="navAbout">About</a></li>
-            <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
-            </li>
+            <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
             <li><a href="events.html" data-i18n="navEvents">Events</a></li>
             <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
             <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
@@ -798,7 +664,5 @@
         </p>
       </div>
     </footer>
-
-    <script type="module" src="event.js"></script>
   </body>
 </html>

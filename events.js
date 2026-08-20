@@ -12,7 +12,7 @@ import {
   where,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { thumbPath, translated } from "./shared.js";
+import { thumbPath, translated, endOfLocalDay } from "./shared.js";
 
 const toolbar = document.getElementById("eventsToolbar");
 const upcomingSection = document.getElementById("upcomingSection");
@@ -117,7 +117,7 @@ async function loadEvents() {
 
   const upcoming = events
     .filter(function (eventItem) {
-      return eventItem.startsAt >= now;
+      return endOfLocalDay(eventItem.startsAt) >= now;
     })
     .sort(function (first, second) {
       return first.startsAt - second.startsAt;
@@ -125,7 +125,7 @@ async function loadEvents() {
 
   const past = events
     .filter(function (eventItem) {
-      return eventItem.startsAt < now;
+      return endOfLocalDay(eventItem.startsAt) < now;
     })
     .sort(function (first, second) {
       return second.startsAt - first.startsAt;
