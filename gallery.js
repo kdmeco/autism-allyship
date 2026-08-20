@@ -6,7 +6,6 @@ import {
 import { thumbPath, translated } from "./shared.js";
 
 const loadingState = document.getElementById("galleryLoading");
-const showImagesButton = document.getElementById("galleryShowImages");
 const yearsContainer = document.getElementById("galleryYears");
 const emptyState = document.getElementById("galleryEmpty");
 const errorState = document.getElementById("galleryError");
@@ -382,13 +381,6 @@ async function loadGallery() {
 }
 
 setUpLightbox();
-
-showImagesButton.addEventListener("click", function () {
-  const plainTextToggle = document.getElementById("plainTextToggle");
-  if (plainTextToggle) {
-    plainTextToggle.click();
-  }
-});
 
 loadGallery()
   .then(function (albums) {
