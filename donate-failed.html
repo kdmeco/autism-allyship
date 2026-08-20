@@ -394,15 +394,17 @@
       <div class="container">
         <section class="page-heading" aria-labelledby="donateFailedHeading">
           <h1 id="donateFailedHeading" data-i18n="donateFailedHeading">The donation was not completed</h1>
-          <p class="page-lede" data-i18n="donateFailedText">No payment reference was created. You can return to the donation form and try again.</p>
+          <p class="page-lede" id="donateFailedLede" data-i18n="donateFailedText">No payment reference was created. You can return to the donation form and try again.</p>
+          <p class="donation-reference" id="donateFailedReference" hidden></p>
+          <p id="donateFailedReason" hidden></p>
         </section>
         <section class="donation-status" aria-labelledby="donateAlternativeHeading">
           <h2 id="donateAlternativeHeading" data-i18n="donateAlternativeHeading">Try again or use EFT</h2>
-          <p data-i18n="donateFailedNext">Check your details and try the donation form again. Official EFT banking details will be added once they are supplied and approved by the project team.</p>
-          <p data-i18n="donateEftWarning">Our banking details never change. Confirm the details on this page before making an EFT donation.</p>
+          <p data-i18n="donateFailedNext">Check your card details and try again, or use EFT from the donation page.</p>
           <a href="donate.html" class="button button-secondary" data-i18n="donateTryAgain">Try the donation form again</a>
         </section>
       </div>
+      <script type="module" src="donate-result.js"></script>
     </main>
 
     <footer class="site-footer">
