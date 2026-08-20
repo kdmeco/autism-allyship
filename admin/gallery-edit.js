@@ -40,6 +40,20 @@ const saveButton = form.querySelector('button[type="submit"]');
 let editingId = null;
 let uploadedCoverImageUrl = "";
 let images = [];
+let coverUploadInFlight = false;
+let photosUploadInFlight = false;
+
+function setCoverUploadBusy(busy) {
+  coverUploadInFlight = busy;
+  photosInput.disabled = busy || photosUploadInFlight;
+  coverImageInput.disabled = busy;
+}
+
+function setPhotosUploadBusy(busy) {
+  photosUploadInFlight = busy;
+  photosInput.disabled = busy || coverUploadInFlight;
+  coverImageInput.disabled = busy || coverUploadInFlight;
+}
 
 editingId = new URLSearchParams(window.location.search).get("id");
 
@@ -139,11 +153,12 @@ function clearPhotosError() {
 // remembered and stored on save.
 coverImageInput.addEventListener("change", async function () {
   const file = coverImageInput.files && coverImageInput.files[0];
-  if (!file) {
+  if (!file || coverUploadInFlight || photosUploadInFlight) {
     return;
   }
 
   clearCoverImageError();
+  setCoverUploadBusy(true);
   coverImageUploadStatus.hidden = false;
   coverImageUploadStatus.textContent = "Uploading image...";
   coverImagePreview.hidden = false;
@@ -205,6 +220,8 @@ coverImageInput.addEventListener("change", async function () {
     showCoverImageError("Failed to upload the cover image. Try again.");
     coverImageUploadStatus.hidden = true;
     coverImagePreview.hidden = true;
+  } finally {
+    setCoverUploadBusy(false);
   }
 });
 
@@ -369,11 +386,12 @@ function removeUploadedPhoto(image) {
 // twenty of the free tier's 500 monthly builds.
 photosInput.addEventListener("change", async function () {
   const files = Array.from(photosInput.files || []);
-  if (files.length === 0) {
+  if (files.length === 0 || coverUploadInFlight || photosUploadInFlight) {
     return;
   }
 
   clearPhotosError();
+  setPhotosUploadBusy(true);
   photosUploadStatus.hidden = false;
   photosUploadStatus.textContent =
     "Uploading your photos... they will appear on the site in about a minute.";
@@ -445,6 +463,7 @@ photosInput.addEventListener("change", async function () {
     photosUploadStatus.hidden = true;
   } finally {
     photosInput.value = "";
+    setPhotosUploadBusy(false);
   }
 });
 
