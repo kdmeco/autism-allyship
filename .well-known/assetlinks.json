@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "org.autismallyship.app",
+      "sha256_cert_fingerprints": [
+        "58:B8:7B:59:FA:0E:DC:62:33:DD:1F:39:FD:AE:F7:85:FD:93:74:76:52:6E:65:C4:49:30:CC:48:07:CF:26:89"
+      ]
+    }
+  }
+]
