@@ -14,6 +14,7 @@
 
 import { auth, db } from "../firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+import { translated } from "../shared.js";
 import {
   collection,
   query,
@@ -34,10 +35,17 @@ const emptyState = document.getElementById("emptyState");
 const errorSlot = document.getElementById("attendeesError");
 const list = document.getElementById("attendeesList");
 const exportCsvButton = document.getElementById("exportCsvButton");
+const filters = document.getElementById("attendeeFilters");
+const searchInput = document.getElementById("attendeeSearch");
+const statusFilter = document.getElementById("attendeeStatusFilter");
+const loadingState = document.getElementById("attendeesLoading");
 
 const eventId = new URLSearchParams(window.location.search).get("id");
 
 let attendees = [];
+
+searchInput.addEventListener("input", renderList);
+statusFilter.addEventListener("change", renderList);
 
 onAuthStateChanged(auth, function (user) {
   if (!user) {
@@ -46,6 +54,7 @@ onAuthStateChanged(auth, function (user) {
   }
   if (!eventId) {
     missingEventState.hidden = false;
+    loadingState.hidden = true;
     exportCsvButton.hidden = true;
     return;
   }
@@ -63,6 +72,10 @@ function clearError() {
 }
 
 async function loadAttendees() {
+  loadingState.hidden = false;
+  filters.hidden = true;
+  list.hidden = true;
+  clearError();
   try {
     const eventSnapshot = await getDoc(doc(db, "events", eventId));
     if (eventSnapshot.exists()) {
@@ -92,6 +105,9 @@ async function loadAttendees() {
   } catch (error) {
     console.error("Failed to load attendees:", error);
     showError("Could not load attendees. Try again.");
+  } finally {
+    loadingState.hidden = true;
+    list.hidden = false;
   }
 }
 
@@ -109,15 +125,39 @@ function formatRedeemedAt(date) {
 function renderList() {
   list.textContent = "";
 
+  const searchTerm = searchInput.value.trim().toLowerCase();
+  const status = statusFilter.value;
+  const visibleAttendees = attendees.filter(function (attendee) {
+    const matchesSearch =
+      !searchTerm ||
+      attendee.attendeeName.toLowerCase().includes(searchTerm) ||
+      attendee.attendeeEmail.toLowerCase().includes(searchTerm);
+    const matchesStatus =
+      status === "all" ||
+      (status === "used" && attendee.redeemed) ||
+      (status === "unused" && !attendee.redeemed);
+    return matchesSearch && matchesStatus;
+  });
+
   if (attendees.length === 0) {
     emptyState.hidden = false;
+    emptyState.textContent = translated("adminAttendeesEmpty");
     exportCsvButton.hidden = true;
+    filters.hidden = true;
     return;
   }
-  emptyState.hidden = true;
+  filters.hidden = false;
   exportCsvButton.hidden = false;
 
-  attendees.forEach(function (attendee) {
+  if (visibleAttendees.length === 0) {
+    emptyState.hidden = false;
+    emptyState.textContent = translated("adminAttendeesNoMatches");
+    return;
+  }
+
+  emptyState.hidden = true;
+
+  visibleAttendees.forEach(function (attendee) {
     list.appendChild(buildRow(attendee));
   });
 }
@@ -160,11 +200,22 @@ function buildRow(attendee) {
 
 function renderActions(actions, attendee) {
   actions.textContent = "";
+  actions.appendChild(buildViewTicketButton(attendee));
   actions.appendChild(buildResendButton(attendee));
   actions.appendChild(buildEditEmailButton(actions, attendee));
   if (!attendee.redeemed) {
     actions.appendChild(buildMarkUsedButton(actions, attendee));
   }
+}
+
+function buildViewTicketButton(attendee) {
+  const link = document.createElement("a");
+  link.className = "button button-secondary";
+  link.href = "../ticket.html?token=" + encodeURIComponent(attendee.token);
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = translated("adminAttendeesViewTicket");
+  return link;
 }
 
 function buildResendButton(attendee) {
@@ -213,6 +264,12 @@ function showEditEmailForm(actions, attendee) {
   input.className = "attendee-edit-email-input";
   input.value = attendee.attendeeEmail;
   input.setAttribute("aria-label", "New email address");
+
+  input.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") {
+      renderActions(actions, attendee);
+    }
+  });
 
   const save = document.createElement("button");
   save.type = "button";

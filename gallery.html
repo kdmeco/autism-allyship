@@ -31,6 +31,9 @@
 
     <link rel="stylesheet" href="styles.css" />
 
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://firestore.googleapis.com" />
+
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
 
@@ -80,7 +83,7 @@
         }
       })();
     </script>
-    <title>Autism Allyship Foundation</title>
+    <title>Gallery | Autism Allyship Foundation</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -391,200 +394,105 @@
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1 class="hero-heading" data-i18n="homeHeroHeading">Be Kind</h1>
-          <p class="hero-tagline" data-i18n="homeHeroTagline">
-            Where every mind belongs
-          </p>
-          <p class="hero-mission" data-i18n="homeHeroMission">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
-          </p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              href="donate.html"
-              data-i18n="homeHeroDonate"
-              >Donate</a
-            >
-            <a
-              class="button button-secondary"
-              href="about.html"
-              data-i18n="homeHeroAbout"
-              >Learn about us</a
-            >
-          </div>
-        </div>
-      </section>
-
       <div class="container">
-        <section class="home-section" aria-labelledby="whatWeDoHeading">
-          <h2 id="whatWeDoHeading" data-i18n="homeWhatWeDoHeading">
-            What we do
-          </h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3 data-i18n="homeCardAboutTitle">About us</h3>
-              <p data-i18n="homeCardAboutText">
-                Learn about our mission, vision and the people behind the
-                foundation.
-              </p>
-              <a href="about.html" data-i18n="homeCardAboutLink"
-                >Find out more</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardResourcesTitle">Resources</h3>
-              <p data-i18n="homeCardResourcesText">
-                Find support services, information and help across South Africa.
-              </p>
-              <a href="resources.html" data-i18n="homeCardResourcesLink"
-                >Browse resources</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardCommunityTitle">Community</h3>
-              <p data-i18n="homeCardCommunityText">
-                Join our events and connect with other families and allies.
-              </p>
-              <a href="events.html" data-i18n="homeCardCommunityLink"
-                >See our events</a
-              >
-            </article>
-          </div>
-        </section>
-
-        <section class="home-section" aria-labelledby="blogHeading">
-          <h2 id="blogHeading" data-i18n="homeBlogHeading">
-            Latest from our blog
-          </h2>
-          <div class="card-grid" id="homeBlogGrid"></div>
-          <div class="card card-placeholder" id="homeBlogPlaceholder">
-            <h3 data-i18n="homeBlogPlaceholderTitle">
-              Blog posts coming soon
-            </h3>
-            <p data-i18n="homeBlogPlaceholderText">
-              We are working on our first posts. Check back soon for news and
-              stories from the community.
-            </p>
-          </div>
-          <p class="home-blog-more">
-            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
+        <section class="page-heading" aria-labelledby="galleryTitleHeading">
+          <h1 id="galleryTitleHeading" data-i18n="galleryPageTitle">Gallery</h1>
+          <p class="page-lede" data-i18n="galleryPageLede">
+            Photos from our events and community.
           </p>
         </section>
 
-        <section class="home-section" aria-labelledby="eventHeading">
-          <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card-grid" id="homeEventGrid"></div>
-          <div class="card card-placeholder" id="homeEventPlaceholder">
-            <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
-            <p data-i18n="homeEventPlaceholderText">
-              Our next gathering is being planned. Check back soon for dates and
-              details.
-            </p>
-          </div>
-          <p class="home-event-more">
-            <a href="events.html" data-i18n="homeAllEvents">See all events</a>
-          </p>
-        </section>
+        <p class="gallery-status" id="galleryLoading" role="status" data-i18n="galleryLoading">
+          Loading gallery albums...
+        </p>
 
-        <section class="home-section" aria-labelledby="homePhotosHeading">
-          <h2 id="homePhotosHeading" data-i18n="homePhotosHeading">
-            Photos from our events
-          </h2>
-          <p data-i18n="homePhotosText">
-            Moments from our Annual Autism Family Picnic.
-          </p>
-          <div class="photo-grid">
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-mother-daughters-thumb.webp"
-              alt="A mother and her two daughters posing together at the picnic"
-              width="333"
-              height="500"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-friends-thumb.webp"
-              alt="Three friends posing together in a park at the picnic"
-              width="500"
-              height="333"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-craft-stall-thumb.webp"
-              alt="A table of handmade wooden and beaded craft items for sale at the picnic"
-              width="333"
-              height="500"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-merch-stall-thumb.webp"
-              alt="A volunteer at the foundation's merchandise stall talking with a visitor"
-              width="500"
-              height="333"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-merch-flatlay-thumb.webp"
-              alt="Foundation branded mugs, keyrings and coasters laid out on a table"
-              width="500"
-              height="333"
-              loading="lazy"
-            />
-          </div>
-        </section>
+        <div class="gallery-years" id="galleryYears"></div>
 
-        <section class="home-section" aria-labelledby="homeInstagramHeading">
-          <h2 id="homeInstagramHeading" data-i18n="homeInstagramHeading">
-            From our Instagram
-          </h2>
-          <p data-i18n="homeInstagramText">
-            Recent posts from Autism Allyship on Instagram.
-          </p>
-          <div
-            class="instagram-embed-grid"
-            id="homeInstagramGrid"
-            hidden
-          ></div>
-          <p
-            class="instagram-fallback"
-            id="homeInstagramFallback"
-            hidden
-          >
-            <a
-              href="https://www.instagram.com/autismallyship/"
-              data-i18n="homeInstagramProfileLink"
-              >Follow us on Instagram</a
-            >
-          </p>
-        </section>
+        <p class="gallery-state" id="galleryEmpty" hidden data-i18n="galleryEmpty">
+          There are currently no gallery albums available.
+        </p>
+        <p class="gallery-state" id="galleryError" hidden data-i18n="galleryError">
+          We could not load the gallery right now. Please try again later.
+        </p>
 
-        <section class="contact-strip" aria-labelledby="contactStripHeading">
-          <h2 id="contactStripHeading" data-i18n="homeContactHeading">
-            Get in touch
-          </h2>
-          <p data-i18n="homeContactText">
-            We would love to hear from you. Whether you have a question, want to
-            volunteer, or need support, reach out.
+        <noscript>
+          <p class="gallery-state" data-i18n="galleryJavaScriptRequired">
+            The gallery needs JavaScript to load its albums. Please enable it to view the photos.
           </p>
-          <div class="contact-strip-actions">
-            <a
-              class="button button-secondary"
-              href="contact.html"
-              data-i18n="homeContactLink"
-              >Contact us</a
-            >
-            <a
-              class="button button-whatsapp"
-              href="https://wa.me/27663859936"
-              data-i18n="homeWhatsAppLink"
-              >Message us on WhatsApp</a
-            >
-          </div>
-        </section>
+        </noscript>
       </div>
     </main>
+
+    <div
+      class="gallery-lightbox"
+      id="galleryLightbox"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="galleryLightboxTitle"
+      hidden
+    >
+      <div class="gallery-lightbox-content">
+        <h2 class="visually-hidden" id="galleryLightboxTitle" data-i18n="galleryLightboxTitle">
+          Gallery image
+        </h2>
+        <div class="gallery-lightbox-toolbar">
+          <p
+            class="gallery-lightbox-position"
+            id="galleryLightboxPosition"
+            role="status"
+            aria-live="polite"
+          ></p>
+          <button
+            type="button"
+            class="gallery-lightbox-control"
+            id="galleryLightboxClose"
+            data-i18n="galleryClose"
+            data-i18n-aria-label="galleryClose"
+            aria-label="Close image"
+          >
+            Close
+          </button>
+        </div>
+        <div class="gallery-lightbox-viewer">
+          <button
+            type="button"
+            class="gallery-lightbox-control"
+            id="galleryLightboxPrevious"
+            data-i18n="galleryPrevious"
+            data-i18n-aria-label="galleryPrevious"
+            aria-label="Previous image"
+          >
+            Previous
+          </button>
+          <img
+            class="gallery-lightbox-image"
+            id="galleryLightboxImage"
+            src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+            alt=""
+            width="1600"
+            height="1067"
+          />
+          <p
+            class="gallery-lightbox-fallback"
+            id="galleryLightboxFallback"
+            data-i18n="galleryImageUnavailable"
+            hidden
+          >
+            This image is not available right now.
+          </p>
+          <button
+            type="button"
+            class="gallery-lightbox-control"
+            id="galleryLightboxNext"
+            data-i18n="galleryNext"
+            data-i18n-aria-label="galleryNext"
+            aria-label="Next image"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
 
     <footer class="site-footer">
       <div class="footer-columns">
@@ -674,9 +582,7 @@
             <li>
               <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
             </li>
-            <li>
-              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
-            </li>
+            <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
             <li>
               <a href="accessibility.html" data-i18n="legalAccessibility"
                 >Accessibility statement</a
@@ -701,25 +607,7 @@
         </p>
       </div>
     </footer>
-    <script>
-      // Both scripts pull the Firebase modules, so they start after the page
-      // has painted rather than competing with the fonts on the network.
-      window.addEventListener("load", function () {
-        var blogScript = document.createElement("script");
-        blogScript.type = "module";
-        blogScript.src = "home-blog.js";
-        document.body.appendChild(blogScript);
 
-        var eventScript = document.createElement("script");
-        eventScript.type = "module";
-        eventScript.src = "home-events.js";
-        document.body.appendChild(eventScript);
-
-        var instagramScript = document.createElement("script");
-        instagramScript.type = "module";
-        instagramScript.src = "home-instagram.js";
-        document.body.appendChild(instagramScript);
-      });
-    </script>
+    <script type="module" src="gallery.js"></script>
   </body>
 </html>

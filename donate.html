@@ -33,6 +33,7 @@
 
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
+    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
       // Resolves the saved settings before the browser paints anything, so a
@@ -412,13 +413,7 @@
               <summary data-i18n="donateEftHeading">Donate by EFT</summary>
               <div class="donate-eft-content">
                 <p data-i18n="donateEftPending">
-                  Official banking details will be added once they have been supplied and approved by the project team.
-                </p>
-                <p data-i18n="donateEftWarning">
-                  Our banking details never change. Confirm the details on this page before making an EFT donation.
-                </p>
-                <p data-i18n="donateEftReferencePending">
-                  The required donation reference format will be added with the approved banking details.
+                  EFT details are not available yet. Please donate by card above, or check back soon.
                 </p>
               </div>
             </details>
@@ -453,14 +448,6 @@
               </div>
             </fieldset>
 
-            <fieldset class="donate-fieldset">
-              <legend data-i18n="donateFrequencyLegend">Donation frequency</legend>
-              <div class="donate-frequency-options">
-                <label><input type="radio" name="frequency" value="once" checked /> <span data-i18n="donateOnce">One-off donation</span></label>
-                <label><input type="radio" name="frequency" value="monthly" /> <span data-i18n="donateMonthly">Monthly donation</span></label>
-              </div>
-            </fieldset>
-
             <div class="form-field">
               <label for="donorName" data-i18n="donateNameLabel">Name</label>
               <input type="text" id="donorName" name="donorName" autocomplete="name" aria-describedby="donorNameError" />
@@ -476,81 +463,24 @@
               <textarea id="donorMessage" name="message" rows="5"></textarea>
             </div>
             <div class="form-checkbox-field">
-              <input type="checkbox" id="donorAnonymous" name="anonymous" />
-              <label for="donorAnonymous" data-i18n="donateAnonymousLabel">Make this donation anonymous</label>
-            </div>
-            <div class="form-checkbox-field">
               <input type="checkbox" id="donorPopia" name="popiaConsent" aria-describedby="donorPopiaError" />
               <label for="donorPopia" data-i18n="donatePopiaLabel">I agree that the foundation may use these details to process my donation.</label>
               <p id="donorPopiaError" class="form-error" hidden data-i18n="donatePopiaError">You must agree before continuing.</p>
             </div>
-            <div class="form-checkbox-field">
-              <input type="checkbox" id="donorEmailOptIn" name="emailOptIn" />
-              <label for="donorEmailOptIn" data-i18n="donateEmailOptInLabel">I would like to hear from the foundation about future updates.</label>
-            </div>
-            <p class="form-note" data-i18n="donateFrontendNote">This form is a frontend preview. No payment or donation record is created yet.</p>
-            <button type="submit" class="button" data-i18n="donateContinueButton">Continue</button>
+            <button type="submit" class="button button-primary" id="donateSubmitButton" data-i18n="donateContinueButton">Continue</button>
+            <p
+              class="form-error form-error-general"
+              id="donatePaymentError"
+              role="status"
+              hidden
+              data-i18n="donatePaymentError"
+            >
+              We could not start your donation. Check your details and try again.
+            </p>
           </form>
         </section>
       </div>
-      <script>
-        const donateForm = document.getElementById("donateForm");
-        const amountInput = document.getElementById("donateAmount");
-        const amountOptions = document.querySelectorAll('input[name="amountChoice"]');
-
-        amountOptions.forEach(function (option) {
-          option.addEventListener("change", function () {
-            if (option.value !== "custom") {
-              amountInput.value = option.value;
-            }
-            amountInput.focus();
-          });
-        });
-
-        donateForm.addEventListener("submit", function (event) {
-          event.preventDefault();
-          const fields = {
-            amount: document.getElementById("donateAmount"),
-            name: document.getElementById("donorName"),
-            email: document.getElementById("donorEmail"),
-            popia: document.getElementById("donorPopia"),
-          };
-          const errors = {
-            amount: document.getElementById("donateAmountError"),
-            name: document.getElementById("donorNameError"),
-            email: document.getElementById("donorEmailError"),
-            popia: document.getElementById("donorPopiaError"),
-          };
-          Object.values(errors).forEach(function (error) { error.hidden = true; });
-          Object.values(fields).forEach(function (field) { field.removeAttribute("aria-invalid"); });
-          let valid = true;
-
-          if (!Number.isFinite(Number(fields.amount.value)) || Number(fields.amount.value) <= 0) {
-            errors.amount.hidden = false;
-            fields.amount.setAttribute("aria-invalid", "true");
-            valid = false;
-          }
-          if (!fields.name.value.trim()) {
-            errors.name.hidden = false;
-            fields.name.setAttribute("aria-invalid", "true");
-            valid = false;
-          }
-          if (!fields.email.validity.valid || !fields.email.value.trim()) {
-            errors.email.hidden = false;
-            fields.email.setAttribute("aria-invalid", "true");
-            valid = false;
-          }
-          if (!fields.popia.checked) {
-            errors.popia.hidden = false;
-            fields.popia.setAttribute("aria-invalid", "true");
-            valid = false;
-          }
-          if (!valid) {
-            const firstInvalid = donateForm.querySelector('[aria-invalid="true"]');
-            if (firstInvalid) firstInvalid.focus();
-          }
-        });
-      </script>
+      <script type="module" src="donate.js"></script>
     </main>
 
     <footer class="site-footer">

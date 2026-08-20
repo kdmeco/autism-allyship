@@ -19,13 +19,29 @@ const bookedBySlot = document.getElementById("ticketBookedBy");
 const redeemedNotice = document.getElementById("ticketRedeemedNotice");
 const qrWrapper = document.getElementById("ticketQrWrapper");
 const qrCanvas = document.getElementById("ticketQrCanvas");
+const loading = document.getElementById("ticketLoading");
 const missing = document.getElementById("ticketMissing");
+const errorState = document.getElementById("ticketError");
+const retryButton = document.getElementById("ticketRetryButton");
 
 const token = new URLSearchParams(window.location.search).get("token");
 
-function showMissing() {
+function hideStates() {
+  loading.hidden = true;
   article.hidden = true;
   missing.hidden = false;
+  errorState.hidden = true;
+}
+
+function showMissing() {
+  hideStates();
+}
+
+function showError() {
+  loading.hidden = true;
+  article.hidden = true;
+  missing.hidden = true;
+  errorState.hidden = false;
 }
 
 function renderTicket(data) {
@@ -42,6 +58,8 @@ function renderTicket(data) {
         hour: "2-digit",
         minute: "2-digit",
       });
+  } else {
+    eventDateSlot.textContent = "";
   }
 
   const quantity = typeof data.quantity === "number" ? data.quantity : 1;
@@ -67,6 +85,8 @@ function renderTicket(data) {
         )
       : translated("ticketRedeemed");
     redeemedNotice.hidden = false;
+  } else {
+    redeemedNotice.hidden = true;
   }
 
   // The full page URL, not the bare token: a phone camera has to see a
@@ -93,6 +113,9 @@ function renderTicket(data) {
   );
 
   article.hidden = false;
+  loading.hidden = true;
+  missing.hidden = true;
+  errorState.hidden = true;
 }
 
 // Rendered to a canvas rather than an img: canvas is not one of the
@@ -117,25 +140,40 @@ function renderQr(text) {
     function (error) {
       if (error) {
         console.error("Could not render the ticket QR code:", error);
-        qrWrapper.hidden = true;
+        qrWrapper.hidden = false;
       }
     },
   );
 }
 
+async function loadTicket() {
+  loading.hidden = false;
+  article.hidden = true;
+  missing.hidden = true;
+  errorState.hidden = true;
+
+  if (!token) {
+    showMissing();
+    return;
+  }
+
+  try {
+    const snapshot = await getDoc(doc(db, "tickets", token));
+    if (!snapshot.exists()) {
+      showMissing();
+      return;
+    }
+    renderTicket(snapshot.data());
+  } catch (error) {
+    console.error("Failed to load the ticket:", error);
+    showError();
+  }
+}
+
+retryButton.addEventListener("click", loadTicket);
+
 if (!token) {
   showMissing();
 } else {
-  getDoc(doc(db, "tickets", token))
-    .then(function (snapshot) {
-      if (!snapshot.exists()) {
-        showMissing();
-        return;
-      }
-      renderTicket(snapshot.data());
-    })
-    .catch(function (error) {
-      console.error("Failed to load the ticket:", error);
-      showMissing();
-    });
+  loadTicket();
 }

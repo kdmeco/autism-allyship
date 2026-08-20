@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
     <meta
       name="theme-color"
       content="#FBFAFA"
@@ -13,51 +14,35 @@
       content="#141213"
       media="(prefers-color-scheme: dark)"
     />
-
     <link
       rel="preload"
-      href="assets/fonts/poppins-400.woff2"
+      href="../assets/fonts/poppins-400.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="assets/fonts/poppins-600.woff2"
+      href="../assets/fonts/poppins-600.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
-
-    <link rel="stylesheet" href="styles.css" />
-
-    <script src="translations.js" defer></script>
-    <script src="main.js" defer></script>
-
+    <link rel="stylesheet" href="../styles.css" />
+    <script src="../translations.js" defer></script>
+    <script src="../main.js" defer></script>
     <script>
-      // Resolves the saved settings before the browser paints anything, so a
-      // returning visitor never sees a flash of the wrong theme or text size.
-      // Deliberately inline and tiny. If you change a storage key here, change it
-      // in main.js too.
       (function () {
         var root = document.documentElement;
         var saved = {};
-
-        // CSS only hides the accessibility panel when this class is present. If this
-        // script never runs, the panel stays visible and open rather than vanishing.
         root.classList.add("js");
-
         try {
           saved.theme = localStorage.getItem("aaf-theme");
           saved.textSize = localStorage.getItem("aaf-text-size");
           saved.sensory = localStorage.getItem("aaf-sensory-mode");
           saved.plainText = localStorage.getItem("aaf-plain-text");
           saved.language = localStorage.getItem("aaf-language");
-        } catch (error) {
-          // Private browsing and pages opened straight off the file system can
-          // block storage. Fall back to defaults rather than breaking the page.
-        }
-
+        } catch (error) {}
         var prefersDark = window.matchMedia(
           "(prefers-color-scheme: dark)",
         ).matches;
@@ -66,33 +51,23 @@
           saved.theme || (prefersDark ? "dark" : "light"),
         );
         root.setAttribute("data-text-size", saved.textSize || "1");
-
-        if (saved.sensory === "on") {
-          root.classList.add("sensory-mode");
-        }
-
-        if (saved.plainText === "on") {
-          root.classList.add("plain-text");
-        }
-
-        if (saved.language) {
-          root.setAttribute("lang", saved.language);
-        }
+        if (saved.sensory === "on") root.classList.add("sensory-mode");
+        if (saved.plainText === "on") root.classList.add("plain-text");
+        if (saved.language) root.setAttribute("lang", saved.language);
       })();
     </script>
-    <title>Autism Allyship Foundation</title>
+    <title>Edit album | Admin | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
       <a class="skip-link" href="#main" data-i18n="skipToContent"
         >Skip to main content</a
       >
-
       <div class="header-bar">
-        <a class="brand" href="index.html">
+        <a class="brand" href="../index.html">
           <img
             class="brand-mark"
-            src="assets/brand/logo-placeholder.jpg"
+            src="../assets/brand/logo-placeholder.jpg"
             alt=""
             width="512"
             height="512"
@@ -104,7 +79,6 @@
             >
           </span>
         </a>
-
         <nav
           class="primary-nav"
           id="primaryNav"
@@ -112,55 +86,18 @@
           aria-label="Main"
         >
           <ul class="nav-list">
-            <li><a href="index.html" data-i18n="navHome">Home</a></li>
-
-            <li class="nav-dropdown">
-              <button
-                type="button"
-                class="nav-dropdown-trigger"
-                id="communityTrigger"
-                aria-expanded="false"
-                aria-controls="communityMenu"
-              >
-                <span data-i18n="navCommunity">Community</span>
-                <svg
-                  class="chevron"
-                  viewBox="0 0 16 16"
-                  width="16"
-                  height="16"
-                  aria-hidden="true"
-                  focusable="false"
-                >
-                  <path
-                    d="M3 6l5 5 5-5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-              <ul class="nav-dropdown-menu" id="communityMenu" hidden>
-                <li><a href="about.html" data-i18n="navAbout">About</a></li>
-                <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
-                <li>
-                  <a href="gallery.html" data-i18n="navGallery"
-                    >Image gallery</a
-                  >
-                </li>
-                <li><a href="events.html" data-i18n="navEvents">Events</a></li>
-              </ul>
-            </li>
-
+            <li><a href="../index.html" data-i18n="navHome">Home</a></li>
+            <li><a href="../about.html" data-i18n="navAbout">About</a></li>
+            <li><a href="../blog.html" data-i18n="navBlog">Blog</a></li>
             <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
+              <a href="../resources.html" data-i18n="navResources">Resources</a>
             </li>
-            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
-            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+            <li><a href="../events.html" data-i18n="navEvents">Events</a></li>
+            <li>
+              <a href="../contact.html" data-i18n="navContact">Contact</a>
+            </li>
           </ul>
         </nav>
-
         <div class="header-controls" id="headerControls">
           <button
             type="button"
@@ -185,7 +122,6 @@
             </svg>
             <span class="control-label" data-i18n="darkMode">Dark mode</span>
           </button>
-
           <div class="accessibility-menu">
             <button
               type="button"
@@ -229,13 +165,11 @@
                 />
               </svg>
             </button>
-
             <div class="accessibility-panel" id="accessibilityPanel">
               <p class="panel-intro" data-i18n="accessibilityIntro">
                 Change how this site looks and reads. Your choices are
                 remembered.
               </p>
-
               <div class="panel-row">
                 <button
                   type="button"
@@ -268,7 +202,6 @@
                   </span>
                 </button>
               </div>
-
               <div class="panel-row">
                 <button
                   type="button"
@@ -303,7 +236,6 @@
                   </span>
                 </button>
               </div>
-
               <div
                 class="panel-row"
                 role="group"
@@ -355,7 +287,6 @@
                   </button>
                 </div>
               </div>
-
               <div class="panel-row">
                 <label
                   class="panel-row-label"
@@ -372,11 +303,9 @@
             </div>
           </div>
         </div>
-
-        <a class="donate-button" href="donate.html" data-i18n="navDonate"
+        <a class="donate-button" href="../donate.html" data-i18n="navDonate"
           >Donate</a
         >
-
         <button
           type="button"
           class="menu-toggle"
@@ -391,197 +320,180 @@
     </header>
 
     <main id="main">
-      <section class="hero">
-        <div class="container">
-          <h1 class="hero-heading" data-i18n="homeHeroHeading">Be Kind</h1>
-          <p class="hero-tagline" data-i18n="homeHeroTagline">
-            Where every mind belongs
-          </p>
-          <p class="hero-mission" data-i18n="homeHeroMission">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
-          </p>
-          <div class="hero-actions">
-            <a
-              class="button button-primary"
-              href="donate.html"
-              data-i18n="homeHeroDonate"
-              >Donate</a
-            >
-            <a
-              class="button button-secondary"
-              href="about.html"
-              data-i18n="homeHeroAbout"
-              >Learn about us</a
-            >
-          </div>
-        </div>
-      </section>
-
       <div class="container">
-        <section class="home-section" aria-labelledby="whatWeDoHeading">
-          <h2 id="whatWeDoHeading" data-i18n="homeWhatWeDoHeading">
-            What we do
-          </h2>
-          <div class="card-grid">
-            <article class="card">
-              <h3 data-i18n="homeCardAboutTitle">About us</h3>
-              <p data-i18n="homeCardAboutText">
-                Learn about our mission, vision and the people behind the
-                foundation.
+        <section class="admin-page" aria-labelledby="galleryEditHeading">
+          <div class="admin-page-header">
+            <div>
+              <h1 id="galleryEditHeading" data-i18n="adminGalleryEditHeading">
+                Edit album
+              </h1>
+              <p class="admin-page-intro" data-i18n="adminGalleryEditIntro">
+                Create or edit a photo album.
               </p>
-              <a href="about.html" data-i18n="homeCardAboutLink"
-                >Find out more</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardResourcesTitle">Resources</h3>
-              <p data-i18n="homeCardResourcesText">
-                Find support services, information and help across South Africa.
-              </p>
-              <a href="resources.html" data-i18n="homeCardResourcesLink"
-                >Browse resources</a
-              >
-            </article>
-            <article class="card">
-              <h3 data-i18n="homeCardCommunityTitle">Community</h3>
-              <p data-i18n="homeCardCommunityText">
-                Join our events and connect with other families and allies.
-              </p>
-              <a href="events.html" data-i18n="homeCardCommunityLink"
-                >See our events</a
-              >
-            </article>
-          </div>
-        </section>
-
-        <section class="home-section" aria-labelledby="blogHeading">
-          <h2 id="blogHeading" data-i18n="homeBlogHeading">
-            Latest from our blog
-          </h2>
-          <div class="card-grid" id="homeBlogGrid"></div>
-          <div class="card card-placeholder" id="homeBlogPlaceholder">
-            <h3 data-i18n="homeBlogPlaceholderTitle">
-              Blog posts coming soon
-            </h3>
-            <p data-i18n="homeBlogPlaceholderText">
-              We are working on our first posts. Check back soon for news and
-              stories from the community.
-            </p>
-          </div>
-          <p class="home-blog-more">
-            <a href="blog.html" data-i18n="homeAllPosts">See all posts</a>
-          </p>
-        </section>
-
-        <section class="home-section" aria-labelledby="eventHeading">
-          <h2 id="eventHeading" data-i18n="homeEventHeading">Next event</h2>
-          <div class="card-grid" id="homeEventGrid"></div>
-          <div class="card card-placeholder" id="homeEventPlaceholder">
-            <h3 data-i18n="homeEventPlaceholderTitle">Events coming soon</h3>
-            <p data-i18n="homeEventPlaceholderText">
-              Our next gathering is being planned. Check back soon for dates and
-              details.
-            </p>
-          </div>
-          <p class="home-event-more">
-            <a href="events.html" data-i18n="homeAllEvents">See all events</a>
-          </p>
-        </section>
-
-        <section class="home-section" aria-labelledby="homePhotosHeading">
-          <h2 id="homePhotosHeading" data-i18n="homePhotosHeading">
-            Photos from our events
-          </h2>
-          <p data-i18n="homePhotosText">
-            Moments from our Annual Autism Family Picnic.
-          </p>
-          <div class="photo-grid">
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-mother-daughters-thumb.webp"
-              alt="A mother and her two daughters posing together at the picnic"
-              width="333"
-              height="500"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-friends-thumb.webp"
-              alt="Three friends posing together in a park at the picnic"
-              width="500"
-              height="333"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-craft-stall-thumb.webp"
-              alt="A table of handmade wooden and beaded craft items for sale at the picnic"
-              width="333"
-              height="500"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-merch-stall-thumb.webp"
-              alt="A volunteer at the foundation's merchandise stall talking with a visitor"
-              width="500"
-              height="333"
-              loading="lazy"
-            />
-            <img
-              src="assets/uploads/gallery/annual-picnic/event-merch-flatlay-thumb.webp"
-              alt="Foundation branded mugs, keyrings and coasters laid out on a table"
-              width="500"
-              height="333"
-              loading="lazy"
-            />
-          </div>
-        </section>
-
-        <section class="home-section" aria-labelledby="homeInstagramHeading">
-          <h2 id="homeInstagramHeading" data-i18n="homeInstagramHeading">
-            From our Instagram
-          </h2>
-          <p data-i18n="homeInstagramText">
-            Recent posts from Autism Allyship on Instagram.
-          </p>
-          <div
-            class="instagram-embed-grid"
-            id="homeInstagramGrid"
-            hidden
-          ></div>
-          <p
-            class="instagram-fallback"
-            id="homeInstagramFallback"
-            hidden
-          >
-            <a
-              href="https://www.instagram.com/autismallyship/"
-              data-i18n="homeInstagramProfileLink"
-              >Follow us on Instagram</a
-            >
-          </p>
-        </section>
-
-        <section class="contact-strip" aria-labelledby="contactStripHeading">
-          <h2 id="contactStripHeading" data-i18n="homeContactHeading">
-            Get in touch
-          </h2>
-          <p data-i18n="homeContactText">
-            We would love to hear from you. Whether you have a question, want to
-            volunteer, or need support, reach out.
-          </p>
-          <div class="contact-strip-actions">
+            </div>
             <a
               class="button button-secondary"
-              href="contact.html"
-              data-i18n="homeContactLink"
-              >Contact us</a
-            >
-            <a
-              class="button button-whatsapp"
-              href="https://wa.me/27663859936"
-              data-i18n="homeWhatsAppLink"
-              >Message us on WhatsApp</a
+              href="gallery.html"
+              data-i18n="adminGalleryBackToList"
+              >Back to albums</a
             >
           </div>
+
+          <form id="galleryForm" class="admin-form admin-form-wide" novalidate>
+            <div class="form-field">
+              <label for="title">
+                <span data-i18n="adminGalleryTitle">Album title</span>
+                <span class="required-mark" data-i18n="requiredField"
+                  >(required)</span
+                >
+              </label>
+              <input type="text" id="title" name="title" required />
+              <p
+                class="form-error"
+                id="titleError"
+                hidden
+                data-i18n="adminGalleryTitleError"
+              >
+                Enter a title for the album.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="eventName" data-i18n="adminGalleryEventName"
+                >Event name</label
+              >
+              <input type="text" id="eventName" name="eventName" />
+              <p class="form-field-note" data-i18n="adminGalleryEventNameNote">
+                Optional. Leave blank if this album is not tied to one event.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="year">
+                <span data-i18n="adminGalleryYear">Year</span>
+                <span class="required-mark" data-i18n="requiredField"
+                  >(required)</span
+                >
+              </label>
+              <input
+                type="number"
+                id="year"
+                name="year"
+                min="2000"
+                max="2100"
+                step="1"
+                required
+              />
+              <p
+                class="form-error"
+                id="yearError"
+                hidden
+                data-i18n="adminGalleryYearError"
+              >
+                Enter the year this album is from.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="coverImage" data-i18n="adminGalleryCoverImage"
+                >Cover image</label
+              >
+              <input
+                type="file"
+                id="coverImage"
+                name="coverImage"
+                accept="image/*"
+              />
+              <p class="form-field-note" data-i18n="adminGalleryCoverImageNote">
+                Optional. Shown on the gallery page before the album opens.
+                Resized to 1600px WebP and a 400px thumbnail. Takes about a
+                minute to appear on the site.
+              </p>
+              <div class="image-preview" id="coverImagePreview" hidden>
+                <p
+                  class="form-field-note"
+                  id="coverImageUploadStatus"
+                  data-i18n="adminGalleryCoverImageUploading"
+                >
+                  Uploading image...
+                </p>
+              </div>
+              <p
+                class="form-error"
+                id="coverImageError"
+                hidden
+                data-i18n="adminGalleryCoverImageError"
+              >
+                Failed to upload the cover image. Try again.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="photos" data-i18n="adminGalleryPhotos">Photos</label>
+              <input
+                type="file"
+                id="photos"
+                name="photos"
+                accept="image/*"
+                multiple
+              />
+              <p class="form-field-note" data-i18n="adminGalleryPhotosNote">
+                Choose as many as you like at once. Resized to 1600px WebP
+                with a 400px thumbnail each.
+              </p>
+              <p
+                class="form-field-note"
+                id="photosUploadStatus"
+                hidden
+                data-i18n="adminGalleryPhotosUploading"
+              >
+                Uploading your photos... they will appear on the site in
+                about a minute.
+              </p>
+              <p
+                class="form-error"
+                id="photosError"
+                hidden
+                data-i18n="adminGalleryPhotosError"
+              >
+                Failed to upload the photos. Try again.
+              </p>
+              <p
+                class="form-field-note"
+                id="noPhotosNote"
+                data-i18n="adminGalleryNoPhotos"
+              >
+                No photos yet. Add some above.
+              </p>
+              <ul class="gallery-photo-list" id="photoList"></ul>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="button button-primary"
+                data-i18n="adminGallerySaveButton"
+              >
+                Save album
+              </button>
+              <a
+                class="button button-secondary"
+                href="gallery.html"
+                data-i18n="adminGalleryCancelButton"
+              >
+                Cancel
+              </a>
+            </div>
+
+            <p
+              class="form-error form-error-general"
+              id="formError"
+              hidden
+              data-i18n="adminGallerySaveFailed"
+            >
+              Failed to save the album. Try again.
+            </p>
+          </form>
         </section>
       </div>
     </main>
@@ -589,10 +501,10 @@
     <footer class="site-footer">
       <div class="footer-columns">
         <div class="footer-column footer-about">
-          <a class="brand brand-footer" href="index.html">
+          <a class="brand brand-footer" href="../index.html">
             <img
               class="brand-mark"
-              src="assets/brand/logo-placeholder.jpg"
+              src="../assets/brand/logo-placeholder.jpg"
               alt=""
               width="512"
               height="512"
@@ -610,7 +522,6 @@
             <strong>000-000 NPO</strong>
           </p>
         </div>
-
         <nav
           class="footer-column"
           data-i18n-aria-label="footerQuickLinks"
@@ -620,16 +531,17 @@
             Quick links
           </h2>
           <ul class="footer-list">
-            <li><a href="about.html" data-i18n="navAbout">About</a></li>
+            <li><a href="../about.html" data-i18n="navAbout">About</a></li>
             <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
+              <a href="../resources.html" data-i18n="navResources">Resources</a>
             </li>
-            <li><a href="events.html" data-i18n="navEvents">Events</a></li>
-            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
-            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+            <li><a href="../events.html" data-i18n="navEvents">Events</a></li>
+            <li><a href="../shop.html" data-i18n="navShop">Shop</a></li>
+            <li>
+              <a href="../contact.html" data-i18n="navContact">Contact</a>
+            </li>
           </ul>
         </nav>
-
         <nav
           class="footer-column"
           data-i18n-aria-label="footerSocials"
@@ -663,7 +575,6 @@
             </li>
           </ul>
         </nav>
-
         <nav
           class="footer-column"
           data-i18n-aria-label="footerLegal"
@@ -672,21 +583,24 @@
           <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
           <ul class="footer-list">
             <li>
-              <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
+              <a href="../privacy.html" data-i18n="legalPrivacy"
+                >Privacy policy</a
+              >
             </li>
             <li>
-              <a href="terms.html" data-i18n="legalTerms">Terms of use</a>
+              <a href="../terms.html" data-i18n="legalTerms">Terms of use</a>
             </li>
             <li>
-              <a href="accessibility.html" data-i18n="legalAccessibility"
+              <a href="../accessibility.html" data-i18n="legalAccessibility"
                 >Accessibility statement</a
               >
             </li>
-            <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
+            <li>
+              <a href="../paia.html" data-i18n="legalPaia">PAIA manual</a>
+            </li>
           </ul>
         </nav>
       </div>
-
       <div class="footer-baseline">
         <p>
           &copy; <span id="footerYear">2026</span> Autism Allyship Foundation.
@@ -701,25 +615,7 @@
         </p>
       </div>
     </footer>
-    <script>
-      // Both scripts pull the Firebase modules, so they start after the page
-      // has painted rather than competing with the fonts on the network.
-      window.addEventListener("load", function () {
-        var blogScript = document.createElement("script");
-        blogScript.type = "module";
-        blogScript.src = "home-blog.js";
-        document.body.appendChild(blogScript);
 
-        var eventScript = document.createElement("script");
-        eventScript.type = "module";
-        eventScript.src = "home-events.js";
-        document.body.appendChild(eventScript);
-
-        var instagramScript = document.createElement("script");
-        instagramScript.type = "module";
-        instagramScript.src = "home-instagram.js";
-        document.body.appendChild(instagramScript);
-      });
-    </script>
+    <script type="module" src="gallery-edit.js"></script>
   </body>
 </html>

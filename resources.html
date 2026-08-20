@@ -468,6 +468,10 @@
           </div>
         </div>
 
+        <p class="blog-empty" id="resourcesLoading" data-i18n="resourcesLoadingText">
+          Loading resources...
+        </p>
+
         <p class="resources-count" id="resourceCount" aria-live="polite"></p>
 
         <div class="resources-list" id="resourceList"></div>
@@ -486,8 +490,17 @@
           There are no resources here yet. Check back soon.
         </p>
 
+        <div class="blog-empty" id="resourcesError" hidden>
+          <p data-i18n="resourcesErrorText">
+            We could not load the resources. Please try again.
+          </p>
+          <button type="button" class="button button-secondary" id="resourcesRetry" data-i18n="resourcesRetry">
+            Try again
+          </button>
+        </div>
+
         <noscript>
-          <p class="blog-empty">
+          <p class="blog-empty" data-i18n="resourcesNoScriptText">
             The resource list needs JavaScript to load. Please enable it to
             browse the directory.
           </p>
