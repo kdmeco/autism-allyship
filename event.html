@@ -36,6 +36,7 @@
 
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
+    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
       // Resolves the saved settings before the browser paints anything, so a
@@ -424,10 +425,11 @@
 
           <section class="ticket-registration" id="ticketRegistration" hidden>
             <h2 data-i18n="ticketRegisterHeading">Register for this event</h2>
-            <p class="page-lede" data-i18n="ticketRegisterIntro">
+            <p class="page-lede" id="ticketRegisterIntro">
               Free to attend. Fill in your details below and we'll send you a
               ticket with a QR code to show at the door.
             </p>
+            <p class="form-field-note" id="ticketPriceTotal" hidden></p>
 
             <form class="registration-form" id="registrationForm" novalidate>
               <div class="form-field">
@@ -541,6 +543,7 @@
               hidden
             >
               <p id="registrationEmailConfirmationText"></p>
+              <p class="form-field-note" id="ticketPayTotalConfirm" hidden></p>
               <div class="form-actions">
                 <button
                   type="button"
