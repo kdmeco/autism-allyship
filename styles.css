@@ -3173,10 +3173,13 @@ ul.event-attachments li {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  min-height: 100%;
   padding: var(--space-3);
   cursor: pointer;
   list-style: none;
+}
+
+.gallery-album:not([open]) .gallery-album-summary {
+  min-height: 100%;
 }
 
 .gallery-album-summary::-webkit-details-marker {
