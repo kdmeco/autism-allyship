@@ -3221,6 +3221,12 @@ ul.event-attachments li {
   font-size: var(--size-sm);
 }
 
+/* The browser's native details/summary collapse is not reliable enough on
+   its own here, so the closed state is forced explicitly. */
+.gallery-album:not([open]) .gallery-album-content {
+  display: none;
+}
+
 .gallery-album-content {
   padding: 0 var(--space-3) var(--space-3);
 }
