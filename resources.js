@@ -122,6 +122,18 @@ function buildCard(resource) {
 
   card.appendChild(summary);
   card.appendChild(details);
+
+  // Native details/summary already toggles on Enter and Space when the summary
+  // is focused. This handler keeps that behaviour explicit so RES-09 stays
+  // reliable if a browser quirks out of the default.
+  summary.addEventListener("keydown", function (event) {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+    event.preventDefault();
+    card.open = !card.open;
+  });
+
   return card;
 }
 
