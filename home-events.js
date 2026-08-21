@@ -1,5 +1,5 @@
 // Fills the "next event" section on the home page with the soonest
-// published event that has not started yet. Until there is one, the
+// published event whose calendar day has not ended yet. Until there is one, the
 // placeholder card stays in place.
 //
 // Unlike home-blog.js, this does not sort or limit in the query. Finding the
@@ -16,7 +16,7 @@ import {
   where,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { thumbPath } from "./shared.js";
+import { thumbPath, endOfLocalDay } from "./shared.js";
 
 const grid = document.getElementById("homeEventGrid");
 const placeholder = document.getElementById("homeEventPlaceholder");
@@ -68,7 +68,7 @@ async function loadNextEvent() {
       };
     })
     .filter(function (eventItem) {
-      return eventItem.startsAt && eventItem.startsAt >= now;
+      return eventItem.startsAt && endOfLocalDay(eventItem.startsAt) >= now;
     })
     .sort(function (first, second) {
       return first.startsAt - second.startsAt;

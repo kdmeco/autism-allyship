@@ -31,24 +31,14 @@
 
     <link rel="stylesheet" href="styles.css" />
 
-    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://firestore.googleapis.com" />
-
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
-    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
-      // Resolves the saved settings before the browser paints anything, so a
-      // returning visitor never sees a flash of the wrong theme or text size.
-      // Deliberately inline and tiny. If you change a storage key here, change it
-      // in main.js too.
       (function () {
         var root = document.documentElement;
         var saved = {};
 
-        // CSS only hides the accessibility panel when this class is present. If this
-        // script never runs, the panel stays visible and open rather than vanishing.
         root.classList.add("js");
 
         try {
@@ -58,13 +48,9 @@
           saved.plainText = localStorage.getItem("aaf-plain-text");
           saved.language = localStorage.getItem("aaf-language");
         } catch (error) {
-          // Private browsing and pages opened straight off the file system can
-          // block storage. Fall back to defaults rather than breaking the page.
         }
 
-        var prefersDark = window.matchMedia(
-          "(prefers-color-scheme: dark)",
-        ).matches;
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         root.setAttribute(
           "data-theme",
           saved.theme || (prefersDark ? "dark" : "light"),
@@ -84,7 +70,8 @@
         }
       })();
     </script>
-    <title>Event | Autism Allyship</title>
+
+    <title>Privacy policy | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -149,17 +136,13 @@
                 <li><a href="about.html" data-i18n="navAbout">About</a></li>
                 <li><a href="blog.html" data-i18n="navBlog">Blog</a></li>
                 <li>
-                  <a href="gallery.html" data-i18n="navGallery"
-                    >Image gallery</a
-                  >
+                  <a href="gallery.html" data-i18n="navGallery">Image gallery</a>
                 </li>
                 <li><a href="events.html" data-i18n="navEvents">Events</a></li>
               </ul>
             </li>
 
-            <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
-            </li>
+            <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
             <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
             <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
           </ul>
@@ -236,8 +219,7 @@
 
             <div class="accessibility-panel" id="accessibilityPanel">
               <p class="panel-intro" data-i18n="accessibilityIntro">
-                Change how this site looks and reads. Your choices are
-                remembered.
+                Change how this site looks and reads. Your choices are remembered.
               </p>
 
               <div class="panel-row">
@@ -299,9 +281,7 @@
                     <span class="panel-toggle-name" data-i18n="plainTextMode"
                       >Simplified text</span
                     >
-                    <span
-                      class="panel-toggle-note"
-                      data-i18n="plainTextModeNote"
+                    <span class="panel-toggle-note" data-i18n="plainTextModeNote"
                       >Hides images and shows plain text only</span
                     >
                   </span>
@@ -314,9 +294,7 @@
                 data-i18n-aria-label="textSize"
                 aria-label="Text size"
               >
-                <span class="panel-row-label" data-i18n="textSize"
-                  >Text size</span
-                >
+                <span class="panel-row-label" data-i18n="textSize">Text size</span>
                 <div class="text-size-group">
                   <button
                     type="button"
@@ -324,9 +302,7 @@
                     data-text-size="1"
                     aria-pressed="true"
                   >
-                    <span class="text-size-glyph size-1" aria-hidden="true"
-                      >A</span
-                    >
+                    <span class="text-size-glyph size-1" aria-hidden="true">A</span>
                     <span class="visually-hidden" data-i18n="textSizeNormal"
                       >Normal text size</span
                     >
@@ -337,9 +313,7 @@
                     data-text-size="2"
                     aria-pressed="false"
                   >
-                    <span class="text-size-glyph size-2" aria-hidden="true"
-                      >A</span
-                    >
+                    <span class="text-size-glyph size-2" aria-hidden="true">A</span>
                     <span class="visually-hidden" data-i18n="textSizeLarge"
                       >Large text size</span
                     >
@@ -350,9 +324,7 @@
                     data-text-size="3"
                     aria-pressed="false"
                   >
-                    <span class="text-size-glyph size-3" aria-hidden="true"
-                      >A</span
-                    >
+                    <span class="text-size-glyph size-3" aria-hidden="true">A</span>
                     <span class="visually-hidden" data-i18n="textSizeLarger"
                       >Extra large text size</span
                     >
@@ -361,13 +333,10 @@
               </div>
 
               <div class="panel-row">
-                <label
-                  class="panel-row-label"
-                  for="languageSelect"
-                  data-i18n="language"
-                  >Language</label
-                >
-                <select id="languageSelect">
+                <label class="panel-select-label" for="languageSelect">
+                  <span data-i18n="language">Language</span>
+                </label>
+                <select id="languageSelect" class="language-select">
                   <option value="en">English</option>
                   <option value="af">Afrikaans</option>
                   <option value="st">Sesotho</option>
@@ -376,10 +345,6 @@
             </div>
           </div>
         </div>
-
-        <a class="donate-button" href="donate.html" data-i18n="navDonate"
-          >Donate</a
-        >
 
         <button
           type="button"
@@ -395,293 +360,195 @@
     </header>
 
     <main id="main">
-      <div class="container">
-        <article class="event-article" id="eventArticle" hidden>
-          <a class="back-link" href="events.html" data-i18n="eventBackToEvents"
-            >Back to events</a
-          >
-
-          <h1 id="eventTitle">Event</h1>
-          <p class="event-meta" id="eventMeta"></p>
-          <p class="event-capacity" id="eventCapacity" hidden></p>
-
-          <div class="event-body" id="eventBody"></div>
-
-          <div id="eventAttachmentsSection" hidden>
-            <h2 data-i18n="eventAttachmentsHeading">Attachments</h2>
-            <ul class="event-attachments" id="eventAttachmentsList"></ul>
-          </div>
-
-          <p>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="addToCalendarButton"
-              data-i18n="eventAddToCalendar"
-            >
-              Add to calendar
-            </button>
+      <div class="container legal-page">
+        <section class="page-heading" aria-labelledby="privacyHeading">
+          <h1 id="privacyHeading" data-i18n="privacyPageTitle">Privacy policy</h1>
+          <p class="page-lede">
+            This draft privacy policy describes the personal information handled by
+            the current website project for events, tickets, donations, contact, and
+            administration. Foundation-specific policy details remain subject to
+            confirmation and approval.
           </p>
-
-          <section class="ticket-registration" id="ticketRegistration" hidden>
-            <h2 data-i18n="ticketRegisterHeading">Register for this event</h2>
-            <p class="page-lede" id="ticketRegisterIntro">
-              Free to attend. Fill in your details below and we'll send you a
-              ticket with a QR code to show at the door.
-            </p>
-            <p class="form-field-note" id="ticketPriceTotal" hidden></p>
-
-            <div
-              class="registration-email-confirmation"
-              id="pendingPaymentPanel"
-              role="status"
-              hidden
-            >
-              <p id="pendingPaymentMessage"></p>
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="button button-primary"
-                  id="checkPendingPaymentButton"
-                  data-i18n="ticketPaymentCheckAgain"
-                >
-                  Check payment
-                </button>
-              </div>
-            </div>
-
-            <form class="registration-form" id="registrationForm" novalidate>
-              <div class="form-field">
-                <label for="attendeeName">
-                  <span data-i18n="ticketNameLabel">Name</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="text"
-                  id="attendeeName"
-                  name="attendeeName"
-                  autocomplete="name"
-                  required
-                />
-                <p
-                  class="form-error"
-                  id="attendeeNameError"
-                  hidden
-                  data-i18n="ticketNameError"
-                >
-                  Enter your name.
-                </p>
-              </div>
-
-              <div class="form-field">
-                <label for="attendeeEmail">
-                  <span data-i18n="ticketEmailLabel">Email</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="email"
-                  id="attendeeEmail"
-                  name="attendeeEmail"
-                  autocomplete="email"
-                  required
-                />
-                <p
-                  class="form-error"
-                  id="attendeeEmailError"
-                  hidden
-                  data-i18n="ticketEmailError"
-                >
-                  Enter a valid email address.
-                </p>
-              </div>
-
-              <div class="form-field">
-                <label for="attendeeQuantity">
-                  <span data-i18n="ticketQuantityLabel">Quantity</span>
-                  <span class="required-mark" data-i18n="requiredField"
-                    >(required)</span
-                  >
-                </label>
-                <input
-                  type="number"
-                  id="attendeeQuantity"
-                  name="quantity"
-                  min="1"
-                  step="1"
-                  value="1"
-                  required
-                />
-                <p class="form-field-note" id="quantityNote" hidden></p>
-                <p
-                  class="form-error"
-                  id="attendeeQuantityError"
-                  hidden
-                  data-i18n="ticketQuantityError"
-                >
-                  Enter how many people are coming.
-                </p>
-              </div>
-
-              <p class="popia-notice">
-                <span data-i18n="ticketPopiaNotice"
-                  >Your name and email address are used only to create your
-                  ticket and to contact you about this event. See our</span
-                >
-                <a href="privacy.html" data-i18n="ticketPopiaNoticeLink"
-                  >privacy policy</a
-                >.
-              </p>
-
-              <div class="form-actions">
-                <button
-                  type="submit"
-                  class="button button-primary"
-                  id="registerButton"
-                  data-i18n="ticketRegisterButton"
-                >
-                  Register
-                </button>
-              </div>
-
-              <p
-                class="form-error form-error-general"
-                id="registrationFormError"
-                role="status"
-                hidden
-              ></p>
-            </form>
-
-            <div
-              class="registration-email-confirmation"
-              id="registrationEmailConfirmation"
-              role="alert"
-              hidden
-            >
-              <p id="registrationEmailConfirmationText"></p>
-              <p class="form-field-note" id="ticketPayTotalConfirm" hidden></p>
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="button button-primary"
-                  id="confirmRegistrationButton"
-                  data-i18n="ticketConfirmEmailButton"
-                >
-                  Confirm email and register
-                </button>
-                <button
-                  type="button"
-                  class="button button-secondary"
-                  id="changeRegistrationEmailButton"
-                  data-i18n="ticketChangeEmailButton"
-                >
-                  Change email
-                </button>
-              </div>
-            </div>
-
-            <div
-              class="registration-confirmation"
-              id="registrationConfirmation"
-              role="status"
-              hidden
-            >
-              <h3 data-i18n="ticketConfirmationHeading">You're registered!</h3>
-              <p data-i18n="ticketConfirmationText">
-                This link is your ticket. Save it now, before you do anything
-                else.
-              </p>
-              <p
-                id="ticketConfirmationEmailSent"
-                data-i18n="ticketConfirmationEmailSent"
-                hidden
-              >
-                We've also sent it to your email address, in case you need it
-                later.
-              </p>
-              <p>
-                <a id="ticketLink" href="#"></a>
-              </p>
-            </div>
-          </section>
-
-          <p
-            class="ticket-registration-notice"
-            id="ticketSoldOutNotice"
-            hidden
-            data-i18n="ticketSoldOutNotice"
-          >
-            This event is sold out.
-          </p>
-
-          <p
-            class="ticket-registration-notice"
-            id="ticketPastNotice"
-            hidden
-            data-i18n="ticketPastNotice"
-          >
-            This event has already happened, so registration is closed.
-          </p>
-
-          <div class="share-row">
-            <h2 class="share-heading" data-i18n="eventShareHeading">
-              Share this event
-            </h2>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="shareButton"
-              data-i18n="eventShare"
-              hidden
-            >
-              Share
-            </button>
-            <a
-              class="button button-secondary"
-              id="whatsappShare"
-              href="https://wa.me/"
-              rel="noopener"
-              target="_blank"
-              data-i18n="eventShareWhatsApp"
-            >
-              Share on WhatsApp
-            </a>
-            <button
-              type="button"
-              class="button button-secondary"
-              id="copyLinkButton"
-              data-i18n="eventCopyLink"
-            >
-              Copy link
-            </button>
-            <span class="share-copied" id="copyConfirmation" role="status" hidden>
-              <span data-i18n="eventLinkCopied">Link copied</span>
-            </span>
-          </div>
-        </article>
-
-        <section class="page-heading" id="eventMissing" hidden>
-          <h1 data-i18n="eventNotFoundTitle">This event is not available</h1>
-          <p class="page-lede" data-i18n="eventNotFoundText">
-            It may have been removed, or it may not be published yet.
-          </p>
-          <a
-            class="button button-secondary"
-            href="events.html"
-            data-i18n="eventBackToEvents"
-          >
-            Back to events
-          </a>
         </section>
 
-        <noscript>
-          <p class="blog-empty">
-            Events need JavaScript to load. Please enable it to read them.
+        <section class="legal-section" aria-labelledby="privacyScopeHeading">
+          <h2 id="privacyScopeHeading">Who this policy applies to</h2>
+          <p>
+            This draft covers visitors, event attendees, ticket holders, donors,
+            contact form users, and staff or admin users who access or use the
+            Autism Allyship Foundation website and related project systems.
           </p>
-        </noscript>
+          <p>
+            The website is run by Active Autism &amp; Neuro-Diversity Allyship
+            Foundation. Some legal and organisational details still require the
+            Foundation's final wording and approval.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyInfoHeading">
+          <h2 id="privacyInfoHeading">What personal information we collect</h2>
+          <p>
+            The current project supports the following categories of personal
+            information:
+          </p>
+          <ul class="legal-list">
+            <li>Contact form information, such as name, email address, phone number and message.</li>
+            <li>Event and ticket registration details, such as name, email address, quantity, and ticket token information.</li>
+            <li>Donation information, such as donor name, email address, amount, message, and payment reference information.</li>
+            <li>Admin and staff account information used for sign-in and system access.</li>
+            <li>Information stored in Firestore for website content, tickets, contact submissions, donations, and related administration.</li>
+            <li>Technical information processed when the website uses Firebase, Cloudflare, or related infrastructure, subject to the relevant provider configuration.</li>
+            <li>The website may provide links to an external WhatsApp destination. Messages sent after following a link are handled by the relevant external service and the person's interaction with it; this website does not receive the message content through the link itself.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyWhyHeading">
+          <h2 id="privacyWhyHeading">Why we collect it</h2>
+          <p>
+            We collect personal information to respond to enquiries, administer
+            events and tickets, process donations, maintain the website and admin
+            tools, communicate with supporters, and fulfil our legal and
+            operational responsibilities.
+          </p>
+          <p>
+            Google Analytics is not implemented in the current project. The current
+            project code is not intended to use advertising tracking or a
+            cookie-based analytics system. This describes the code currently included
+            in the project and does not confirm every future deployment or
+            third-party configuration.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyUseHeading">
+          <h2 id="privacyUseHeading">How we use it</h2>
+          <p>
+            The website is designed to use personal information for the tasks it
+            supports, including:
+          </p>
+          <ul class="legal-list">
+            <li>To respond to contact messages and support requests.</li>
+            <li>To manage event registrations and validate booked tickets.</li>
+            <li>To send ticket or confirmation emails where the relevant email service has been configured.</li>
+            <li>To process and record donations and payment references.</li>
+            <li>To maintain the resource directory, event information, blog content and admin records.</li>
+            <li>To protect the security of the website, admin accounts and data in the project systems.</li>
+          </ul>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyRetentionHeading">
+          <h2 id="privacyRetentionHeading">Retention and deletion</h2>
+          <p>
+            The project records the following retention periods. The Foundation
+            must still approve a period for admin and staff account records before
+            this policy is final:
+          </p>
+          <ul class="legal-list">
+            <li>Contact submissions are retained for 12 months.</li>
+            <li>Ticket records are retained for 12 months after the event.</li>
+            <li>Donation records are retained for five years.</li>
+            <li class="placeholder-block">Admin and staff record retention period: to be confirmed by the Foundation before launch.</li>
+          </ul>
+          <p>
+            This draft does not establish a Foundation retention or deletion policy.
+            The final policy must explain the approved process for requests to
+            correct or delete personal information.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyThirdPartiesHeading">
+          <h2 id="privacyThirdPartiesHeading">Third parties and service providers</h2>
+          <p>
+            The current project includes or connects to the following services where
+            they are relevant to the task being carried out:
+          </p>
+          <ul class="legal-list">
+            <li>Firebase and Google Cloud services for authentication, Firestore data storage, and related project infrastructure.</li>
+            <li>Cloudflare Pages and Cloudflare Workers for hosting, website delivery, file handling and automation.</li>
+            <li>Paystack for payment processing on the donation and ticket flow supported by the project.</li>
+            <li>Brevo may be configured for transactional email messages. The Foundation must confirm whether it processes personal information for the live website.</li>
+          </ul>
+          <p>
+            The Foundation must confirm the final circumstances in which personal
+            information is shared with these providers. This draft does not establish
+            a broader Foundation sharing policy or confirm every provider used in a
+            live deployment.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyTransfersHeading">
+          <h2 id="privacyTransfersHeading">Data processed outside South Africa</h2>
+          <p>
+            Some third-party technology providers may process information in
+            jurisdictions outside South Africa, depending on their infrastructure and
+            configuration. The project does not confirm the Foundation-specific
+            processing arrangement or POPIA basis for any such processing.
+          </p>
+          <p>
+            The Foundation must confirm its cross-border processing arrangements
+            and POPIA basis before launch.
+          </p>
+          <p>
+            Until that confirmation is approved, this section is a draft description
+            rather than a final cross-border processing position.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyRightsHeading">
+          <h2 id="privacyRightsHeading">Your rights</h2>
+          <p>
+            Under the Protection of Personal Information Act, 2013, a person may
+            have rights to request access to personal information, ask for
+            correction of inaccurate information, and ask for deletion or
+            restriction where the law allows it.
+          </p>
+          <p>
+            The final policy will identify the approved contact route for requests to
+            access, correct, or delete personal information. The Information Officer
+            details below remain placeholders until the Foundation supplies and
+            approves them.
+          </p>
+          <p>
+            This draft does not establish the Foundation's final request-handling
+            procedure.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyOfficerHeading">
+          <h2 id="privacyOfficerHeading">Contact the Information Officer</h2>
+          <div class="legal-meta" aria-label="Information Officer details">
+            <p class="placeholder-block">Information Officer name and contact details: to be supplied by the Foundation before launch.</p>
+            <p class="placeholder-block">Physical or postal address: to be supplied by the Foundation before launch.</p>
+          </div>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacySecurityHeading">
+          <h2 id="privacySecurityHeading">Security and safeguards</h2>
+          <p>
+            The project uses Firebase Authentication for admin access, Firestore for
+            data storage, and Cloudflare-hosted services for website delivery and
+            related API endpoints. These technical components have their own
+            configuration and access controls.
+          </p>
+          <p>
+            The Foundation must confirm any organisational safeguards, access rules,
+            and final security commitments before publication. No website or service
+            can guarantee that all security risks are eliminated.
+          </p>
+        </section>
+
+        <section class="legal-section" aria-labelledby="privacyChangesHeading">
+          <h2 id="privacyChangesHeading">Changes to this policy</h2>
+          <p>
+            This is draft privacy-policy wording. Any final policy update process,
+            effective date, and review schedule require Foundation approval.
+          </p>
+          <p>
+            The effective date and last review date for this version are:
+          </p>
+          <div class="legal-meta">
+            <p class="placeholder-block">Effective date and last review date: to be set when the Foundation approves this policy.</p>
+          </div>
+        </section>
       </div>
     </main>
 
@@ -701,8 +568,8 @@
             </span>
           </a>
           <p data-i18n="footerDescription">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
+            Building inclusive, accessible spaces for autistic and neurodivergent
+            people and their families.
           </p>
           <p class="footer-npo">
             <span data-i18n="npoLabel">NPO registration number</span>
@@ -715,14 +582,10 @@
           data-i18n-aria-label="footerQuickLinks"
           aria-label="Quick links"
         >
-          <h2 class="footer-heading" data-i18n="footerQuickLinks">
-            Quick links
-          </h2>
+          <h2 class="footer-heading" data-i18n="footerQuickLinks">Quick links</h2>
           <ul class="footer-list">
             <li><a href="about.html" data-i18n="navAbout">About</a></li>
-            <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
-            </li>
+            <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
             <li><a href="events.html" data-i18n="navEvents">Events</a></li>
             <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
             <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
@@ -798,7 +661,5 @@
         </p>
       </div>
     </footer>
-
-    <script type="module" src="event.js"></script>
   </body>
 </html>

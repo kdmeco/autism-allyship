@@ -20,6 +20,15 @@ export function translated(key) {
   return dictionary[key] || translations.en[key];
 }
 
+// An event stays current for its whole calendar day. There is no endsAt
+// field, and the foundation's main event is an all-day picnic, so moving it
+// to Past at its start time would hide it while people are still attending.
+export function endOfLocalDay(date) {
+  const end = new Date(date);
+  end.setHours(23, 59, 59, 999);
+  return end;
+}
+
 // RFC 5545 wants CRLF, escaped text and UTC stamps. No DTEND: neither an
 // event nor a ticket stores an end time, and inventing one would put a made
 // up duration in somebody's calendar.
