@@ -3614,13 +3614,6 @@ body.gallery-lightbox-open {
   font-weight: 700;
 }
 
-.shop-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
-  max-width: 52rem;
-}
-
 :root.sensory-mode .public-site .hero .container::before,
 :root.sensory-mode .public-site .card::after,
 :root.plain-text .public-site .hero .container::before,
@@ -3665,8 +3658,7 @@ body.gallery-lightbox-open {
   }
 
   .shop-hero,
-  .shop-category-grid,
-  .shop-info-grid {
+  .shop-category-grid {
     grid-template-columns: 1fr;
   }
 
