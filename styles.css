@@ -1558,7 +1558,7 @@ textarea {
 
 .instagram-embed-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20.5rem), 1fr));
   gap: var(--space-5);
   margin-top: var(--space-5);
   align-items: start;
@@ -1566,6 +1566,14 @@ textarea {
 
 .instagram-embed-item {
   min-width: 0;
+  overflow: hidden;
+}
+
+.instagram-embed-item .instagram-media,
+.instagram-embed-item iframe {
+  max-width: 100% !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 .instagram-fallback {
@@ -3444,7 +3452,7 @@ body.gallery-lightbox-open {
 }
 
 .public-site .card-grid {
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 20rem));
   align-items: stretch;
 }
 

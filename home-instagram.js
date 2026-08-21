@@ -53,7 +53,7 @@ function showEmbeds() {
     blockquote.setAttribute("data-instgrm-permalink", post.url);
     blockquote.setAttribute("data-instgrm-version", "14");
     blockquote.style.cssText =
-      "background:#FFF; border:0; margin:0; max-width:540px; min-width:280px; padding:0; width:100%;";
+      "background:#FFF; border:0; margin:0; max-width:540px; padding:0; width:100%;";
 
     const link = document.createElement("a");
     link.href = post.url;
