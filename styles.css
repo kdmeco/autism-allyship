@@ -3488,21 +3488,6 @@ body.gallery-lightbox-open {
   background-color: var(--colour-surface-alt);
 }
 
-.public-site .page-heading::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  right: clamp(0rem, 7vw, 6rem);
-  bottom: var(--space-5);
-  width: clamp(7rem, 18vw, 13rem);
-  aspect-ratio: 1;
-  border: 1.25rem solid var(--colour-accent-fill);
-  border-radius: 50% 42% 58% 46%;
-  opacity: 0.12;
-  transform: rotate(-14deg);
-  pointer-events: none;
-}
-
 .public-site .page-heading h1 {
   max-width: 52rem;
   font-size: clamp(var(--size-2xl), 6vw, 4.75rem);
@@ -3774,10 +3759,8 @@ body.gallery-lightbox-open {
   max-width: 52rem;
 }
 
-:root.sensory-mode .public-site .page-heading::after,
 :root.sensory-mode .public-site .hero .container::before,
 :root.sensory-mode .public-site .card::after,
-:root.plain-text .public-site .page-heading::after,
 :root.plain-text .public-site .hero .container::before,
 :root.plain-text .public-site .card::after {
   display: none;
