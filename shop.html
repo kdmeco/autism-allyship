@@ -80,7 +80,7 @@
     </script>
     <title>Shop | Autism Allyship</title>
   </head>
-  <body>
+  <body class="public-site">
     <header class="site-header" id="siteHeader">
       <a class="skip-link" href="#main" data-i18n="skipToContent"
         >Skip to main content</a
@@ -90,7 +90,7 @@
         <a class="brand" href="index.html">
           <img
             class="brand-mark"
-            src="assets/brand/logo-placeholder.jpg"
+            src="assets/brand/logo.jpg"
             alt=""
             width="512"
             height="512"
@@ -323,18 +323,18 @@
             </div>
           </div>
 
-          <a class="donate-button" href="donate.html" data-i18n="navDonate">Donate</a>
-          <button
-            type="button"
-            class="menu-toggle"
-            id="menuToggle"
-            aria-expanded="false"
-            aria-controls="primaryNav headerControls"
-          >
-            <span class="menu-icon" aria-hidden="true"></span>
-            <span class="control-label" data-i18n="menu">Menu</span>
-          </button>
         </div>
+        <a class="donate-button" href="donate.html" data-i18n="navDonate">Donate</a>
+        <button
+          type="button"
+          class="menu-toggle"
+          id="menuToggle"
+          aria-expanded="false"
+          aria-controls="primaryNav headerControls"
+        >
+          <span class="menu-icon" aria-hidden="true"></span>
+          <span class="control-label" data-i18n="menu">Menu</span>
+        </button>
       </div>
     </header>
 
@@ -343,118 +343,106 @@
         <section class="page-heading" aria-labelledby="shopHeading">
           <h1 id="shopHeading" data-i18n="shopPageTitle">Autism Allyship shop</h1>
           <p class="page-lede" data-i18n="shopPageLede">
-            Explore Autism Allyship merchandise and choose the shopping option that suits you.
+            Browse Autism Allyship merchandise, then view the current catalogue and order on WhatsApp.
           </p>
         </section>
 
-        <section class="shop-section" aria-labelledby="shopFeaturedHeading">
-          <h2 id="shopFeaturedHeading" data-i18n="shopFeaturedHeading">Featured merchandise</h2>
-          <p class="shop-section-intro" data-i18n="shopFeaturedIntro">
-            A small set of foundation merchandise will sit here. Until product photographs arrive,
-            these slots stay empty rather than inventing items.
-          </p>
-          <div class="shop-featured-grid" role="list">
-            <figure class="shop-featured-slot" role="listitem">
-              <div class="shop-featured-frame" aria-hidden="true"></div>
-              <figcaption data-i18n="shopFeaturedSlotLabel">Product photo pending</figcaption>
-            </figure>
-            <figure class="shop-featured-slot" role="listitem">
-              <div class="shop-featured-frame" aria-hidden="true"></div>
-              <figcaption data-i18n="shopFeaturedSlotLabel">Product photo pending</figcaption>
-            </figure>
-            <figure class="shop-featured-slot" role="listitem">
-              <div class="shop-featured-frame" aria-hidden="true"></div>
-              <figcaption data-i18n="shopFeaturedSlotLabel">Product photo pending</figcaption>
-            </figure>
+        <section class="shop-hero" aria-labelledby="shopFeaturedHeading">
+          <div class="shop-hero-copy">
+            <p class="section-eyebrow" data-i18n="shopHeroEyebrow">Merchandise</p>
+            <h2 id="shopFeaturedHeading" data-i18n="shopFeaturedHeading">Made for everyday allyship</h2>
+            <p data-i18n="shopHeroText">
+              See the available designs and ask the team about current options in the WhatsApp catalogue.
+            </p>
+            <a
+              class="button button-whatsapp"
+              href="https://wa.me/c/27663859936"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="shopWhatsAppButton"
+              >View the WhatsApp catalogue</a
+            >
           </div>
-          <div class="shop-preview-panel">
-            <div class="shop-preview-copy">
-              <p class="shop-section-kicker" data-i18n="shopProductsPendingKicker">A collection is on its way</p>
-              <h3 data-i18n="shopProductsPendingHeading">Merchandise coming soon</h3>
-              <p data-i18n="shopProductsPendingText">
-                Product photographs and details will be added when the foundation supplies them.
-              </p>
+          <div class="shop-hero-images" aria-hidden="true">
+            <img src="assets/brand/merch/mugs-and-cups-thumb.webp" alt="" width="640" height="482" />
+            <img src="assets/brand/merch/flasks-and-bottles-thumb.webp" alt="" width="640" height="482" />
+            <img src="assets/brand/merch/keyrings-thumb.webp" alt="" width="640" height="482" />
+          </div>
+        </section>
+
+        <section class="shop-section section-band" aria-labelledby="shopCategoriesHeading">
+          <div class="section-heading-rule">
+            <div>
+              <p class="section-eyebrow" data-i18n="shopCategoriesEyebrow">Browse by category</p>
+              <h2 id="shopCategoriesHeading" data-i18n="shopCategoriesHeading">Choose what you would like to see</h2>
             </div>
           </div>
-        </section>
-
-        <section class="shop-section" aria-labelledby="shopOptionsHeading">
-          <h2 id="shopOptionsHeading" data-i18n="shopOptionsHeading">Choose how to shop</h2>
-          <div class="shop-options-grid">
-            <article class="card shop-option-card">
-              <h3 data-i18n="shopStoreHeading">Online store</h3>
-              <p data-i18n="shopStoreText">
-                The foundation's Paystack Storefront link will be added once it has been approved.
-              </p>
-              <a
-                id="shopStorefrontLink"
-                class="button button-primary"
-                href="#"
-                target="_blank"
-                rel="noopener"
-                hidden
-                data-i18n="shopStoreVisitButton"
-                >Visit our store</a
-              >
-              <span
-                id="shopStorefrontPending"
-                class="button button-whatsapp shop-store-unavailable"
-                aria-disabled="true"
-                data-i18n="shopStoreButton"
-                >Online store coming soon</span
-              >
+          <div class="shop-category-grid">
+            <article class="card shop-category-card">
+              <img
+                src="assets/brand/merch/mugs-and-cups.webp"
+                alt="Autism Allyship travel mugs"
+                width="1600"
+                height="1205"
+                loading="lazy"
+              />
+              <div class="shop-category-copy">
+                <h3 data-i18n="shopMugsHeading">Mugs and cups</h3>
+                <a class="text-link" href="https://wa.me/c/27663859936" target="_blank" rel="noopener noreferrer" data-i18n="shopCategoryButton">View on WhatsApp</a>
+              </div>
             </article>
-
-            <article class="card shop-option-card">
-              <h3 data-i18n="shopWhatsAppHeading">WhatsApp catalogue</h3>
-              <p data-i18n="shopWhatsAppText">
-                Use the catalogue to ask questions and order directly. This suits shoppers who prefer personal help before ordering.
-              </p>
-              <a
-                class="button button-whatsapp"
-                href="https://wa.me/c/27663859936"
-                target="_blank"
-                rel="noopener"
-                data-i18n="shopWhatsAppButton"
-                >Order on WhatsApp</a
-              >
+            <article class="card shop-category-card">
+              <img
+                src="assets/brand/merch/flasks-and-bottles.webp"
+                alt="White Autism Allyship flasks and water bottles"
+                width="1600"
+                height="1205"
+                loading="lazy"
+              />
+              <div class="shop-category-copy">
+                <h3 data-i18n="shopFlasksHeading">Flasks and bottles</h3>
+                <a class="text-link" href="https://wa.me/c/27663859936" target="_blank" rel="noopener noreferrer" data-i18n="shopCategoryButton">View on WhatsApp</a>
+              </div>
+            </article>
+            <article class="card shop-category-card">
+              <img
+                src="assets/brand/merch/keyrings.webp"
+                alt="Autism Allyship keyrings in several designs"
+                width="1600"
+                height="1205"
+                loading="lazy"
+              />
+              <div class="shop-category-copy">
+                <h3 data-i18n="shopKeyringsHeading">Keyrings</h3>
+                <a class="text-link" href="https://wa.me/c/27663859936" target="_blank" rel="noopener noreferrer" data-i18n="shopCategoryButton">View on WhatsApp</a>
+              </div>
             </article>
           </div>
         </section>
 
         <section class="shop-section" aria-labelledby="shopDeliveryHeading">
           <h2 id="shopDeliveryHeading" data-i18n="shopDeliveryHeading">Delivery and returns</h2>
-          <div class="shop-info-panel">
-            <div class="shop-info-mark" aria-hidden="true">i</div>
-            <div>
-              <p data-i18n="shopDeliveryIntro">
-                Orders placed through WhatsApp are arranged directly with the foundation. Courier
-                options and timing depend on where you are and what you ordered.
-              </p>
-              <p class="shop-pending-copy" data-i18n="shopDeliveryPending">
-                Exact delivery areas, fees and returns wording will be published here once the
-                foundation supplies approved information. Until then, ask on WhatsApp before you pay.
-              </p>
-            </div>
+          <div class="shop-info-grid">
+            <p class="placeholder-block" data-i18n="shopDeliveryPlaceholder">[Delivery information]</p>
+            <p class="placeholder-block" data-i18n="shopReturnsPlaceholder">[Returns information]</p>
           </div>
         </section>
       </div>
-      <script type="module" src="shop.js"></script>
     </main>
 
     <footer class="site-footer">
       <div class="footer-columns">
         <div class="footer-column footer-about">
           <a class="brand brand-footer" href="index.html">
-            <img class="brand-mark" src="assets/brand/logo-placeholder.jpg" alt="" width="512" height="512" />
+            <img class="brand-mark" src="assets/brand/logo.jpg" alt="" width="512" height="512" />
             <span class="brand-words"><span class="brand-name">Autism Allyship</span></span>
           </a>
           <p data-i18n="footerDescription">
-            Building inclusive, accessible spaces for autistic and neurodivergent people and their families.
+            Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
           </p>
           <p class="footer-npo">
             <span data-i18n="npoLabel">NPO registration number</span>
-            <strong>000-000 NPO</strong>
+            <strong>[NPO registration number]</strong>
           </p>
         </div>
 
