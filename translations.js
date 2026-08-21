@@ -577,6 +577,7 @@ const translations = {
     donateMessageLabel: "Message (optional)",
     donatePopiaLabel:
       "I agree that the foundation may use these details to process my donation.",
+    donatePopiaPrivacyLink: "Read our privacy policy",
     donatePopiaError: "You must agree before continuing.",
     donateContinueButton: "Continue",
     donateProcessing: "Processing...",
@@ -1110,6 +1111,7 @@ const translations = {
     donateEmailError: "",
     donateMessageLabel: "",
     donatePopiaLabel: "",
+    donatePopiaPrivacyLink: "",
     donatePopiaError: "",
     donateContinueButton: "",
     donateProcessing: "",
@@ -1634,6 +1636,7 @@ const translations = {
     donateEmailError: "",
     donateMessageLabel: "",
     donatePopiaLabel: "",
+    donatePopiaPrivacyLink: "",
     donatePopiaError: "",
     donateContinueButton: "",
     donateProcessing: "",

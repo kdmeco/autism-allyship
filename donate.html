@@ -463,8 +463,11 @@
               <textarea id="donorMessage" name="message" rows="5"></textarea>
             </div>
             <div class="form-checkbox-field">
-              <input type="checkbox" id="donorPopia" name="popiaConsent" aria-describedby="donorPopiaError" />
+              <input type="checkbox" id="donorPopia" name="popiaConsent" aria-describedby="donorPopiaError donorPopiaPrivacy" />
               <label for="donorPopia" data-i18n="donatePopiaLabel">I agree that the foundation may use these details to process my donation.</label>
+              <p id="donorPopiaPrivacy" class="form-hint">
+                <a href="privacy.html" data-i18n="donatePopiaPrivacyLink">Read our privacy policy</a>
+              </p>
               <p id="donorPopiaError" class="form-error" hidden data-i18n="donatePopiaError">You must agree before continuing.</p>
             </div>
             <button type="submit" class="button button-primary" id="donateSubmitButton" data-i18n="donateContinueButton">Continue</button>

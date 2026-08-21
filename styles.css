@@ -3887,3 +3887,14 @@ body.gallery-lightbox-open {
   border-color: var(--colour-accent-text);
   color: var(--colour-accent-text);
 }
+
+.form-hint {
+  margin: var(--space-2) 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--colour-text-muted);
+}
+
+.form-hint a {
+  color: var(--colour-accent-text);
+}
