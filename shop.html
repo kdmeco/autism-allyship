@@ -349,12 +349,25 @@
 
         <section class="shop-section" aria-labelledby="shopFeaturedHeading">
           <h2 id="shopFeaturedHeading" data-i18n="shopFeaturedHeading">Featured merchandise</h2>
+          <p class="shop-section-intro" data-i18n="shopFeaturedIntro">
+            A small set of foundation merchandise will sit here. Until product photographs arrive,
+            these slots stay empty rather than inventing items.
+          </p>
+          <div class="shop-featured-grid" role="list">
+            <figure class="shop-featured-slot" role="listitem">
+              <div class="shop-featured-frame" aria-hidden="true"></div>
+              <figcaption data-i18n="shopFeaturedSlotLabel">Product photo pending</figcaption>
+            </figure>
+            <figure class="shop-featured-slot" role="listitem">
+              <div class="shop-featured-frame" aria-hidden="true"></div>
+              <figcaption data-i18n="shopFeaturedSlotLabel">Product photo pending</figcaption>
+            </figure>
+            <figure class="shop-featured-slot" role="listitem">
+              <div class="shop-featured-frame" aria-hidden="true"></div>
+              <figcaption data-i18n="shopFeaturedSlotLabel">Product photo pending</figcaption>
+            </figure>
+          </div>
           <div class="shop-preview-panel">
-            <div class="shop-preview-art" aria-hidden="true">
-              <span class="shop-preview-orbit shop-preview-orbit-one"></span>
-              <span class="shop-preview-orbit shop-preview-orbit-two"></span>
-              <span class="shop-product-placeholder-mark">AA</span>
-            </div>
             <div class="shop-preview-copy">
               <p class="shop-section-kicker" data-i18n="shopProductsPendingKicker">A collection is on its way</p>
               <h3 data-i18n="shopProductsPendingHeading">Merchandise coming soon</h3>
@@ -373,7 +386,18 @@
               <p data-i18n="shopStoreText">
                 The foundation's Paystack Storefront link will be added once it has been approved.
               </p>
+              <a
+                id="shopStorefrontLink"
+                class="button button-primary"
+                href="#"
+                target="_blank"
+                rel="noopener"
+                hidden
+                data-i18n="shopStoreVisitButton"
+                >Visit our store</a
+              >
               <span
+                id="shopStorefrontPending"
                 class="button button-whatsapp shop-store-unavailable"
                 aria-disabled="true"
                 data-i18n="shopStoreButton"
@@ -402,12 +426,20 @@
           <h2 id="shopDeliveryHeading" data-i18n="shopDeliveryHeading">Delivery and returns</h2>
           <div class="shop-info-panel">
             <div class="shop-info-mark" aria-hidden="true">i</div>
-            <p class="shop-pending-copy" data-i18n="shopDeliveryPending">
-              Delivery times, delivery areas and returns details will be added once the foundation supplies approved information.
-            </p>
+            <div>
+              <p data-i18n="shopDeliveryIntro">
+                Orders placed through WhatsApp are arranged directly with the foundation. Courier
+                options and timing depend on where you are and what you ordered.
+              </p>
+              <p class="shop-pending-copy" data-i18n="shopDeliveryPending">
+                Exact delivery areas, fees and returns wording will be published here once the
+                foundation supplies approved information. Until then, ask on WhatsApp before you pay.
+              </p>
+            </div>
           </div>
         </section>
       </div>
+      <script type="module" src="shop.js"></script>
     </main>
 
     <footer class="site-footer">
