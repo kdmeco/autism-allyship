@@ -67,7 +67,7 @@
         <a class="brand" href="../index.html">
           <img
             class="brand-mark"
-            src="../assets/brand/logo-placeholder.jpg"
+            src="../assets/brand/logo.jpg"
             alt=""
             width="512"
             height="512"
@@ -438,13 +438,15 @@
                 multiple
               />
               <p class="form-field-note" data-i18n="adminGalleryPhotosNote">
-                Choose as many as you like at once. Resized to 1600px WebP
-                with a 400px thumbnail each.
+                Choose as many as you like. Large selections are uploaded five
+                photos at a time and saved after every completed batch.
               </p>
               <p
                 class="form-field-note"
                 id="photosUploadStatus"
                 hidden
+                role="status"
+                aria-live="polite"
                 data-i18n="adminGalleryPhotosUploading"
               >
                 Uploading your photos... they will appear on the site in
@@ -504,7 +506,7 @@
           <a class="brand brand-footer" href="../index.html">
             <img
               class="brand-mark"
-              src="../assets/brand/logo-placeholder.jpg"
+              src="../assets/brand/logo.jpg"
               alt=""
               width="512"
               height="512"
@@ -514,12 +516,11 @@
             </span>
           </a>
           <p data-i18n="footerDescription">
-            Building inclusive, accessible spaces for autistic and
-            neurodivergent people and their families.
+            Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
           </p>
           <p class="footer-npo">
             <span data-i18n="npoLabel">NPO registration number</span>
-            <strong>000-000 NPO</strong>
+            <strong>[NPO registration number]</strong>
           </p>
         </div>
         <nav
@@ -603,7 +604,7 @@
       </div>
       <div class="footer-baseline">
         <p>
-          &copy; <span id="footerYear">2026</span> Autism Allyship Foundation.
+          &copy; <span id="footerYear">2026</span> Active Autism &amp; Neuro-Diversity Allyship Foundation.
           <span data-i18n="rightsReserved">All rights reserved.</span>
         </p>
         <p class="footer-contact">

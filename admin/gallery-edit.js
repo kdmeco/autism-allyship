@@ -42,17 +42,20 @@ let uploadedCoverImageUrl = "";
 let images = [];
 let coverUploadInFlight = false;
 let photosUploadInFlight = false;
+const PHOTOS_PER_UPLOAD = 5;
 
 function setCoverUploadBusy(busy) {
   coverUploadInFlight = busy;
   photosInput.disabled = busy || photosUploadInFlight;
   coverImageInput.disabled = busy;
+  saveButton.disabled = busy || photosUploadInFlight;
 }
 
 function setPhotosUploadBusy(busy) {
   photosUploadInFlight = busy;
   photosInput.disabled = busy || coverUploadInFlight;
   coverImageInput.disabled = busy || coverUploadInFlight;
+  saveButton.disabled = busy || coverUploadInFlight;
 }
 
 editingId = new URLSearchParams(window.location.search).get("id");
@@ -146,6 +149,50 @@ function showPhotosError(message) {
 function clearPhotosError() {
   photosError.hidden = true;
   photosError.textContent = "";
+}
+
+function currentAlbumData() {
+  return {
+    title: titleInput.value.trim(),
+    eventName: eventNameInput.value.trim(),
+    year: parseInt(yearInput.value, 10),
+    coverImageUrl: uploadedCoverImageUrl,
+    images: images,
+  };
+}
+
+function validateAlbumForUpload() {
+  clearErrors();
+  const data = currentAlbumData();
+  let valid = true;
+
+  if (!data.title) {
+    showError(titleError, "Enter a title before uploading photos.");
+    valid = false;
+  }
+  if (!yearInput.value || !Number.isFinite(data.year)) {
+    showError(yearError, "Enter the year before uploading photos.");
+    valid = false;
+  }
+  return valid;
+}
+
+// A large import must survive a refresh or a failed later batch. Create the
+// album once its required fields are present, then checkpoint its image list
+// after every successful five-photo Worker request.
+async function ensureAlbumCheckpoint() {
+  const data = currentAlbumData();
+  if (editingId) {
+    await setDoc(doc(db, "galleries", editingId), data, { merge: true });
+    return;
+  }
+
+  const ref = await addDoc(collection(db, "galleries"), data);
+  editingId = ref.id;
+  const url = new URL(window.location.href);
+  url.searchParams.set("id", editingId);
+  window.history.replaceState({}, "", url);
+  heading.textContent = "Edit album";
 }
 
 // When a cover image is selected, resize it in the browser and send it to
@@ -380,10 +427,9 @@ function removeUploadedPhoto(image) {
     });
 }
 
-// Every photo selected in one go is resized and sent to the Worker as a
-// single commit, the same batching rule the cover image and every other
-// upload on this site follows, so an album of twenty photos does not spend
-// twenty of the free tier's 500 monthly builds.
+// The Worker accepts ten files per request. Each source photo creates a full
+// image and a thumbnail, so process at most five photos at a time. Only the
+// current batch is held in memory and every completed batch is checkpointed.
 photosInput.addEventListener("change", async function () {
   const files = Array.from(photosInput.files || []);
   if (files.length === 0 || coverUploadInFlight || photosUploadInFlight) {
@@ -391,76 +437,129 @@ photosInput.addEventListener("change", async function () {
   }
 
   clearPhotosError();
+  if (!validateAlbumForUpload()) {
+    photosInput.value = "";
+    return;
+  }
+
   setPhotosUploadBusy(true);
   photosUploadStatus.hidden = false;
-  photosUploadStatus.textContent =
-    "Uploading your photos... they will appear on the site in about a minute.";
+  photosUploadStatus.textContent = "Preparing " + files.length + " photos...";
+
+  let uploadedCount = 0;
 
   try {
-    const resized = await Promise.all(
-      files.map(function (file) {
-        return resizeImage(file);
-      }),
-    );
     const token = await auth.currentUser.getIdToken();
     const branch = uploadBranch();
 
-    const uploadFiles = [];
-    resized.forEach(function (image) {
-      uploadFiles.push({ data: image.fullBase64, type: "image/webp" });
-      uploadFiles.push({
-        data: image.thumbBase64,
-        type: "image/webp",
-        thumb: true,
+    await ensureAlbumCheckpoint();
+
+    for (let start = 0; start < files.length; start += PHOTOS_PER_UPLOAD) {
+      const batch = files.slice(start, start + PHOTOS_PER_UPLOAD);
+      photosUploadStatus.textContent =
+        "Resizing photos " +
+        (start + 1) +
+        " to " +
+        (start + batch.length) +
+        " of " +
+        files.length +
+        "...";
+
+      const resized = await Promise.all(
+        batch.map(function (file) {
+          return resizeImage(file);
+        }),
+      );
+      const uploadFiles = [];
+      resized.forEach(function (image) {
+        uploadFiles.push({ data: image.fullBase64, type: "image/webp" });
+        uploadFiles.push({
+          data: image.thumbBase64,
+          type: "image/webp",
+          thumb: true,
+        });
       });
-    });
 
-    const response = await fetch(WORKER_UPLOAD_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + token,
-      },
-      body: JSON.stringify({
-        folder: "assets/uploads/gallery/" + albumSlug() + "/",
-        commitMessage: "Upload gallery photos",
-        files: uploadFiles,
-        branch: branch,
-      }),
-    });
+      photosUploadStatus.textContent =
+        "Uploading " +
+        (start + 1) +
+        " to " +
+        (start + batch.length) +
+        " of " +
+        files.length +
+        "...";
 
-    if (response.status === 401) {
-      showPhotosError("Your session has expired. Sign in again and retry.");
-      photosUploadStatus.hidden = true;
-      photosInput.value = "";
-      return;
-    }
-
-    if (!response.ok) {
-      throw new Error("Upload failed with status " + response.status);
-    }
-
-    const result = await response.json();
-    if (!result.ok) {
-      throw new Error(result.error || "Upload failed");
-    }
-
-    // The Worker returns paths in the order the files were sent: full,
-    // thumb, full, thumb, matching how uploadFiles was built above.
-    files.forEach(function (file, index) {
-      images.push({
-        url: result.files[index * 2].path,
-        thumbUrl: result.files[index * 2 + 1].path,
-        alt: "",
+      const response = await fetch(WORKER_UPLOAD_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+        body: JSON.stringify({
+          folder: "assets/uploads/gallery/" + albumSlug() + "/",
+          commitMessage: "Upload gallery photos",
+          files: uploadFiles,
+          branch: branch,
+        }),
       });
-    });
-    renderPhotoList();
+
+      if (response.status === 401) {
+        throw new Error("SESSION_EXPIRED");
+      }
+      if (!response.ok) {
+        throw new Error("Upload failed with status " + response.status);
+      }
+
+      const result = await response.json();
+      if (!result.ok || result.files.length !== batch.length * 2) {
+        throw new Error(result.error || "Upload returned an unexpected file list");
+      }
+
+      batch.forEach(function (_file, index) {
+        images.push({
+          url: result.files[index * 2].path,
+          thumbUrl: result.files[index * 2 + 1].path,
+          alt: "",
+        });
+      });
+      uploadedCount += batch.length;
+      renderPhotoList();
+      try {
+        await ensureAlbumCheckpoint();
+      } catch (error) {
+        console.error("Gallery checkpoint failed:", error);
+        throw new Error("CHECKPOINT_FAILED");
+      }
+      photosUploadStatus.textContent =
+        "Uploaded " + uploadedCount + " of " + files.length + " photos.";
+    }
+
     photosUploadStatus.textContent =
-      "Photos uploaded. They will appear on the site in about a minute.";
+      "Uploaded " + files.length + " photos. The album has been saved.";
   } catch (error) {
     console.error("Photo upload failed:", error);
-    showPhotosError("Failed to upload the photos. Try again.");
-    photosUploadStatus.hidden = true;
+    const remaining = files.length - uploadedCount;
+    if (error.message === "SESSION_EXPIRED") {
+      showPhotosError("Your session has expired. Sign in again, then select the remaining photos.");
+    } else if (error.message === "CHECKPOINT_FAILED") {
+      showPhotosError(
+        "The photos were uploaded, but the album checkpoint failed. Do not select them again. Choose Save album to keep the uploaded paths.",
+      );
+    } else {
+      showPhotosError(
+        "Uploaded " +
+          uploadedCount +
+          " of " +
+          files.length +
+          ". " +
+          remaining +
+          " photos were not uploaded. Select the remaining photos and try again.",
+      );
+    }
+    photosUploadStatus.textContent =
+      error.message === "CHECKPOINT_FAILED"
+        ? "Uploaded " + uploadedCount + " photos. Save the album before leaving this page."
+        : "The " + uploadedCount + " completed photos are saved in this album.";
   } finally {
     photosInput.value = "";
     setPhotosUploadBusy(false);
@@ -491,13 +590,7 @@ form.addEventListener("submit", async function (event) {
     return;
   }
 
-  const albumData = {
-    title: title,
-    eventName: eventName,
-    year: year,
-    coverImageUrl: uploadedCoverImageUrl,
-    images: images,
-  };
+  const albumData = currentAlbumData();
 
   saveButton.disabled = true;
   saveButton.textContent = "Saving...";

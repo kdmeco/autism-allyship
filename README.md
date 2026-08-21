@@ -30,6 +30,18 @@ directly; it loads the current full-size image only when the viewer opens, rathe
 every photo in a large page grid. Use the Previous, Next and Close controls, Escape, or the left
 and right arrow keys to navigate.
 
+The gallery editor accepts a large photo selection and processes it sequentially in groups of
+five. Each source photo produces a full WebP and a thumbnail, keeping every request within the
+upload Worker's ten-file limit. The editor checkpoints an album after each completed group so a
+later failure does not discard earlier uploads. Enter the album title and year before selecting
+photos.
+
+For production gallery imports, sign in through
+`https://autism-allyship.pages.dev/admin/login.html`. Uploading there commits media to `main`.
+Because the environments share Firestore, merge the generated media commits back into `dev` and
+`staging` after the import so their gallery documents never point at files missing from those
+branches.
+
 ## Local check
 
 Serve this folder with any static-file server, for example:
