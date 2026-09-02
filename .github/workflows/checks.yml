@@ -52,8 +52,6 @@ jobs:
             './blog-post.html'
             './contact.html'
             './donate.html'
-            './donate-success.html'
-            './donate-failed.html'
             './event.html'
             './events.html'
             './gallery.html'
@@ -92,8 +90,6 @@ jobs:
             http://localhost:8080/blog.html
             http://localhost:8080/contact.html
             http://localhost:8080/donate.html
-            http://localhost:8080/donate-success.html
-            http://localhost:8080/donate-failed.html
             http://localhost:8080/events.html
             http://localhost:8080/gallery.html
             http://localhost:8080/paia.html
