@@ -1,20 +1,34 @@
-// Public donation form. Validates in the browser, asks the api Worker to
-// initialise a Paystack transaction, then opens Paystack's own popup to
-// resume it. Paystack handles collecting card details entirely inside its
-// own iframe, so no payment detail ever reaches this script. The popup's
-// onSuccess callback is not treated as proof of payment on its own: it only
-// carries the visitor across to donate-success.html, which confirms the
-// outcome with the Worker's verify endpoint the same way donate-result.js
-// does whenever that page is reached, including a direct visit or a reload.
+// Public donation page. Donations are made by EFT straight into the
+// foundation's bank account, so this script never touches money and there is
+// no payment gateway behind it. All it does is let a donor optionally tell the
+// foundation that a transfer is on its way, which is what makes an anonymous
+// line on a bank statement matchable to a person.
+//
+// That notification is written to the submissions collection, not to
+// donations. SCHEMA.md gives donations `allow write: if false` precisely so a
+// browser can never assert that money arrived, and an EFT notification is a
+// claim of intent rather than proof of payment. The foundation creates the
+// real donations record from their statement. Same reasoning, same rule, so
+// the rule did not need weakening.
+//
+// The POPIA checkbox is a gate only: SCHEMA.md has no consent field, so it is
+// never stored. Matches contact.js.
 
-import { API_DONATE_INITIALIZE_URL } from "./api.js";
+import { db } from "./firebase.js";
+import { API_CONTACT_NOTIFY_URL } from "./api.js";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+} from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { translated } from "./shared.js";
 
 const donateForm = document.getElementById("donateForm");
 const amountInput = document.getElementById("donateAmount");
 const amountOptions = document.querySelectorAll('input[name="amountChoice"]');
 const submitButton = document.getElementById("donateSubmitButton");
-const paymentError = document.getElementById("donatePaymentError");
+const submitError = document.getElementById("donateSubmitError");
+const submitSuccess = document.getElementById("donateSubmitSuccess");
 
 const fields = {
   amount: amountInput,
@@ -45,13 +59,17 @@ function clearErrors() {
   Object.values(fields).forEach(function (field) {
     field.removeAttribute("aria-invalid");
   });
-  paymentError.hidden = true;
+  submitError.hidden = true;
 }
 
+// The amount is optional now. Nothing here collects payment, so an amount is
+// only ever a hint to help the foundation match a statement line. A blank one
+// is fine; a nonsense one is not.
 function validateForm() {
   let valid = true;
+  const amount = fields.amount.value.trim();
 
-  if (!Number.isFinite(Number(fields.amount.value)) || Number(fields.amount.value) <= 0) {
+  if (amount && (!Number.isFinite(Number(amount)) || Number(amount) <= 0)) {
     errors.amount.hidden = false;
     fields.amount.setAttribute("aria-invalid", "true");
     valid = false;
@@ -75,14 +93,27 @@ function validateForm() {
   return valid;
 }
 
-function showPaymentError(message) {
-  paymentError.textContent = message || translated("donatePaymentError");
-  paymentError.hidden = false;
+function showSubmitFailure() {
+  submitError.textContent = translated("donateSubmitError");
+  submitError.hidden = false;
+  submitButton.disabled = false;
+  submitButton.textContent = translated("donateSubmitButton");
 }
 
-function resetSubmitButton() {
-  submitButton.disabled = false;
-  submitButton.textContent = translated("donateContinueButton");
+// The amount and the donor's own words are folded into the message body
+// because submissions has no amount field and SCHEMA.md is shared with the
+// app. One collection, one shape, nothing new to migrate.
+function buildMessage(amount, note) {
+  const lines = [];
+  lines.push(
+    amount
+      ? translated("donateNotifyAmountLine").replace("{amount}", amount)
+      : translated("donateNotifyAmountUnknown"),
+  );
+  if (note) {
+    lines.push(note);
+  }
+  return lines.join("\n\n");
 }
 
 donateForm.addEventListener("submit", async function (event) {
@@ -95,63 +126,58 @@ donateForm.addEventListener("submit", async function (event) {
     return;
   }
 
-  const donation = {
-    amount: Number(fields.amount.value),
-    donorName: fields.name.value.trim(),
-    donorEmail: fields.email.value.trim(),
-    message: document.getElementById("donorMessage").value.trim(),
-  };
+  // Firestore queues writes when the tab is offline and never rejects, which
+  // would leave the button disabled and hide the connection error. Refuse
+  // before we call addDoc, so nothing is queued. Matches contact.js.
+  if (navigator.onLine === false) {
+    showSubmitFailure();
+    return;
+  }
 
   submitButton.disabled = true;
-  submitButton.textContent = translated("donateProcessing");
+  submitButton.textContent = translated("donateSubmitting");
 
   try {
-    const response = await fetch(API_DONATE_INITIALIZE_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(donation),
-    });
-    const result = await response.json();
+    const submission = {
+      name: fields.name.value.trim(),
+      email: fields.email.value.trim(),
+      phone: "",
+      category: "Donation",
+      message: buildMessage(
+        fields.amount.value.trim(),
+        document.getElementById("donorMessage").value.trim(),
+      ),
+    };
 
-    if (!response.ok || !result.ok) {
-      showPaymentError(result.error);
-      resetSubmitButton();
-      return;
+    await addDoc(collection(db, "submissions"), {
+      ...submission,
+      handled: false,
+      createdAt: serverTimestamp(),
+    });
+
+    try {
+      const response = await fetch(API_CONTACT_NOTIFY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submission),
+      });
+      if (!response.ok) {
+        console.error("Donation notify failed:", response.status);
+      }
+    } catch (notifyError) {
+      console.error(
+        "Donation notify failed:",
+        notifyError.code || notifyError.name || "unknown",
+      );
     }
 
-    if (typeof PaystackPop === "undefined") {
-      // The Paystack script failed to load, most likely an ad blocker or a
-      // network problem, since the tag itself is never conditional.
-      showPaymentError(translated("donatePaymentError"));
-      resetSubmitButton();
-      return;
-    }
-
-    const popup = new PaystackPop();
-    popup.resumeTransaction(result.accessCode, {
-      onSuccess: function () {
-        window.location.href =
-          "donate-success.html?reference=" + encodeURIComponent(result.reference);
-      },
-      // Closing the popup unpaid and a popup-level error both leave a real
-      // reference behind, one Paystack already knows the true state of. Send
-      // either case to the failed page rather than resetting the form
-      // silently: donate-result.js asks Paystack what actually happened and
-      // resolves the pending Firestore record either way, so nothing is left
-      // stuck as "pending" forever just because someone closed the popup.
-      onCancel: function () {
-        window.location.href =
-          "donate-failed.html?reference=" + encodeURIComponent(result.reference);
-      },
-      onError: function (error) {
-        console.error("Paystack popup error:", error && error.message);
-        window.location.href =
-          "donate-failed.html?reference=" + encodeURIComponent(result.reference);
-      },
-    });
+    donateForm.hidden = true;
+    submitSuccess.hidden = false;
+    submitSuccess.focus();
   } catch (error) {
-    console.error("Donation initialize failed:", error);
-    showPaymentError(translated("donatePaymentError"));
-    resetSubmitButton();
+    // Log a code, never the form values. POPIA: no personal information in
+    // the console, even while debugging.
+    console.error("Donation notify submit failed:", error.code || "unknown");
+    showSubmitFailure();
   }
 });
