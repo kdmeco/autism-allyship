@@ -17,11 +17,7 @@ import {
   buildSavePanel,
   endOfLocalDay,
 } from "./shared.js";
-import {
-  API_TICKET_URL,
-  API_TICKET_INITIALIZE_URL,
-  API_TICKET_VERIFY_URL,
-} from "./api.js";
+import { API_TICKET_URL } from "./api.js";
 
 const article = document.getElementById("eventArticle");
 const titleSlot = document.getElementById("eventTitle");
