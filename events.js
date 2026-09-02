@@ -15,6 +15,16 @@ import {
 import { thumbPath, translated, endOfLocalDay } from "./shared.js";
 
 const toolbar = document.getElementById("eventsToolbar");
+
+// Revealed here rather than after the fetch. The markup ships it hidden so it
+// never appears without JavaScript to drive it, but unhiding it only once the
+// events arrive meant a roughly 400px toolbar dropping into the page after
+// first paint and pushing everything below it down. That single reveal was the
+// whole of this page's 0.182 layout shift. This module is deferred, so doing
+// it here still runs before the first paint and the page never moves.
+if (toolbar) {
+  toolbar.hidden = false;
+}
 const upcomingSection = document.getElementById("upcomingSection");
 const upcomingList = document.getElementById("eventsUpcomingList");
 const upcomingEmpty = document.getElementById("eventsUpcomingEmpty");
@@ -151,9 +161,8 @@ async function loadEvents() {
   allEvents = upcoming.concat(past);
   totalEvents = allEvents.length;
 
-  if (totalEvents > 0) {
-    toolbar.hidden = false;
-  }
+  // Only ever hidden again when there is nothing at all to filter.
+  toolbar.hidden = totalEvents === 0;
 
   applyFilters();
 }
