@@ -405,7 +405,7 @@
           </p>
         </section>
 
-        <div class="events-toolbar" id="eventsToolbar" hidden>
+        <div class="events-toolbar" id="eventsToolbar">
           <div class="events-filter-group">
             <span
               class="events-filter-group-label"
@@ -516,15 +516,16 @@
           >
             Upcoming events
           </h2>
-          <div class="card-grid" id="eventsUpcomingList"></div>
-          <p
-            class="blog-empty"
-            id="eventsUpcomingEmpty"
-            hidden
-            data-i18n="eventsUpcomingEmptyText"
-          >
-            There are no upcoming events yet. Check back soon.
-          </p>
+          <div class="card-grid" id="eventsUpcomingList">
+            <p
+              class="blog-empty card-grid-message"
+              id="eventsUpcomingEmpty"
+              hidden
+              data-i18n="eventsUpcomingEmptyText"
+            >
+              There are no upcoming events yet. Check back soon.
+            </p>
+          </div>
         </div>
 
         <div id="pastSection">
@@ -535,15 +536,16 @@
           >
             Past events
           </h2>
-          <div class="card-grid" id="eventsPastList"></div>
-          <p
-            class="blog-empty"
-            id="eventsPastEmpty"
-            hidden
-            data-i18n="eventsPastEmptyText"
-          >
-            There are no past events to show yet.
-          </p>
+          <div class="card-grid" id="eventsPastList">
+            <p
+              class="blog-empty card-grid-message"
+              id="eventsPastEmpty"
+              hidden
+              data-i18n="eventsPastEmptyText"
+            >
+              There are no past events to show yet.
+            </p>
+          </div>
         </div>
 
         <noscript>
