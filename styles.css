@@ -3833,3 +3833,12 @@ body.gallery-lightbox-open {
   min-height: 30rem;
 }
 
+
+/* The toolbar ships visible so it is part of the first paint. Revealing it
+   from JavaScript, even early in a deferred module, still happened after the
+   page had painted and dropped a 400px block into the layout, which was the
+   bulk of the events page shift. Without JavaScript the filters cannot work,
+   so they are hidden the same way the accessibility panel is. */
+html:not(.js) #eventsToolbar {
+  display: none;
+}
