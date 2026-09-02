@@ -2421,9 +2421,29 @@ ul.feature-list li {
 
 /* While events are loading each grid holds a card's height, so the footer
    stays where it was instead of jumping when the cards arrive. */
-#eventsUpcomingList:empty,
-#eventsPastList:empty {
-  min-height: 30rem;
+/* Unconditional, not :empty. These lists are filled from Firestore after first
+   paint, and a reservation that releases the moment content arrives is itself
+   the shift it was meant to prevent: the grid drops from the reserved height to
+   whatever the cards need and everything below jumps. Holding the height in
+   both states keeps the page still.
+
+   One card row rather than the two this used to hold. A taller reservation
+   steadies the page slightly more, but an empty section then renders as a large
+   blank panel that reads as broken content rather than as an empty state, and
+   that cost is paid on every visit while the shift is paid once. */
+#eventsUpcomingList,
+#eventsPastList {
+  min-height: 22rem;
+}
+
+/* The empty message lives inside the grid so it fills the reserved space rather
+   than stacking underneath it. Centred so the reserved height reads as a
+   deliberate empty state. */
+.card-grid-message {
+  grid-column: 1 / -1;
+  align-self: center;
+  margin: 0;
+  text-align: center;
 }
 
 .events-clear {
@@ -3813,14 +3833,3 @@ body.gallery-lightbox-open {
   min-height: 30rem;
 }
 
-/* The reservations above hold a height while a list is still empty. Once the
-   list has loaded and turned out to have nothing in it, the empty message
-   appears underneath a container that is still reserving space, and the net
-   effect is the shift the reservation was meant to prevent. When the message
-   is showing, the load has finished, so the reservation is no longer needed. */
-#upcomingSection:has(#eventsUpcomingEmpty:not([hidden])) #eventsUpcomingList:empty,
-#pastSection:has(#eventsPastEmpty:not([hidden])) #eventsPastList:empty,
-main:has(#galleryEmpty:not([hidden])) #galleryYears:empty,
-main:has(#galleryError:not([hidden])) #galleryYears:empty {
-  min-height: 0;
-}
