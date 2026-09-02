@@ -36,7 +36,6 @@
 
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
-    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
       // Resolves the saved settings before the browser paints anything, so a
@@ -430,25 +429,6 @@
               ticket with a QR code to show at the door.
             </p>
             <p class="form-field-note" id="ticketPriceTotal" hidden></p>
-
-            <div
-              class="registration-email-confirmation"
-              id="pendingPaymentPanel"
-              role="status"
-              hidden
-            >
-              <p id="pendingPaymentMessage"></p>
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="button button-primary"
-                  id="checkPendingPaymentButton"
-                  data-i18n="ticketPaymentCheckAgain"
-                >
-                  Check payment
-                </button>
-              </div>
-            </div>
 
             <form class="registration-form" id="registrationForm" novalidate>
               <div class="form-field">
