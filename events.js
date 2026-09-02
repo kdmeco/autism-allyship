@@ -151,9 +151,8 @@ async function loadEvents() {
   allEvents = upcoming.concat(past);
   totalEvents = allEvents.length;
 
-  if (totalEvents > 0) {
-    toolbar.hidden = false;
-  }
+  // Only ever hidden again when there is nothing at all to filter.
+  toolbar.hidden = totalEvents === 0;
 
   applyFilters();
 }
