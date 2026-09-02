@@ -3804,3 +3804,23 @@ body.gallery-lightbox-open {
   border-radius: var(--radius-md);
   background-color: var(--colour-surface-alt);
 }
+
+/* Same reservation as #blogGrid and the events lists above. The albums arrive
+   from Firestore after first paint, and without a reserved height the whole
+   footer jumps up the page when they land. The height only applies while the
+   container is genuinely empty, so a loaded page is unaffected. */
+#galleryYears:empty {
+  min-height: 30rem;
+}
+
+/* The reservations above hold a height while a list is still empty. Once the
+   list has loaded and turned out to have nothing in it, the empty message
+   appears underneath a container that is still reserving space, and the net
+   effect is the shift the reservation was meant to prevent. When the message
+   is showing, the load has finished, so the reservation is no longer needed. */
+#upcomingSection:has(#eventsUpcomingEmpty:not([hidden])) #eventsUpcomingList:empty,
+#pastSection:has(#eventsPastEmpty:not([hidden])) #eventsPastList:empty,
+main:has(#galleryEmpty:not([hidden])) #galleryYears:empty,
+main:has(#galleryError:not([hidden])) #galleryYears:empty {
+  min-height: 0;
+}
