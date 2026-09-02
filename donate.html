@@ -33,7 +33,6 @@
 
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
-    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
       // Resolves the saved settings before the browser paints anything, so a
@@ -409,20 +408,49 @@
               </p>
             </section>
 
-            <details class="donate-eft">
-              <summary data-i18n="donateEftHeading">Donate by EFT</summary>
-              <div class="donate-eft-content">
-                <p data-i18n="donateEftPending">
-                  EFT details are not available yet. Please donate by card above, or check back soon.
-                </p>
-              </div>
-            </details>
+            <section class="donate-eft" aria-labelledby="donateEftHeading">
+              <h2 id="donateEftHeading" data-i18n="donateEftHeading">Donate by EFT</h2>
+              <p data-i18n="donateEftIntro">
+                Donations are made by electronic transfer directly to the foundation's bank account.
+              </p>
+              <dl class="donate-bank">
+                <div class="donate-bank-row">
+                  <dt data-i18n="donateBankAccountName">Account name</dt>
+                  <dd>Active Autism Neuro-Diversity</dd>
+                </div>
+                <div class="donate-bank-row">
+                  <dt data-i18n="donateBankName">Bank</dt>
+                  <dd>FNB Gold Business Account</dd>
+                </div>
+                <div class="donate-bank-row">
+                  <dt data-i18n="donateBankAccountNumber">Account number</dt>
+                  <dd>630 736 70 119</dd>
+                </div>
+                <div class="donate-bank-row">
+                  <dt data-i18n="donateBankBranchCode">Branch code</dt>
+                  <dd>210 835</dd>
+                </div>
+                <div class="donate-bank-row">
+                  <dt data-i18n="donateBankReference">Reference</dt>
+                  <dd><span data-i18n="donateBankReferenceFormat">Your name, then the word Donation</span></dd>
+                </div>
+              </dl>
+              <p class="donate-eft-warning" data-i18n="donateEftWarning">
+                Our banking details never change. If anyone contacts you claiming they have, it is not us. Check this page or phone the foundation before you pay.
+              </p>
+              <p data-i18n="donateEftNoTax">
+                The foundation cannot currently issue section 18A tax certificates, so donations are not tax deductible.
+              </p>
+            </section>
           </div>
 
           <form class="donate-form" id="donateForm" novalidate>
-            <h2 data-i18n="donateFormHeading">Choose your donation</h2>
+            <h2 data-i18n="donateFormHeading">Let us know you have donated</h2>
+            <p class="donate-form-lede" data-i18n="donateFormLede">
+              This is optional. Filling it in helps the foundation match your transfer and thank you, but your donation reaches them either way.
+            </p>
             <fieldset class="donate-fieldset">
-              <legend data-i18n="donateAmountLegend">Donation amount</legend>
+              <legend data-i18n="donateAmountLegend">Amount you sent (optional)</legend>
               <div class="donate-amount-options">
                 <label class="donate-amount-option">
                   <input type="radio" name="amountChoice" value="50" />
@@ -442,9 +470,9 @@
                 </label>
               </div>
               <div class="form-field">
-                <label for="donateAmount" data-i18n="donateCustomAmountLabel">Custom amount in rand</label>
+                <label for="donateAmount" data-i18n="donateCustomAmountLabel">Other amount in rand</label>
                 <input type="number" id="donateAmount" name="amount" min="1" step="0.01" inputmode="decimal" aria-describedby="donateAmountError" />
-                <p id="donateAmountError" class="form-error" hidden data-i18n="donateAmountError">Choose a donation amount greater than R0.</p>
+                <p id="donateAmountError" class="form-error" hidden data-i18n="donateAmountError">Enter an amount greater than R0, or leave this blank.</p>
               </div>
             </fieldset>
 
@@ -464,21 +492,31 @@
             </div>
             <div class="form-checkbox-field">
               <input type="checkbox" id="donorPopia" name="popiaConsent" aria-describedby="donorPopiaError donorPopiaPrivacy" />
-              <label for="donorPopia" data-i18n="donatePopiaLabel">I agree that the foundation may use these details to process my donation.</label>
+              <label for="donorPopia" data-i18n="donatePopiaLabel">I agree that the foundation may use these details to record and acknowledge my donation.</label>
               <p id="donorPopiaPrivacy" class="form-hint">
                 <a href="privacy.html" data-i18n="donatePopiaPrivacyLink">Read our privacy policy</a>
               </p>
               <p id="donorPopiaError" class="form-error" hidden data-i18n="donatePopiaError">You must agree before continuing.</p>
             </div>
-            <button type="submit" class="button button-primary" id="donateSubmitButton" data-i18n="donateContinueButton">Continue</button>
+            <button type="submit" class="button button-primary" id="donateSubmitButton" data-i18n="donateSubmitButton">Send these details</button>
             <p
               class="form-error form-error-general"
-              id="donatePaymentError"
+              id="donateSubmitError"
               role="status"
               hidden
-              data-i18n="donatePaymentError"
+              data-i18n="donateSubmitError"
             >
-              We could not start your donation. Check your details and try again.
+              We could not send your details. Your donation is unaffected. Please try again.
+            </p>
+            <p
+              class="form-success"
+              id="donateSubmitSuccess"
+              role="status"
+              tabindex="-1"
+              hidden
+              data-i18n="donateSubmitSuccess"
+            >
+              Thank you. The foundation has your details and will match them to your transfer.
             </p>
           </form>
         </section>
@@ -503,10 +541,6 @@
           </a>
           <p data-i18n="footerDescription">
             Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
-          </p>
-          <p class="footer-npo">
-            <span data-i18n="npoLabel">NPO registration number</span>
-            <strong>[NPO registration number]</strong>
           </p>
         </div>
 

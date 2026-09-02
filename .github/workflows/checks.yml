@@ -27,11 +27,13 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      # fail is false until the pages actually exist. Right now the header links
-      # to about.html, blog.html and the rest, none of which are built, so this
-      # would fail on every push for weeks. It still reports, so you can read
-      # the summary and spot a genuinely wrong path.
-      # TURN fail BACK TO true once the page set is built.
+      # Every public page is listed. Add each new page here as it is built, or
+      # its links go unchecked. Fragments are left out because the shell blocks
+      # are pasted into these pages already, and admin pages sit behind auth.
+      #
+      # The excluded hosts either rate-limit automated checks or are preconnect
+      # hints whose bare origin returns 404, which is expected and not a broken
+      # link. Everything else must resolve, so a wrong path fails the build.
       - name: Check links
         uses: lycheeverse/lychee-action@v2
         with:
@@ -40,14 +42,27 @@ jobs:
             --exclude wa.me
             --exclude instagram.com
             --exclude x.com
+            --exclude chat.whatsapp.com
+            --exclude gstatic.com
+            --exclude firestore.googleapis.com
             './index.html'
+            './about.html'
+            './accessibility.html'
             './blog.html'
             './blog-post.html'
-            './resources.html'
-            './events.html'
+            './contact.html'
+            './donate.html'
             './event.html'
+            './events.html'
+            './gallery.html'
+            './paia.html'
+            './privacy.html'
+            './resources.html'
+            './shop.html'
+            './terms.html'
             './ticket.html'
-          fail: false
+            './404.html'
+          fail: true
 
   lighthouse:
     name: Performance and accessibility
@@ -63,15 +78,26 @@ jobs:
 
       # URLs are listed explicitly so Lighthouse does not try to load the
       # header and footer fragments as if they were pages. Add each new page
-      # here as it gets built.
+      # here as it gets built. blog-post, event and ticket are left out: they
+      # need a record id in the query string to render anything real.
       - name: Run Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             http://localhost:8080/index.html
+            http://localhost:8080/about.html
+            http://localhost:8080/accessibility.html
             http://localhost:8080/blog.html
-            http://localhost:8080/resources.html
+            http://localhost:8080/contact.html
+            http://localhost:8080/donate.html
             http://localhost:8080/events.html
+            http://localhost:8080/gallery.html
+            http://localhost:8080/paia.html
+            http://localhost:8080/privacy.html
+            http://localhost:8080/resources.html
+            http://localhost:8080/shop.html
+            http://localhost:8080/terms.html
+            http://localhost:8080/404.html
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true

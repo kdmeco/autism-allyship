@@ -36,7 +36,6 @@
 
     <script src="translations.js" defer></script>
     <script src="main.js" defer></script>
-    <script src="https://js.paystack.co/v2/inline.js" defer></script>
 
     <script>
       // Resolves the saved settings before the browser paints anything, so a
@@ -431,25 +430,6 @@
             </p>
             <p class="form-field-note" id="ticketPriceTotal" hidden></p>
 
-            <div
-              class="registration-email-confirmation"
-              id="pendingPaymentPanel"
-              role="status"
-              hidden
-            >
-              <p id="pendingPaymentMessage"></p>
-              <div class="form-actions">
-                <button
-                  type="button"
-                  class="button button-primary"
-                  id="checkPendingPaymentButton"
-                  data-i18n="ticketPaymentCheckAgain"
-                >
-                  Check payment
-                </button>
-              </div>
-            </div>
-
             <form class="registration-form" id="registrationForm" novalidate>
               <div class="form-field">
                 <label for="attendeeName">
@@ -702,10 +682,6 @@
           </a>
           <p data-i18n="footerDescription">
             Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
-          </p>
-          <p class="footer-npo">
-            <span data-i18n="npoLabel">NPO registration number</span>
-            <strong>[NPO registration number]</strong>
           </p>
         </div>
 

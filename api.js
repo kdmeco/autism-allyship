@@ -2,21 +2,16 @@
 // admin/upload.js because that one talks to a different Worker entirely,
 // the one that commits images through the GitHub API.
 //
-// /ticket is called anonymously by the public event page for free events.
-// /tickets/initialize and /tickets/verify are the paid path. /contact-notify is
-// called anonymously after the contact form writes to Firestore. The three
-// attendee endpoints below are admin-only, called from
-// admin/event-attendees.js with a Firebase ID token, but they still live
-// here rather than in admin/upload.js because they are the same Worker as
-// /ticket, just gated differently. The two donation endpoints are called
-// anonymously by donate.js and donate-result.js.
+// /ticket is called anonymously by the public event page. /contact-notify is
+// called anonymously after the contact form writes to Firestore, and again by
+// donate.js when a donor tells the foundation an EFT is on its way. The three
+// attendee endpoints below are admin-only, called from admin/event-attendees.js
+// with a Firebase ID token, but they still live here rather than in
+// admin/upload.js because they are the same Worker as /ticket, just gated
+// differently.
 const API_BASE = "https://autism-allyship-api.kdmeco-dev.workers.dev";
 export const API_TICKET_URL = API_BASE + "/ticket";
-export const API_TICKET_INITIALIZE_URL = API_BASE + "/tickets/initialize";
-export const API_TICKET_VERIFY_URL = API_BASE + "/tickets/verify";
 export const API_CONTACT_NOTIFY_URL = API_BASE + "/contact-notify";
 export const API_RESEND_URL = API_BASE + "/attendees/resend";
 export const API_EDIT_EMAIL_URL = API_BASE + "/attendees/edit-email";
 export const API_MARK_USED_URL = API_BASE + "/attendees/mark-used";
-export const API_DONATE_INITIALIZE_URL = API_BASE + "/donations/initialize";
-export const API_DONATE_VERIFY_URL = API_BASE + "/donations/verify";
