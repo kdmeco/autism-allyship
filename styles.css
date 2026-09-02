@@ -1,9 +1,17 @@
+/* font-display is optional rather than swap on purpose. With swap, Poppins
+   arrives after first paint and every page reflows as the text re-lays out,
+   which measured as a cumulative layout shift of 0.359, well into Lighthouse
+   "poor". Unexpected movement on load matters more than usual for this
+   audience. optional gives the font a short window and never swaps after it,
+   so the shift is zero. The cost is that a first visit on a slow connection
+   may render in the fallback stack; the fonts are self hosted and cached, so
+   later visits get Poppins. */
 @font-face {
   font-family: "Poppins";
   src: url("assets/fonts/poppins-400.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -11,7 +19,7 @@
   src: url("assets/fonts/poppins-500.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -19,7 +27,7 @@
   src: url("assets/fonts/poppins-600.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 @font-face {
@@ -27,7 +35,7 @@
   src: url("assets/fonts/poppins-700.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
 :root {
