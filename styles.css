@@ -1372,8 +1372,15 @@ textarea {
   border-color: var(--colour-line-strong);
 }
 
+.card h2,
 .card h3 {
   margin: 0;
+  /* Card headings look the same whatever level they are. The level is chosen
+     by where the card sits in the page outline, not by how big it should
+     look, so blog.js can use h2 and events.js h3 without them diverging. */
+  font-size: var(--size-lg);
+  font-weight: 600;
+  letter-spacing: normal;
 }
 
 .card p {
