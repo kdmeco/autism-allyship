@@ -80,6 +80,7 @@ const translations = {
     homeInstagramHeading: "From our Instagram",
     homeInstagramText: "Recent posts from Autism Allyship on Instagram.",
     homeInstagramProfileLink: "Follow us on Instagram",
+    homeInstagramEmbedTitle: "Instagram post {number} from Autism Allyship",
     homeContactHeading: "Get in touch",
     homeContactText:
       "We would love to hear from you. Whether you have a question, want to volunteer, or need support, reach out.",
@@ -673,6 +674,7 @@ const translations = {
     homeInstagramHeading: "Van ons Instagram",
     homeInstagramText: "Onlangse plasings van Autism Allyship op Instagram.",
     homeInstagramProfileLink: "Volg ons op Instagram",
+    homeInstagramEmbedTitle: "Instagram-plasing {number} van Autism Allyship",
     homeContactHeading: "Kom in kontak",
     homeContactText: "Ons hoor graag van jou. Of jy nou 'n vraag het, wil help, of ondersteuning nodig het, kontak ons gerus.",
     homeContactLink: "Kontak ons",
@@ -1189,6 +1191,7 @@ const translations = {
     homeInstagramHeading: "Ho tswa Instagram ya rona",
     homeInstagramText: "Dingoliloeng tsa moraorao tsa Autism Allyship ho Instagram.",
     homeInstagramProfileLink: "Re latele ho Instagram",
+    homeInstagramEmbedTitle: "Sengoliloeng sa Instagram {number} sa Autism Allyship",
     homeContactHeading: "Ikopanye le rona",
     homeContactText: "Re rata ho utlwa ho wena. Ebang o na le potso, o batla ho ithaopa, kapa o hloka tshehetso, ikopanye le rona.",
     homeContactLink: "Ikopanye le rona",
