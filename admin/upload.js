@@ -6,19 +6,16 @@ export const WORKER_UPLOAD_URL =
 export const WORKER_REMOVE_URL =
   "https://autism-allyship-upload.kdmeco-dev.workers.dev/remove";
 
-// Returns the git branch that uploads and removals should target, based on
-// the hostname that served this page. Returns null for production, where
-// the Worker uses its own default branch.
+// Returns the git branch that uploads and removals should target. Always null
+// since the production handover on 3 September 2026, which means the Worker
+// uses its own default branch, main.
+//
+// Until then this read the hostname and returned "staging" or "dev" so each
+// preview admin committed to its own branch. That is gone: after handover an
+// admin page has no business writing anywhere but production, and the Worker
+// now refuses every other branch anyway. Kept as a function rather than
+// deleted so the sixteen call sites keep reading the same way, and so turning
+// preview uploads back on later is one edit in one place.
 export function uploadBranch() {
-  const host = window.location.hostname;
-  if (host === "staging.autism-allyship.pages.dev") {
-    return "staging";
-  }
-  if (host === "dev.autism-allyship.pages.dev") {
-    return "dev";
-  }
-  if (host === "localhost" || host === "127.0.0.1") {
-    return "dev";
-  }
   return null;
 }

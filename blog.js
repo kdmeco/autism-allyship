@@ -57,7 +57,11 @@ function buildCard(post) {
     card.appendChild(image);
   }
 
-  const heading = document.createElement("h3");
+  // h2, not h3: on this page the post titles sit directly under the page h1
+  // with no group heading between, so h3 would skip a level. events.js and
+  // home-blog.js keep h3 because both have an h2 above their lists. The card
+  // rule in styles.css keeps every card heading the same size either way.
+  const heading = document.createElement("h2");
   const headingLink = document.createElement("a");
   headingLink.href = "blog-post.html?id=" + encodeURIComponent(post.id);
   headingLink.textContent = post.title;
