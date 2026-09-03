@@ -4,6 +4,7 @@
 // and embed-script failure both fall back to a plain profile link.
 
 import { db } from "./firebase.js";
+import { translated } from "./shared.js";
 import {
   collection,
   getDocs,
@@ -68,6 +69,9 @@ function showEmbeds() {
 
   grid.hidden = false;
   loadEmbedScript();
+  // Also title anything already present, so a re-render that skips the script
+  // path above still leaves no frame without a name.
+  titleEmbedFrames();
 }
 
 function loadEmbedScript() {
@@ -82,6 +86,7 @@ function loadEmbedScript() {
   if (existing) {
     if (window.instgrm && window.instgrm.Embeds) {
       window.instgrm.Embeds.process();
+      watchForEmbedFrames();
     }
     return;
   }
@@ -92,6 +97,7 @@ function loadEmbedScript() {
   script.onload = function () {
     if (window.instgrm && window.instgrm.Embeds) {
       window.instgrm.Embeds.process();
+      watchForEmbedFrames();
     } else {
       showFallback();
     }
@@ -100,6 +106,50 @@ function loadEmbedScript() {
     showFallback();
   };
   document.body.appendChild(script);
+}
+
+// Instagram's embed script swaps each blockquote for an iframe of its own
+// making, and those arrive with no title attribute, which axe reports as a
+// serious frame-title failure. We cannot set it at creation because we do not
+// create them, so watch the grid and title each one as it appears.
+function titleEmbedFrames() {
+  if (!grid) {
+    return;
+  }
+
+  // Index across every frame, not just the untitled ones. The frames arrive one
+  // at a time, so numbering the untitled ones alone would start again at 1 for
+  // each late arrival and hand two posts the same accessible name.
+  grid.querySelectorAll("iframe").forEach(function (frame, index) {
+    if (frame.hasAttribute("title")) {
+      return;
+    }
+
+    frame.setAttribute(
+      "title",
+      translated("homeInstagramEmbedTitle").replace(
+        "{number}",
+        String(index + 1),
+      ),
+    );
+  });
+}
+
+// process() replaces the blockquotes asynchronously, so there is nothing to
+// title at the moment it returns. Ten seconds is long enough for a slow
+// connection and short enough that the observer does not outlive the page.
+function watchForEmbedFrames() {
+  if (!grid) {
+    return;
+  }
+
+  titleEmbedFrames();
+
+  const observer = new MutationObserver(titleEmbedFrames);
+  observer.observe(grid, { childList: true, subtree: true });
+  window.setTimeout(function () {
+    observer.disconnect();
+  }, 10000);
 }
 
 function applyMode() {
