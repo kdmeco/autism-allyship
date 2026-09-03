@@ -1605,6 +1605,17 @@ textarea {
   margin-top: var(--space-4);
 }
 
+/* Links inside the embed area, which is Instagram's own white card: the
+   permalink in the blockquote before their script runs, and the same link
+   again inside the #instagram-media-payload wrapper it builds. Both are shown
+   permanently to anyone whose browser blocks instagram.com. Their embed spec
+   fixes that card to white in every theme, so the link cannot take the themed
+   accent: in dark mode that is #f5749f, which measures 2.66:1 on white against
+   a 4.5:1 requirement. #d41b5c is the light-surface accent from DECISIONS.md,
+   5.11:1. Scoped to our own wrapper so it cannot leak past the embed. */
+.instagram-embed-item a {
+  color: #d41b5c;
+}
 
 :root.sensory-mode .instagram-embed-grid {
   display: none;
