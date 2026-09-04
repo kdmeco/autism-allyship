@@ -1164,13 +1164,15 @@ textarea {
   position: static !important;
 }
 
-/* The Android app opens blog-post.html inside a WebView and adds app=1. The app
-   supplies its own toolbar, back control and settings, so showing the site's
+/* The Android app opens eight pages inside a WebView and adds app=1:
+   blog-post, event, shop, donate, accessibility and the three legal pages. The
+   app supplies its own toolbar, back control and settings, so showing the site's
    header and footer as well would repeat all of it and let someone browse the
-   whole website from inside a single article. The back link and the share row go
-   for the same reason: the link would strand them on the website's blog list,
-   and the share buttons rely on a new window and the system share sheet, neither
-   of which does anything useful in a WebView. */
+   whole website out of a legal page. The back link and the share row go for the
+   same reason: the link would strand them on the website's blog list, and the
+   share buttons rely on a new window and the system share sheet, neither of
+   which does anything useful in a WebView. The class is set by the shell script
+   in the head, early enough that none of this paints first. */
 :root.app-embed .site-header,
 :root.app-embed .site-footer,
 :root.app-embed .back-link,
