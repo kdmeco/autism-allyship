@@ -23,27 +23,6 @@ const copyConfirmation = document.getElementById("copyConfirmation");
 const params = new URLSearchParams(window.location.search);
 const postId = params.get("id");
 
-// The Android app opens this page inside a WebView and adds app=1. The site's
-// own header and footer are hidden there because the app already provides
-// navigation, settings and a back control, and a second set inside the article
-// makes the app read as a wrapper around the website. Theme and sensory mode
-// arrive as parameters because the WebView keeps its own storage and cannot see
-// what was chosen on the website. A normal visitor never sends any of this, so
-// nothing below runs for them.
-if (params.get("app") === "1") {
-  const root = document.documentElement;
-  root.classList.add("app-embed");
-
-  const theme = params.get("theme");
-  if (theme === "dark" || theme === "light") {
-    root.setAttribute("data-theme", theme);
-  }
-
-  if (params.get("sensory") === "on") {
-    root.classList.add("sensory-mode");
-  }
-}
-
 function showMissing() {
   article.hidden = true;
   missing.hidden = false;

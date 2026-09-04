@@ -79,23 +79,10 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const pageParams = new URLSearchParams(window.location.search);
 const eventId = pageParams.get("id");
+// Hiding the shell and applying the app's theme happens in the shell script in
+// the head, early enough that the header never paints. This flag is only for
+// the two behaviours below that are specific to this page.
 const isAppEmbed = pageParams.get("app") === "1";
-
-// The Android app opens this page inside a WebView and adds app=1. Same
-// reason as blog-post.js: the app already has a toolbar and back control.
-if (isAppEmbed) {
-  const root = document.documentElement;
-  root.classList.add("app-embed");
-
-  const theme = pageParams.get("theme");
-  if (theme === "dark" || theme === "light") {
-    root.setAttribute("data-theme", theme);
-  }
-
-  if (pageParams.get("sensory") === "on") {
-    root.classList.add("sensory-mode");
-  }
-}
 
 function showMissing() {
   article.hidden = true;
