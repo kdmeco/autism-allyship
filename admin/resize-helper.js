@@ -13,8 +13,17 @@ const QUALITY = 0.85;
 // Takes a File object and returns an object with full and thumb base64 strings.
 // Rejects if the file is not an image or cannot be decoded.
 export async function resizeImage(file) {
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Selected file is not an image.");
+  // Windows reports an empty type for some camera files, so say which file and
+  // what it came through as. "Not an image" on its own sends someone looking
+  // for a corrupt photo when the photo is fine and only the type is missing.
+  if (!file.type || !file.type.startsWith("image/")) {
+    throw new Error(
+      'The browser did not recognise "' +
+        (file.name || "that file") +
+        '" as an image. It came through as ' +
+        (file.type ? '"' + file.type + '"' : "no file type at all") +
+        ". Re-saving it from an image editor usually fixes this.",
+    );
   }
 
   const original = await readImage(file);
@@ -55,12 +64,36 @@ function readImage(file) {
 
     img.onload = function () {
       URL.revokeObjectURL(url);
+
+      // A browser that cannot decode a file sometimes fires load anyway and
+      // reports no size, which used to produce a zero by zero canvas, an empty
+      // base64 string, and a confusing "Each file needs data and a type" from
+      // the Worker. Caught here instead, where the real cause is still visible.
+      if (!img.naturalWidth || !img.naturalHeight) {
+        reject(
+          new Error(
+            'The browser loaded "' +
+              (file.name || "that file") +
+              '" but could not decode it, so it has no size. It may be a raw ' +
+              "camera file renamed to .jpg, or saved in a format this browser " +
+              "cannot read. Re-save it as a normal JPEG or PNG and try again.",
+          ),
+        );
+        return;
+      }
+
       resolve(img);
     };
 
     img.onerror = function () {
       URL.revokeObjectURL(url);
-      reject(new Error("Failed to read image file."));
+      reject(
+        new Error(
+          'The browser could not read "' +
+            (file.name || "that file") +
+            '". The file may be damaged, or in a format it cannot open.',
+        ),
+      );
     };
 
     img.src = url;
@@ -86,13 +119,44 @@ function scaleToWebP(img, longEdge, quality) {
 
     ctx.drawImage(img, 0, 0, width, height);
 
+    let dataUrl;
     try {
-      const dataUrl = canvas.toDataURL("image/webp", quality);
-      // Strip the "data:image/webp;base64," prefix so we send pure base64.
-      const base64 = dataUrl.split(",")[1];
-      resolve(base64);
+      dataUrl = canvas.toDataURL("image/webp", quality);
     } catch (error) {
-      reject(new Error("WebP encoding not supported in this browser."));
+      reject(new Error("This browser could not encode the image as WebP."));
+      return;
     }
+
+    // toDataURL does not throw when it cannot honour the type asked for. It
+    // quietly returns PNG instead, and a PNG of a photograph is several times
+    // the size of the WebP, which is enough to push a large picture past the
+    // Worker's five megabyte limit. Worth naming rather than letting it come
+    // back as an unexplained 413.
+    if (!dataUrl.startsWith("data:image/webp")) {
+      reject(
+        new Error(
+          "This browser cannot save images as WebP, so it fell back to a much " +
+            "larger format. Try Chrome, Edge or Firefox.",
+        ),
+      );
+      return;
+    }
+
+    // Strip the "data:image/webp;base64," prefix so we send pure base64.
+    const base64 = dataUrl.split(",")[1];
+    if (!base64) {
+      reject(
+        new Error(
+          "The resized image came out empty at " +
+            width +
+            " by " +
+            height +
+            " pixels. The original may be damaged.",
+        ),
+      );
+      return;
+    }
+
+    resolve(base64);
   });
 }

@@ -14,7 +14,12 @@ import {
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { resizeImage } from "./resize-helper.js";
-import { WORKER_UPLOAD_URL, uploadBranch } from "./upload.js";
+import {
+  WORKER_UPLOAD_URL,
+  uploadBranch,
+  uploadFailureMessage,
+  readJsonBody,
+} from "./upload.js";
 
 const form = document.getElementById("blogForm");
 const titleInput = document.getElementById("title");
@@ -106,20 +111,11 @@ imageInput.addEventListener("change", async function () {
       }),
     });
 
-    if (response.status === 401) {
-      showImageError("Your session has expired. Sign in again and retry.");
-      imageUploadStatus.hidden = true;
-      imagePreview.hidden = true;
-      return;
-    }
-
-    if (!response.ok) {
-      throw new Error("Upload failed with status " + response.status);
-    }
-
-    const result = await response.json();
-    if (!result.ok) {
-      throw new Error(result.error || "Upload failed");
+    // Read the body once, then let one branch handle every kind of failure.
+    // The Worker names the actual reason, so that is what gets shown.
+    const result = await readJsonBody(response);
+    if (!response.ok || !result || !result.ok) {
+      throw new Error(uploadFailureMessage(response.status, result));
     }
 
     // The Worker returns the path relative to the repository root, which is
@@ -141,7 +137,9 @@ imageInput.addEventListener("change", async function () {
       "Image uploaded. It will appear on the site in about a minute.";
   } catch (error) {
     console.error("Image upload failed:", error);
-    showImageError("Failed to upload the image. Try again.");
+    showImageError(
+      error.message || "Failed to upload the image. Try again.",
+    );
     imageUploadStatus.hidden = true;
     imagePreview.hidden = true;
   }
