@@ -475,21 +475,15 @@ textarea {
 }
 
 .brand-mark {
-  width: 2.75rem;
+  width: auto;
   height: 2.75rem;
   border-radius: var(--radius-md);
   background-color: #ffffff;
   padding: 0.125rem;
-  /* The logo is 176x264, a portrait 2:3, but this box is square. Without this
-     it stretches to fill and the logo renders visibly squashed on every page. */
-  object-fit: contain;
-  transition:
-    width var(--speed-settled) ease,
-    height var(--speed-settled) ease;
+  transition: height var(--speed-settled) ease;
 }
 
 .site-header.is-scrolled .brand-mark {
-  width: 2.125rem;
   height: 2.125rem;
 }
 
@@ -1208,7 +1202,6 @@ textarea {
   }
 
   .brand-mark {
-    width: 2.25rem;
     height: 2.25rem;
   }
 
