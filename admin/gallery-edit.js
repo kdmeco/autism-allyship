@@ -14,7 +14,13 @@ import {
   doc,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { resizeImage } from "./resize-helper.js";
-import { WORKER_UPLOAD_URL, WORKER_REMOVE_URL, uploadBranch } from "./upload.js";
+import {
+  WORKER_UPLOAD_URL,
+  WORKER_REMOVE_URL,
+  uploadBranch,
+  uploadFailureMessage,
+  readJsonBody,
+} from "./upload.js";
 
 const form = document.getElementById("galleryForm");
 const titleInput = document.getElementById("title");
@@ -232,22 +238,12 @@ coverImageInput.addEventListener("change", async function () {
       }),
     });
 
-    if (response.status === 401) {
-      showCoverImageError(
-        "Your session has expired. Sign in again and retry.",
-      );
-      coverImageUploadStatus.hidden = true;
-      coverImagePreview.hidden = true;
-      return;
-    }
-
-    if (!response.ok) {
-      throw new Error("Upload failed with status " + response.status);
-    }
-
-    const result = await response.json();
-    if (!result.ok) {
-      throw new Error(result.error || "Upload failed");
+    // Read the body once, then let one branch handle every kind of failure.
+    // The Worker says exactly what was wrong, so that reason is what gets
+    // shown instead of a generic retry prompt.
+    const result = await readJsonBody(response);
+    if (!response.ok || !result || !result.ok) {
+      throw new Error(uploadFailureMessage(response.status, result));
     }
 
     uploadedCoverImageUrl = result.files[0].path;
@@ -264,7 +260,12 @@ coverImageInput.addEventListener("change", async function () {
       "Image uploaded. It will appear on the site in about a minute.";
   } catch (error) {
     console.error("Cover image upload failed:", error);
-    showCoverImageError("Failed to upload the cover image. Try again.");
+    // error.message is either the reason the Worker gave or the reason the
+    // browser gave while resizing. Both name a cause; neither says "try again"
+    // unless trying again is genuinely the right advice.
+    showCoverImageError(
+      error.message || "Failed to upload the cover image. Try again.",
+    );
     coverImageUploadStatus.hidden = true;
     coverImagePreview.hidden = true;
   } finally {
@@ -503,16 +504,21 @@ photosInput.addEventListener("change", async function () {
         }),
       });
 
+      const result = await readJsonBody(response);
       if (response.status === 401) {
         throw new Error("SESSION_EXPIRED");
       }
-      if (!response.ok) {
-        throw new Error("Upload failed with status " + response.status);
+      if (!response.ok || !result || !result.ok) {
+        throw new Error(uploadFailureMessage(response.status, result));
       }
-
-      const result = await response.json();
-      if (!result.ok || result.files.length !== batch.length * 2) {
-        throw new Error(result.error || "Upload returned an unexpected file list");
+      if (!Array.isArray(result.files) || result.files.length !== batch.length * 2) {
+        throw new Error(
+          "The upload service saved " +
+            (Array.isArray(result.files) ? result.files.length : 0) +
+            " files when " +
+            batch.length * 2 +
+            " were expected, so this batch was not recorded.",
+        );
       }
 
       batch.forEach(function (_file, index) {
@@ -540,12 +546,20 @@ photosInput.addEventListener("change", async function () {
     console.error("Photo upload failed:", error);
     const remaining = files.length - uploadedCount;
     if (error.message === "SESSION_EXPIRED") {
-      showPhotosError("Your session has expired. Sign in again, then select the remaining photos.");
+      showPhotosError(
+        "The upload service did not accept your sign in. Sign in again, then " +
+          "select the remaining photos. If that does not help, your account may " +
+          "not be on the upload service's admin list, which is separate from the " +
+          "admin list on this site.",
+      );
     } else if (error.message === "CHECKPOINT_FAILED") {
       showPhotosError(
         "The photos were uploaded, but the album checkpoint failed. Do not select them again. Choose Save album to keep the uploaded paths.",
       );
     } else {
+      // The count tells them what to re-select; error.message tells them why it
+      // stopped. Without the second half a size or format problem looks like a
+      // random failure and gets retried forever.
       showPhotosError(
         "Uploaded " +
           uploadedCount +
@@ -553,7 +567,9 @@ photosInput.addEventListener("change", async function () {
           files.length +
           ". " +
           remaining +
-          " photos were not uploaded. Select the remaining photos and try again.",
+          " photos were not uploaded. " +
+          (error.message || "") +
+          " Select the remaining photos and try again.",
       );
     }
     photosUploadStatus.textContent =
