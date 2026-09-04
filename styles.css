@@ -2148,6 +2148,13 @@ ul.feature-list li {
   font-weight: 600;
 }
 
+/* Home app download section */
+
+.home-app-more {
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
 /* Resources */
 
 .resources-disclaimer {

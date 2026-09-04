@@ -189,6 +189,7 @@ function showRegistrationSuccess(data, startsAt, token, emailSent) {
         description: data.description,
         startsAt: startsAt,
       },
+      showAppLink: !isAppEmbed,
     }),
   );
 

@@ -5,7 +5,8 @@
       "namespace": "android_app",
       "package_name": "org.autismallyship.app",
       "sha256_cert_fingerprints": [
-        "58:B8:7B:59:FA:0E:DC:62:33:DD:1F:39:FD:AE:F7:85:FD:93:74:76:52:6E:65:C4:49:30:CC:48:07:CF:26:89"
+        "58:B8:7B:59:FA:0E:DC:62:33:DD:1F:39:FD:AE:F7:85:FD:93:74:76:52:6E:65:C4:49:30:CC:48:07:CF:26:89",
+        "BF:AB:7E:F3:5A:D5:3D:F6:E0:67:ED:AB:E0:93:E9:91:CC:D0:DF:34:0C:60:B2:F3:4C:8B:C6:B2:61:D0:71:4D"
       ]
     }
   }
