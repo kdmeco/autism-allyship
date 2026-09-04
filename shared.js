@@ -109,7 +109,12 @@ export function downloadIcs(eventData, filename) {
 // It deliberately never collapses or marks itself done, even after a save
 // action runs: a misclick on the wrong option must not read as "handled"
 // and take the others off the table.
-export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
+export function buildSavePanel({
+  ticketUrl,
+  eventTitle,
+  icsData,
+  showAppLink = true,
+}) {
   const panel = document.createElement("div");
   panel.className = "save-ticket-panel";
   panel.setAttribute("role", "region");
@@ -200,11 +205,13 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
     downloadIcs(icsData, "ticket.ics");
   });
 
-  // Inert until the app is on the Play Store: Section 10 of the notes
-  // tracks wiring the real link. Do not fake a store URL in the meantime.
+  // A direct APK download rather than a store link, because the app is not on
+  // the Play Store yet. Both pages that build this panel sit in the repository
+  // root, so the relative path resolves from either.
   const appLink = document.createElement("a");
   appLink.className = "button button-secondary";
-  appLink.href = "#";
+  appLink.href = "assets/downloads/autism-allyship-1.0.apk";
+  appLink.setAttribute("download", "");
   appLink.textContent = translated("saveTicketGetApp");
 
   actions.append(
@@ -213,8 +220,12 @@ export function buildSavePanel({ ticketUrl, eventTitle, icsData }) {
     whatsappLink,
     emailButton,
     calendarButton,
-    appLink,
   );
+
+  // Nothing to offer someone who is already reading this inside the app.
+  if (showAppLink) {
+    actions.appendChild(appLink);
+  }
   panel.appendChild(actions);
 
   return panel;
