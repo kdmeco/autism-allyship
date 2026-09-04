@@ -211,6 +211,18 @@ coverImageInput.addEventListener("change", async function () {
   }
 
   clearCoverImageError();
+
+  // The photo picker has always checked this and the cover picker never did,
+  // which is how a cover uploaded before the title and year were typed ended up
+  // in "2026-album": albumSlug() falls back to the current year and the word
+  // album when both fields are empty, so the cover landed in a folder that
+  // belonged to no album while the photos went to the real one. Same check as
+  // the photos, same reason.
+  if (!validateAlbumForUpload()) {
+    coverImageInput.value = "";
+    return;
+  }
+
   setCoverUploadBusy(true);
   coverImageUploadStatus.hidden = false;
   coverImageUploadStatus.textContent = "Uploading image...";
@@ -248,6 +260,16 @@ coverImageInput.addEventListener("change", async function () {
 
     uploadedCoverImageUrl = result.files[0].path;
 
+    // Record it straight away, the way a finished photo batch is recorded. The
+    // file is already committed to the repository at this point, so leaving it
+    // only in a page variable means a refresh before Save loses the reference
+    // while the image itself stays in the repository forever.
+    try {
+      await ensureAlbumCheckpoint();
+    } catch (error) {
+      console.error("Cover image checkpoint failed:", error);
+    }
+
     const previousPreview = coverImagePreview.querySelector("img");
     if (previousPreview) {
       previousPreview.remove();
@@ -273,6 +295,22 @@ coverImageInput.addEventListener("change", async function () {
   }
 });
 
+// Stored media paths are relative to the site root, because the public pages
+// that read them sit at the root. Every admin page is one level down in
+// /admin/, so the same string resolves to /admin/assets/uploads/... and comes
+// back 404, which is why the photo previews rendered as empty boxes. One level
+// up is the whole fix. Data URLs and absolute paths are passed through
+// untouched, so a just-resized preview still works.
+function mediaSrc(path) {
+  if (!path) {
+    return "";
+  }
+  if (/^(data:|https?:|\/)/.test(path)) {
+    return path;
+  }
+  return "../" + path;
+}
+
 function renderPhotoList() {
   photoList.textContent = "";
   noPhotosNote.hidden = images.length > 0;
@@ -288,7 +326,7 @@ function buildPhotoItem(image, index) {
 
   const thumb = document.createElement("img");
   thumb.className = "gallery-photo-thumb";
-  thumb.src = image.thumbUrl || image.url;
+  thumb.src = mediaSrc(image.thumbUrl || image.url);
   thumb.alt = "";
   thumb.width = 200;
   thumb.height = 133;
