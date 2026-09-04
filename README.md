@@ -8,8 +8,6 @@ operations and managed image uploads.
 
 - `../autism-allyship-api` — ticket, contact and donation Worker API.
 - `../autism-allyship-upload` — authenticated gallery upload and removal Worker.
-- `../autism-allyship-foundation-notes/autism-allyship-notes` — project handover, testing and
-  delivery notes.
 
 ## Deployment branches
 
