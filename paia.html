@@ -37,41 +37,72 @@
     <script src="main.js" defer></script>
 
     <script>
-      (function () {
-        var root = document.documentElement;
-        var saved = {};
+  // Resolves the saved settings before the browser paints anything, so a
+  // returning visitor never sees a flash of the wrong theme or text size.
+  // Deliberately inline and tiny. If you change a storage key here, change it
+  // in main.js too.
+  (function () {
+    var root = document.documentElement;
+    var saved = {};
 
-        root.classList.add("js");
+    // CSS only hides the accessibility panel when this class is present. If this
+    // script never runs, the panel stays visible and open rather than vanishing.
+    root.classList.add("js");
 
-        try {
-          saved.theme = localStorage.getItem("aaf-theme");
-          saved.textSize = localStorage.getItem("aaf-text-size");
-          saved.sensory = localStorage.getItem("aaf-sensory-mode");
-          saved.plainText = localStorage.getItem("aaf-plain-text");
-          saved.language = localStorage.getItem("aaf-language");
-        } catch (error) {
-        }
+    try {
+      saved.theme = localStorage.getItem("aaf-theme");
+      saved.textSize = localStorage.getItem("aaf-text-size");
+      saved.sensory = localStorage.getItem("aaf-sensory-mode");
+      saved.plainText = localStorage.getItem("aaf-plain-text");
+      saved.language = localStorage.getItem("aaf-language");
+    } catch (error) {
+      // Private browsing and pages opened straight off the file system can
+      // block storage. Fall back to defaults rather than breaking the page.
+    }
 
-        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        root.setAttribute(
-          "data-theme",
-          saved.theme || (prefersDark ? "dark" : "light"),
-        );
-        root.setAttribute("data-text-size", saved.textSize || "1");
+    // The Android app opens eight of these pages inside a WebView and adds
+    // app=1, along with the theme and sensory mode it is running, because the
+    // WebView keeps its own storage and cannot see what was chosen on the
+    // website. It lives here rather than in a page script because the CSS
+    // hides the header on this class: set it any later and the site header
+    // paints inside the app before it is hidden. A normal visitor sends none
+    // of this, so nothing below runs for them.
+    var appParams = new URLSearchParams(window.location.search);
+    if (appParams.get("app") === "1") {
+      root.classList.add("app-embed");
 
-        if (saved.sensory === "on") {
-          root.classList.add("sensory-mode");
-        }
+      var appTheme = appParams.get("theme");
+      if (appTheme === "dark" || appTheme === "light") {
+        saved.theme = appTheme;
+      }
 
-        if (saved.plainText === "on") {
-          root.classList.add("plain-text");
-        }
+      // Sent both ways, so off has to be able to override a stored on.
+      var appSensory = appParams.get("sensory");
+      if (appSensory === "on" || appSensory === "off") {
+        saved.sensory = appSensory;
+      }
+    }
 
-        if (saved.language) {
-          root.setAttribute("lang", saved.language);
-        }
-      })();
-    </script>
+    var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    root.setAttribute(
+      "data-theme",
+      saved.theme || (prefersDark ? "dark" : "light"),
+    );
+    root.setAttribute("data-text-size", saved.textSize || "1");
+
+    if (saved.sensory === "on") {
+      root.classList.add("sensory-mode");
+    }
+
+    if (saved.plainText === "on") {
+      root.classList.add("plain-text");
+    }
+
+    if (saved.language) {
+      root.setAttribute("lang", saved.language);
+    }
+  })();
+</script>
 
     <title>PAIA manual | Autism Allyship</title>
   </head>

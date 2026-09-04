@@ -60,6 +60,29 @@
       // block storage. Fall back to defaults rather than breaking the page.
     }
 
+    // The Android app opens eight of these pages inside a WebView and adds
+    // app=1, along with the theme and sensory mode it is running, because the
+    // WebView keeps its own storage and cannot see what was chosen on the
+    // website. It lives here rather than in a page script because the CSS
+    // hides the header on this class: set it any later and the site header
+    // paints inside the app before it is hidden. A normal visitor sends none
+    // of this, so nothing below runs for them.
+    var appParams = new URLSearchParams(window.location.search);
+    if (appParams.get("app") === "1") {
+      root.classList.add("app-embed");
+
+      var appTheme = appParams.get("theme");
+      if (appTheme === "dark" || appTheme === "light") {
+        saved.theme = appTheme;
+      }
+
+      // Sent both ways, so off has to be able to override a stored on.
+      var appSensory = appParams.get("sensory");
+      if (appSensory === "on" || appSensory === "off") {
+        saved.sensory = appSensory;
+      }
+    }
+
     var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     root.setAttribute(
       "data-theme",
