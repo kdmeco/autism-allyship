@@ -3868,9 +3868,6 @@ html:not(.js) #eventsToolbar {
   display: flex;
   gap: var(--space-3);
   border-bottom: 1px solid var(--colour-line);
-  /* Narrow screens scroll the list sideways rather than wrapping it into
-     several rows, which is why the tabs refuse to shrink below their
-     content width. */
   overflow-x: auto;
 }
 
@@ -3886,8 +3883,6 @@ html:not(.js) #eventsToolbar {
   font-weight: 500;
 }
 
-/* Weight as well as the underline, so the selected tab survives plain text
-   mode the same way it survives a print of the page. */
 .tab[aria-selected="true"] {
   color: var(--colour-text);
   border-bottom-color: var(--colour-accent-fill);
