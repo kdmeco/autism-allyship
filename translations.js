@@ -48,6 +48,7 @@ const translations = {
     legalAccessibility: "Accessibility statement",
     legalPaia: "PAIA manual",
     rightsReserved: "All rights reserved.",
+    footerNpcRegistration: "NPC registration:",
     homeHeroHeading: "Be Kind",
     homeHeroTagline: "Where every mind belongs",
     homeHeroMission:
@@ -654,6 +655,7 @@ const translations = {
     legalAccessibility: "Toeganklikheidsverklaring",
     legalPaia: "PAIA-handleiding",
     rightsReserved: "Alle regte voorbehou.",
+    footerNpcRegistration: "NPC-registrasie:",
     homeHeroHeading: "Wees Vriendelik",
     homeHeroTagline: "Waar elke gees tuis hoort",
     homeHeroMission: "Gemeenskapsgeleenthede en praktiese inligting vir outistiese en neurodivergente mense, hul families en bondgenote.",
@@ -1175,6 +1177,7 @@ const translations = {
     legalAccessibility: "Polelo ya phihlello",
     legalPaia: "Buka ya tataiso ya PAIA",
     rightsReserved: "Ditokelo tsohle di sirelelitswe.",
+    footerNpcRegistration: "Ngodiso ya NPC:",
     homeHeroHeading: "Eba Mosa",
     homeHeroTagline: "",
     homeHeroMission: "Diketsahalo tsa setjhaba le tlhahisoleseding e sebetsang bakeng sa batho ba nang le “autism” le ba nang le “neurodiversity”, malapa a bona le metswalle ya bona.",

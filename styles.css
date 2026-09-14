@@ -1275,6 +1275,12 @@ textarea {
   gap: var(--space-3);
 }
 
+.hero-npc {
+  margin-top: var(--space-4);
+  font-size: var(--size-sm);
+  color: var(--colour-text-muted);
+}
+
 .button {
   display: inline-flex;
   align-items: center;
