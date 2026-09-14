@@ -3,6 +3,13 @@ name: Checks
 on:
   push:
     branches: [dev, staging, main]
+    # The upload Worker commits admin photos, posters and attachments straight
+    # to main, one commit per batch of five photos. None of those commits
+    # changes a page, so running every check on each one cost twenty minutes a
+    # commit and filled the Actions storage. A commit that touches anything
+    # else still runs all three jobs.
+    paths-ignore:
+      - "assets/uploads/**"
   workflow_dispatch:
 
 jobs:
@@ -80,6 +87,12 @@ jobs:
       # header and footer fragments as if they were pages. Add each new page
       # here as it gets built. blog-post, event and ticket are left out: they
       # need a record id in the query string to render anything real.
+      #
+      # The reports are not kept as artifacts. Fourteen pages run three times
+      # came to about 23 MB a run, kept for 90 days, which filled the
+      # account's 0.5 GB of Actions storage by mid September 2026. The
+      # temporary public storage link in each run's log still opens the full
+      # report.
       - name: Run Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:
@@ -99,5 +112,5 @@ jobs:
             http://localhost:8080/terms.html
             http://localhost:8080/404.html
           configPath: ./lighthouserc.json
-          uploadArtifacts: true
+          uploadArtifacts: false
           temporaryPublicStorage: true
