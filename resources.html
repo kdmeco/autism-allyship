@@ -427,6 +427,26 @@
           </p>
         </section>
 
+        <div class="resources-intro">
+          <p data-i18n="resourcesIntroText">
+            One of our key projects is to develop and maintain a national database that guides families and people affected by autism and neurodiversity. It covers:
+          </p>
+          <ul class="resources-intro-list">
+            <li data-i18n="resourcesIntroCommunity">
+              Community activations at schools, clinics, police stations and shops
+            </li>
+            <li data-i18n="resourcesIntroSpecialists">
+              Specialists such as doctors, occupational therapists and educational psychologists
+            </li>
+            <li data-i18n="resourcesIntroLeisure">
+              Leisure and recreational spaces willing to make the necessary accommodations
+            </li>
+            <li data-i18n="resourcesIntroSupport">
+              Support groups, so people can find the one closest to them
+            </li>
+          </ul>
+        </div>
+
         <div class="resources-disclaimer">
           <p data-i18n="resourcesDisclaimer">
             Listing a service here does not mean we recommend or endorse it.
@@ -513,7 +533,11 @@
           Loading resources...
         </p>
 
-        <p class="resources-count" id="resourceCount" aria-live="polite"></p>
+        <p class="resources-count" id="resourceCount" aria-live="polite" hidden></p>
+
+        <p class="resources-prompt" id="resourcesChoosePrompt" hidden data-i18n="resourcesChoosePrompt">
+          Choose a category to see what it holds.
+        </p>
 
         <div class="resources-list" id="resourceList"></div>
 

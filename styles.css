@@ -3863,3 +3863,11 @@ body.gallery-lightbox-open {
 html:not(.js) #eventsToolbar {
   display: none;
 }
+
+.resources-prompt {
+  color: var(--colour-text-muted);
+}
+
+.filter-pill-count {
+  font-variant-numeric: tabular-nums;
+}

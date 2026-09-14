@@ -2,8 +2,12 @@
 // then searches and filters them in the browser. Firestore cannot search
 // inside text fields, so the list is fetched whole (published entries only)
 // and the search box, category pills and province dropdown narrow it down on
-// the page. If the filtering pass ever fails, the full list simply stays
-// visible.
+// the page. Nothing is listed until a category is chosen: the foundation
+// asked for the pills up front and the resources behind them, rather than
+// every entry poured out in one alphabetical list. Typing in the search box
+// without choosing a category searches everything. If the filtering pass
+// ever fails, the page keeps showing nothing rather than falling back to the
+// full list the foundation asked us not to pour out.
 
 import { db } from "./firebase.js";
 import {
@@ -20,6 +24,7 @@ const pillBar = document.getElementById("categoryPills");
 const searchBox = document.getElementById("resourceSearch");
 const provinceSelect = document.getElementById("provinceFilter");
 const countLine = document.getElementById("resourceCount");
+const choosePrompt = document.getElementById("resourcesChoosePrompt");
 const filterEmpty = document.getElementById("resourcesEmpty");
 const clearRow = document.getElementById("clearFilters");
 const clearLink = document.getElementById("clearFiltersLink");
@@ -28,8 +33,64 @@ const loadingState = document.getElementById("resourcesLoading");
 const errorState = document.getElementById("resourcesError");
 const retryButton = document.getElementById("resourcesRetry");
 
+// The groups are fixed in code and the stored category values never change
+// shape: a group is one label sitting over one or more of those values, in
+// the order the foundation's own list uses. Anything outside the map lands
+// in Other, which only appears when something is in it.
+const CATEGORY_GROUPS = [
+  { key: "schools", labelKey: "resourcesGroupSchools", categories: ["School"] },
+  {
+    key: "specialists",
+    labelKey: "resourcesGroupSpecialists",
+    categories: ["Diagnosis & assessment", "Therapy", "Early intervention"],
+  },
+  {
+    key: "support",
+    labelKey: "resourcesGroupSupport",
+    categories: ["Support group"],
+  },
+  {
+    key: "recreation",
+    labelKey: "resourcesGroupRecreation",
+    categories: ["Recreation"],
+  },
+  {
+    key: "organisations",
+    labelKey: "resourcesGroupOrganisations",
+    categories: ["National organisation", "Helpline"],
+  },
+  {
+    key: "adults",
+    labelKey: "resourcesGroupAdults",
+    categories: ["Adult services"],
+  },
+  {
+    key: "grants",
+    labelKey: "resourcesGroupGrants",
+    categories: ["Grants & financial", "Sensory & equipment"],
+  },
+];
+const OTHER_GROUP_KEY = "other";
+
 let totalResources = 0;
-let activeCategory = "";
+let activeGroup = "";
+const groupPills = new Map();
+
+function groupOfCategory(category) {
+  return CATEGORY_GROUPS.find(function (group) {
+    return group.categories.includes(category);
+  });
+}
+
+function cardInGroup(card, groupKey) {
+  if (groupKey === OTHER_GROUP_KEY) {
+    return !groupOfCategory(card.dataset.category);
+  }
+  const group = CATEGORY_GROUPS.find(function (candidate) {
+    return candidate.key === groupKey;
+  });
+  return group ? group.categories.includes(card.dataset.category) : false;
+}
 
 function contactLink(kind, value) {
   const link = document.createElement("a");
@@ -137,79 +198,98 @@ function buildCard(resource) {
   return card;
 }
 
-function buildPill(category) {
+function buildPill(group) {
   const pill = document.createElement("button");
   pill.type = "button";
   pill.className = "filter-pill";
-  pill.textContent = category;
-  pill.setAttribute(
-    "aria-pressed",
-    String(category === activeCategory),
-  );
+
+  // The label carries a data-i18n key so a language switch retranslates it in
+  // place, and the count lives in its own span so it survives that swap.
+  const label = document.createElement("span");
+  label.setAttribute("data-i18n", group.labelKey);
+  label.textContent = translated(group.labelKey);
+
+  const count = document.createElement("span");
+  count.className = "filter-pill-count";
+
+  pill.append(label, count);
+  pill.setAttribute("aria-pressed", "false");
   pill.addEventListener("click", function () {
-    activeCategory = category;
-    pillBar.querySelectorAll(".filter-pill").forEach(function (other) {
-      other.setAttribute(
-        "aria-pressed",
-        String(other === pill),
-      );
-    });
-    applyFilters();
+    selectGroup(activeGroup === group.key ? "" : group.key);
   });
+  groupPills.set(group.key, pill);
   return pill;
 }
 
 function buildPills(resources) {
-  const categories = [
-    ...new Set(
-      resources
-        .map(function (resource) {
-          return (resource.category || "").trim();
-        })
-        .filter(Boolean),
-    ),
-  ].sort(function (first, second) {
-    return first.localeCompare(second);
+  const hasOther = resources.some(function (resource) {
+    return !groupOfCategory(resource.category);
   });
 
-  if (categories.length === 0) {
-    return;
+  CATEGORY_GROUPS.forEach(function (group) {
+    pillBar.appendChild(buildPill(group));
+  });
+  if (hasOther) {
+    pillBar.appendChild(
+      buildPill({ key: OTHER_GROUP_KEY, labelKey: "resourcesGroupOther" }),
+    );
   }
-
-  const all = document.createElement("button");
-  all.type = "button";
-  all.className = "filter-pill";
-  all.textContent = translated("resourcesFilterAll");
-  all.setAttribute("aria-pressed", String(activeCategory === ""));
-  all.addEventListener("click", function () {
-    activeCategory = "";
-    pillBar.querySelectorAll(".filter-pill").forEach(function (other) {
-      other.setAttribute("aria-pressed", String(other === all));
-    });
-    applyFilters();
-  });
-  pillBar.appendChild(all);
-
-  categories.forEach(function (category) {
-    pillBar.appendChild(buildPill(category));
-  });
 
   pillBar.hidden = false;
 }
 
+// The chosen group rides in the URL hash, so a filtered view can be shared,
+// and a hashchange on an open page selects its group the same way a click
+// does.
+function selectGroup(groupKey) {
+  activeGroup = groupKey;
+  groupPills.forEach(function (pill, key) {
+    pill.setAttribute("aria-pressed", String(key === groupKey));
+  });
+  if (groupKey) {
+    history.replaceState(null, "", "#" + groupKey);
+  } else if (window.location.hash) {
+    history.replaceState(
+      null,
+      "",
+      window.location.pathname + window.location.search,
+    );
+  }
+  applyFilters();
+}
+
+function updatePillCounts(term, province) {
+  groupPills.forEach(function (pill, key) {
+    let matching = 0;
+    list.querySelectorAll(".resource-card").forEach(function (card) {
+      if (
+        cardInGroup(card, key) &&
+        (!term || card.dataset.searchText.includes(term)) &&
+        (!province || card.dataset.provinces.split(",").includes(province))
+      ) {
+        matching = matching + 1;
+      }
+    });
+    pill.querySelector(".filter-pill-count").textContent =
+      "(" + matching + ")";
+  });
+}
+
 // Hiding and unhiding cards, never removing them, so a failure in here can
-// only ever leave the full list showing.
+// only ever leave the prompt showing.
 function applyFilters() {
   try {
     const term = searchBox.value.trim().toLowerCase();
     const province = provinceSelect.value;
-    const filtersActive = Boolean(term) || Boolean(activeCategory) || Boolean(province);
+    const showingList = Boolean(activeGroup) || Boolean(term);
+    const filtersActive = Boolean(term) || Boolean(activeGroup) || Boolean(province);
 
     let shown = 0;
     list.querySelectorAll(".resource-card").forEach(function (card) {
       const matches =
+        showingList &&
         (!term || card.dataset.searchText.includes(term)) &&
-        (!activeCategory || card.dataset.category === activeCategory) &&
+        (!activeGroup || cardInGroup(card, activeGroup)) &&
         (!province || card.dataset.provinces.split(",").includes(province));
 
       card.hidden = !matches;
@@ -218,6 +298,8 @@ function applyFilters() {
       }
     });
 
+    choosePrompt.hidden = showingList;
+    countLine.hidden = !showingList;
     countLine.textContent =
       shown === 1
         ? translated("resourcesCountSingular")
@@ -225,8 +307,10 @@ function applyFilters() {
             .replace("{shown}", String(shown))
             .replace("{total}", String(totalResources));
 
-    filterEmpty.hidden = !(filtersActive && shown === 0);
+    filterEmpty.hidden = !(showingList && shown === 0);
     clearRow.hidden = !filtersActive;
+
+    updatePillCounts(term, province);
 
     // A filter can hide the card the keyboard focus was inside. Move focus to
     // the search box rather than let it fall back to the top of the page.
@@ -238,9 +322,10 @@ function applyFilters() {
       searchBox.focus();
     }
   } catch (error) {
-    console.error("Filtering failed, showing the full list:", error);
+    console.error("Filtering failed, keeping the prompt showing:", error);
+    choosePrompt.hidden = false;
     list.querySelectorAll(".resource-card").forEach(function (card) {
-      card.hidden = false;
+      card.hidden = true;
     });
   }
 }
@@ -249,17 +334,19 @@ function clearEverything(event) {
   event.preventDefault();
   searchBox.value = "";
   provinceSelect.value = "";
-  activeCategory = "";
-  pillBar.querySelectorAll(".filter-pill").forEach(function (pill, position) {
-    pill.setAttribute("aria-pressed", String(position === 0));
-  });
-  applyFilters();
+  selectGroup("");
   searchBox.focus();
 }
 
 searchBox.addEventListener("input", applyFilters);
 provinceSelect.addEventListener("change", applyFilters);
 clearLink.addEventListener("click", clearEverything);
+window.addEventListener("hashchange", function () {
+  const hash = window.location.hash.replace(/^#/, "");
+  if (hash && groupPills.has(hash) && hash !== activeGroup) {
+    selectGroup(hash);
+  }
+});
 
 async function loadResources() {
   loadingState.hidden = false;
@@ -307,7 +394,13 @@ async function loadResources() {
     resources.forEach(function (resource) {
       list.appendChild(buildCard(resource));
     });
-    applyFilters();
+
+    const hash = window.location.hash.replace(/^#/, "");
+    if (hash && groupPills.has(hash)) {
+      selectGroup(hash);
+    } else {
+      applyFilters();
+    }
   } catch (error) {
     loadingState.hidden = true;
     toolbar.hidden = true;
