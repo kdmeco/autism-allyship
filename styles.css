@@ -2159,6 +2159,16 @@ ul.feature-list li {
 
 /* Resources */
 
+.resources-intro {
+  margin-bottom: var(--space-5);
+}
+
+ul.resources-intro-list {
+  list-style: disc;
+  padding-inline-start: var(--space-5);
+  margin: var(--space-2) 0 0;
+}
+
 .resources-disclaimer {
   margin-top: var(--space-5);
   margin-bottom: var(--space-5);
