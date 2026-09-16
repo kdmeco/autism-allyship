@@ -271,7 +271,7 @@ function updatePillCounts(term, province) {
       }
     });
     pill.querySelector(".filter-pill-count").textContent =
-      "(" + matching + ")";
+      " (" + matching + ")";
   });
 }
 
