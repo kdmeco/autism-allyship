@@ -620,7 +620,7 @@ const translations = {
 
   af: {
     skipToContent: "Slaan oor na hoofinhoud",
-    brandTagline: "Ek is 'n bondgenoot",
+    brandTagline: "",
     mainNavLabel: "Hoof",
     navHome: "Tuis",
     navCommunity: "Gemeenskap",
@@ -655,7 +655,7 @@ const translations = {
     legalPaia: "PAIA-handleiding",
     rightsReserved: "Alle regte voorbehou.",
     homeHeroHeading: "Wees Vriendelik",
-    homeHeroTagline: "Ek is 'n bondgenoot",
+    homeHeroTagline: "",
     homeHeroMission: "Gemeenskapsgeleenthede en praktiese inligting vir outistiese en neurodivergente mense, hul families en bondgenote.",
     homeHeroDonate: "Skenk",
     homeHeroAbout: "Leer meer oor ons",
@@ -730,7 +730,7 @@ const translations = {
     aboutPageLede: "Active Autism & Neuro-Diversity Allyship Foundation bring mense bymekaar deur gemeenskapsgeleenthede, inligting en outistiese bondgenootskap.",
     aboutStoryHeading: "Ons storie",
     aboutStoryText: "Autism Allyship reël gemeenskapsaktiwiteite en deel inligting vir outistiese en neurodivergente mense, hul families en bondgenote.",
-    aboutStoryTagline: "Ek is 'n bondgenoot.",
+    aboutStoryTagline: "",
     aboutVoiceHeading: "Ons stem in die gemeenskap",
     aboutVoiceText: "Die Stigting het deelgeneem aan gesprekke op die FeministMommy YouTube-reeks, Rekord East en Channel Africa. Sy gemeenskap sluit ook die ShowUpCrew en die maskotte Lumi en Ida in.",
     aboutStandForHeading: "Waarvoor ons staan",
