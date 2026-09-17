@@ -76,7 +76,7 @@
           <span class="brand-words">
             <span class="brand-name">Autism Allyship</span>
             <span class="brand-tagline" data-i18n="brandTagline"
-              >Where every mind belongs</span
+              >I am an ally</span
             >
           </span>
         </a>
@@ -386,9 +386,22 @@
               <label for="category" data-i18n="adminResourcesCategory"
                 >Category</label
               >
-              <input type="text" id="category" name="category" />
+              <select id="category" name="category">
+                <option value="" data-i18n="adminResourcesCategoryChoose">Choose a category</option>
+                <option value="School">School</option>
+                <option value="Diagnosis &amp; assessment">Diagnosis &amp; assessment</option>
+                <option value="Therapy">Therapy</option>
+                <option value="Early intervention">Early intervention</option>
+                <option value="Support group">Support group</option>
+                <option value="Recreation">Recreation</option>
+                <option value="National organisation">National organisation</option>
+                <option value="Helpline">Helpline</option>
+                <option value="Adult services">Adult services</option>
+                <option value="Grants &amp; financial">Grants &amp; financial</option>
+                <option value="Sensory &amp; equipment">Sensory &amp; equipment</option>
+              </select>
               <p class="form-field-note" data-i18n="adminResourcesCategoryNote">
-                Optional. Used for the filter pills on the resources page.
+                Used for the groups on the resources page.
               </p>
             </div>
 

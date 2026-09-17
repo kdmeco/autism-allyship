@@ -84,6 +84,19 @@
       if (appSensory === "on" || appSensory === "off") {
         saved.sensory = appSensory;
       }
+
+      // The language the app is set to, so a WebView page opens already
+      // translated. Only the three the site has translations for, and it
+      // is applied rather than saved, so it never becomes the saved
+      // choice of a visitor who never made one.
+      var appLanguage = appParams.get("lang");
+      if (
+        appLanguage === "en" ||
+        appLanguage === "af" ||
+        appLanguage === "st"
+      ) {
+        saved.language = appLanguage;
+      }
     }
 
     var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -126,7 +139,7 @@
           <span class="brand-words">
             <span class="brand-name">Autism Allyship</span>
             <span class="brand-tagline" data-i18n="brandTagline"
-              >Where every mind belongs</span
+              >I am an ally</span
             >
           </span>
         </a>
@@ -484,113 +497,113 @@
     </main>
 
     <footer class="site-footer">
-      <div class="footer-columns">
-        <div class="footer-column footer-about">
-          <a class="brand brand-footer" href="index.html">
-            <img
-              class="brand-mark"
-              src="assets/brand/logo-mark.webp"
-              alt=""
-              width="176"
-              height="264"
-            />
-            <span class="brand-words">
-              <span class="brand-name">Autism Allyship</span>
-            </span>
-          </a>
-          <p data-i18n="footerDescription">
-            Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
-          </p>
-        </div>
+  <div class="footer-columns">
+    <div class="footer-column footer-about">
+      <a class="brand brand-footer" href="index.html">
+        <img
+          class="brand-mark"
+          src="assets/brand/logo-mark.webp"
+          alt=""
+          width="176"
+          height="264"
+        />
+        <span class="brand-words">
+          <span class="brand-name">Autism Allyship</span>
+        </span>
+      </a>
+      <p data-i18n="footerDescription">
+        Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
+      </p>
+    </div>
 
-        <nav
-          class="footer-column"
-          data-i18n-aria-label="footerQuickLinks"
-          aria-label="Quick links"
-        >
-          <h2 class="footer-heading" data-i18n="footerQuickLinks">
-            Quick links
-          </h2>
-          <ul class="footer-list">
-            <li><a href="about.html" data-i18n="navAbout">About</a></li>
-            <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
-            </li>
-            <li><a href="events.html" data-i18n="navEvents">Events</a></li>
-            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
-            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
-          </ul>
-        </nav>
+    <nav
+      class="footer-column"
+      data-i18n-aria-label="footerQuickLinks"
+      aria-label="Quick links"
+    >
+      <h2 class="footer-heading" data-i18n="footerQuickLinks">Quick links</h2>
+      <ul class="footer-list">
+        <li><a href="about.html" data-i18n="navAbout">About</a></li>
+        <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
+        <li><a href="events.html" data-i18n="navEvents">Events</a></li>
+        <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
+        <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+      </ul>
+    </nav>
 
-        <nav
-          class="footer-column"
-          data-i18n-aria-label="footerSocials"
-          aria-label="Social media"
-        >
-          <h2 class="footer-heading" data-i18n="footerSocials">Follow us</h2>
-          <ul class="footer-list">
-            <li>
-              <a
-                href="https://www.instagram.com/autismallyship/"
-                rel="me noopener"
-                target="_blank"
-                >Instagram</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://x.com/AutismAllyship"
-                rel="me noopener"
-                target="_blank"
-                >X</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://chat.whatsapp.com/HI0K5zd5oTxC1tt8sWYPk2"
-                rel="noopener"
-                target="_blank"
-                >WhatsApp community</a
-              >
-            </li>
-          </ul>
-        </nav>
+    <nav
+      class="footer-column"
+      data-i18n-aria-label="footerSocials"
+      aria-label="Social media"
+    >
+      <h2 class="footer-heading" data-i18n="footerSocials">Follow us</h2>
+      <ul class="footer-list">
+        <li>
+          <a
+            href="https://www.instagram.com/autismallyship/"
+            rel="me noopener"
+            target="_blank"
+            >Instagram</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://x.com/AutismAllyship"
+            rel="me noopener"
+            target="_blank"
+            >X</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/HI0K5zd5oTxC1tt8sWYPk2"
+            rel="noopener"
+            target="_blank"
+            >WhatsApp community</a
+          >
+        </li>
+      </ul>
+    </nav>
 
-        <nav
-          class="footer-column"
-          data-i18n-aria-label="footerLegal"
-          aria-label="Legal"
-        >
-          <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
-          <ul class="footer-list">
-            <li>
-              <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
-            </li>
-            <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
-            <li>
-              <a href="accessibility.html" data-i18n="legalAccessibility"
-                >Accessibility statement</a
-              >
-            </li>
-            <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
-          </ul>
-        </nav>
-      </div>
+    <nav
+      class="footer-column"
+      data-i18n-aria-label="footerLegal"
+      aria-label="Legal"
+    >
+      <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
+      <ul class="footer-list">
+        <li>
+          <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
+        </li>
+        <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
+        <li>
+          <a href="accessibility.html" data-i18n="legalAccessibility"
+            >Accessibility statement</a
+          >
+        </li>
+        <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
+      </ul>
+    </nav>
+  </div>
 
-      <div class="footer-baseline">
-        <p>
-          &copy; <span id="footerYear">2026</span> Active Autism &amp; Neuro-Diversity Allyship Foundation.
-          <span data-i18n="rightsReserved">All rights reserved.</span>
-        </p>
-        <p class="footer-contact">
-          <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>
-          <span aria-hidden="true">&middot;</span>
-          <a href="tel:+27663859936">+27 66 385 9936</a>
-          <span aria-hidden="true">&middot;</span>
-          <span>Pretoria, Gauteng, South Africa</span>
-        </p>
-      </div>
-    </footer>
+  <div class="footer-baseline">
+    <p>
+      &copy; <span id="footerYear">2026</span> Active Autism &amp; Neuro-Diversity Allyship Foundation.
+      <span data-i18n="rightsReserved">All rights reserved.</span>
+    </p>
+    <p>
+      <span data-i18n="footerNpcRegistration">NPC registration:</span>
+      2023/657319/08
+    </p>
+    <p class="footer-contact">
+      <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>
+      <span aria-hidden="true">&middot;</span>
+      <a href="tel:+27663859936">+27 66 385 9936</a>
+      <span aria-hidden="true">&middot;</span>
+      <span>Pretoria, Gauteng, South Africa</span>
+    </p>
+  </div>
+</footer>
 
     <script type="module" src="blog-post.js"></script>
   </body>

@@ -30,6 +30,8 @@ const categoryKeys = {
   media: "contactCategoryMedia",
   "resource suggestion": "contactCategoryResourceSuggestion",
   accessibility: "contactCategoryAccessibilityFeedback",
+  "speaking engagement": "contactCategorySpeakingEngagement",
+  Donation: "contactCategoryDonation",
 };
 
 let allSubmissions = [];
