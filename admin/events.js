@@ -215,7 +215,19 @@ function askToDelete(actions, eventItem) {
 
   const question = document.createElement("span");
   question.className = "admin-list-meta";
-  question.textContent = "Delete this event? This cannot be undone.";
+  // A booked ticket outlives its event, so an admin about to delete one that
+  // has bookings needs to know both halves: how many tickets, and that
+  // deleting does not cancel them.
+  const ticketsSold =
+    typeof eventItem.ticketsSold === "number" ? eventItem.ticketsSold : 0;
+  question.textContent =
+    ticketsSold > 0
+      ? "Delete this event? " +
+        ticketsSold +
+        (ticketsSold === 1 ? " ticket has" : " tickets have") +
+        " been booked, and those tickets stay valid after the event is " +
+        "deleted. This cannot be undone."
+      : "Delete this event? This cannot be undone.";
 
   const yes = document.createElement("button");
   yes.type = "button";
