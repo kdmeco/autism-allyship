@@ -344,16 +344,29 @@ const MEDIA_TYPE_KEYS = {
   "visit and live stream": "galleryMediaTypeVisitAndLiveStream",
 };
 
-// A link's label comes from its host, per SCHEMA.md. Anything that is not one
-// of the three known hosts gets the plain open label.
+// A host matches a domain when it is the domain or a subdomain of it, so
+// www.youtube.com counts as youtube.com the same way youtube.com does.
+function hostMatches(host, domain) {
+  return host === domain || host.endsWith("." + domain);
+}
+
+// A link's label comes from its host, per SCHEMA.md. An address that cannot
+// be parsed as a URL has no host to match, so it gets no link at all rather
+// than a guessed label.
 function mediaLinkKey(url) {
-  if (url.includes("omny.fm")) {
+  let host;
+  try {
+    host = new URL(url).hostname;
+  } catch (error) {
+    return null;
+  }
+  if (hostMatches(host, "omny.fm")) {
     return "galleryMediaListenOmny";
   }
-  if (url.includes("youtube.com") || url.includes("youtu.be")) {
+  if (hostMatches(host, "youtube.com") || hostMatches(host, "youtu.be")) {
     return "galleryMediaWatchYouTube";
   }
-  if (url.includes("citizen.co.za")) {
+  if (hostMatches(host, "citizen.co.za")) {
     return "galleryMediaReadRekord";
   }
   return "galleryMediaOpenLink";
@@ -470,16 +483,18 @@ function buildMediaEntry(entry) {
 
   if (entry.url) {
     const labelKey = mediaLinkKey(entry.url);
-    const linkParagraph = document.createElement("p");
-    linkParagraph.className = "media-link";
-    const link = document.createElement("a");
-    link.href = entry.url;
-    link.target = "_blank";
-    link.rel = "noopener";
-    link.setAttribute("data-i18n", labelKey);
-    link.textContent = translated(labelKey);
-    linkParagraph.appendChild(link);
-    item.appendChild(linkParagraph);
+    if (labelKey) {
+      const linkParagraph = document.createElement("p");
+      linkParagraph.className = "media-link";
+      const link = document.createElement("a");
+      link.href = entry.url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.setAttribute("data-i18n", labelKey);
+      link.textContent = translated(labelKey);
+      linkParagraph.appendChild(link);
+      item.appendChild(linkParagraph);
+    }
   }
 
   return item;
