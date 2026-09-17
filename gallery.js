@@ -2,6 +2,8 @@ import { db } from "./firebase.js";
 import {
   collection,
   getDocs,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
 import { thumbPath, translated, setUpTabs } from "./shared.js";
 
@@ -9,6 +11,10 @@ const loadingState = document.getElementById("galleryLoading");
 const yearsContainer = document.getElementById("galleryYears");
 const emptyState = document.getElementById("galleryEmpty");
 const errorState = document.getElementById("galleryError");
+const mediaLoading = document.getElementById("mediaLoading");
+const mediaList = document.getElementById("mediaList");
+const mediaEmpty = document.getElementById("mediaEmpty");
+const mediaError = document.getElementById("mediaError");
 const lightbox = document.getElementById("galleryLightbox");
 const lightboxTitle = document.getElementById("galleryLightboxTitle");
 const lightboxPosition = document.getElementById("galleryLightboxPosition");
@@ -325,6 +331,194 @@ function setUpLightbox() {
   });
 }
 
+// The stored type values and the translation key each one renders through.
+// A value outside this map is left out of the meta line rather than shown
+// raw.
+const MEDIA_TYPE_KEYS = {
+  television: "galleryMediaTypeTelevision",
+  radio: "galleryMediaTypeRadio",
+  newspaper: "galleryMediaTypeNewspaper",
+  article: "galleryMediaTypeArticle",
+  "online video": "galleryMediaTypeOnlineVideo",
+  "live stream": "galleryMediaTypeLiveStream",
+  "visit and live stream": "galleryMediaTypeVisitAndLiveStream",
+};
+
+// A host matches a domain when it is the domain or a subdomain of it, so
+// www.youtube.com counts as youtube.com the same way youtube.com does.
+function hostMatches(host, domain) {
+  return host === domain || host.endsWith("." + domain);
+}
+
+// A link's label comes from its host, per SCHEMA.md. An address that cannot
+// be parsed as a URL has no host to match, so it gets no link at all rather
+// than a guessed label.
+function mediaLinkKey(url) {
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch (error) {
+    return null;
+  }
+  // Only https links are shown, matching the admin form, so a stored
+  // javascript: or data: address can never become a clickable link.
+  if (parsed.protocol !== "https:") {
+    return null;
+  }
+  const host = parsed.hostname;
+  if (hostMatches(host, "omny.fm")) {
+    return "galleryMediaListenOmny";
+  }
+  if (hostMatches(host, "youtube.com") || hostMatches(host, "youtu.be")) {
+    return "galleryMediaWatchYouTube";
+  }
+  if (hostMatches(host, "citizen.co.za")) {
+    return "galleryMediaReadRekord";
+  }
+  return "galleryMediaOpenLink";
+}
+
+// Dates are stored as YYYY-MM-DD and shown the way the old hardcoded list
+// showed them, for example 3 Nov 2025. The month stays in English because
+// names, shows and topics are not translated.
+const MEDIA_MONTHS = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+function formatMediaDate(value) {
+  const parts = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!parts) {
+    return "";
+  }
+  const month = MEDIA_MONTHS[Number(parts[2]) - 1] || parts[2];
+  return Number(parts[3]) + " " + month + " " + parts[1];
+}
+
+function normaliseMedia(documentSnapshot) {
+  const data = documentSnapshot.data();
+  if (typeof data.outlet !== "string" || !data.outlet.trim()) {
+    return null;
+  }
+
+  const type = typeof data.type === "string" ? data.type : "";
+  return {
+    outlet: data.outlet.trim(),
+    typeKey: MEDIA_TYPE_KEYS[type] || null,
+    date: typeof data.date === "string" ? data.date : "",
+    panel: typeof data.panel === "string" ? data.panel.trim() : "",
+    topic: typeof data.topic === "string" ? data.topic.trim() : "",
+    url: typeof data.url === "string" ? data.url.trim() : "",
+  };
+}
+
+// Dated entries newest first, then undated entries, so no composite index
+// is needed. The string comparison works because every date is YYYY-MM-DD:
+// the same characters in the same order sort the way the calendar does.
+function sortMedia(entries) {
+  return entries.slice().sort(function (first, second) {
+    if (first.date && second.date) {
+      if (first.date !== second.date) {
+        return first.date < second.date ? 1 : -1;
+      }
+      return 0;
+    }
+    if (first.date) {
+      return -1;
+    }
+    if (second.date) {
+      return 1;
+    }
+    return 0;
+  });
+}
+
+// A span carrying data-i18n, so applyLanguage retranslates it when the
+// visitor switches language on an open page. The text is set as well,
+// because an entry renders after applyLanguage has already run once.
+function translatedSpan(key) {
+  const span = document.createElement("span");
+  span.setAttribute("data-i18n", key);
+  span.textContent = translated(key);
+  return span;
+}
+
+// The same shape the old hardcoded list used: an outlet heading, a meta
+// line, and the optional panel, topic and link. Everything goes in through
+// textContent, so nothing an admin types can run as markup. The labels
+// carry data-i18n and the names and topics stay plain text, so a language
+// switch retranslates the one without touching the other.
+function buildMediaEntry(entry) {
+  const item = document.createElement("li");
+  item.className = "media-item";
+
+  const outlet = document.createElement("h3");
+  outlet.className = "media-outlet";
+  outlet.textContent = entry.outlet;
+  item.appendChild(outlet);
+
+  // The date itself stays in English, because names, shows and topics are
+  // not translated.
+  const meta = document.createElement("p");
+  meta.className = "media-meta";
+  if (entry.date) {
+    meta.append(formatMediaDate(entry.date));
+  } else {
+    meta.appendChild(translatedSpan("galleryMediaUndated"));
+  }
+  if (entry.typeKey) {
+    meta.append(" \u00b7 ");
+    meta.appendChild(translatedSpan(entry.typeKey));
+  }
+  item.appendChild(meta);
+
+  if (entry.panel) {
+    const panel = document.createElement("p");
+    panel.className = "media-panel";
+    panel.appendChild(translatedSpan("galleryMediaPanelWith"));
+    panel.append(" " + entry.panel);
+    item.appendChild(panel);
+  }
+
+  if (entry.topic) {
+    const topic = document.createElement("p");
+    topic.className = "media-topic";
+    topic.textContent = entry.topic;
+    item.appendChild(topic);
+  }
+
+  if (entry.url) {
+    const labelKey = mediaLinkKey(entry.url);
+    if (labelKey) {
+      const linkParagraph = document.createElement("p");
+      linkParagraph.className = "media-link";
+      const link = document.createElement("a");
+      link.href = entry.url;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.setAttribute("data-i18n", labelKey);
+      link.textContent = translated(labelKey);
+      linkParagraph.appendChild(link);
+      item.appendChild(linkParagraph);
+    }
+  }
+
+  return item;
+}
+
+async function loadMedia() {
+  const snapshot = await getDocs(
+    query(collection(db, "media"), where("published", "==", true)),
+  );
+  return sortMedia(
+    snapshot.docs
+      .map(normaliseMedia)
+      .filter(function (entry) {
+        return entry !== null;
+      }),
+  );
+}
+
 async function loadGallery() {
   const snapshot = await getDocs(collection(db, "galleries"));
   return snapshot.docs
@@ -356,4 +550,22 @@ loadGallery()
   .catch(function () {
     loadingState.hidden = true;
     setState(errorState, true);
+  });
+
+// Its own chain, so a denied or failed media query cannot take the album
+// loading down with it. Each tab stands or falls on its own query.
+loadMedia()
+  .then(function (entries) {
+    mediaLoading.hidden = true;
+    if (entries.length === 0) {
+      setState(mediaEmpty, true);
+      return;
+    }
+    entries.forEach(function (entry) {
+      mediaList.appendChild(buildMediaEntry(entry));
+    });
+  })
+  .catch(function () {
+    mediaLoading.hidden = true;
+    setState(mediaError, true);
   });

@@ -210,7 +210,7 @@ export function buildSavePanel({
   // root, so the relative path resolves from either.
   const appLink = document.createElement("a");
   appLink.className = "button button-secondary";
-  appLink.href = "assets/downloads/autism-allyship-1.0.apk";
+  appLink.href = "assets/downloads/autism-allyship-1.1.apk";
   appLink.setAttribute("download", "");
   appLink.textContent = translated("saveTicketGetApp");
 
