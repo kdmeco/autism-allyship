@@ -12,7 +12,7 @@
 const translations = {
   en: {
     skipToContent: "Skip to main content",
-    brandTagline: "Where every mind belongs",
+    brandTagline: "I am an ally",
     mainNavLabel: "Main",
     navHome: "Home",
     navCommunity: "Community",
@@ -50,7 +50,7 @@ const translations = {
     rightsReserved: "All rights reserved.",
     footerNpcRegistration: "NPC registration:",
     homeHeroHeading: "Be Kind",
-    homeHeroTagline: "Where every mind belongs",
+    homeHeroTagline: "I am an ally",
     homeHeroMission:
       "Community events and practical information for autistic and neurodivergent people, their families and allies.",
     homeHeroDonate: "Donate",
@@ -156,7 +156,7 @@ const translations = {
     aboutStoryHeading: "Our story",
     aboutStoryText:
       "Autism Allyship organises community activities and shares information for autistic and neurodivergent people, their families and allies.",
-    aboutStoryTagline: "Where every mind belongs.",
+    aboutStoryTagline: "I am an ally.",
     aboutVoiceHeading: "Our voice in the community",
     aboutVoiceText:
       "The Foundation has taken part in conversations on the FeministMommy YouTube series, Rekord East and Channel Africa. Its community also includes the ShowUpCrew and the mascots Lumi and Ida.",
@@ -641,7 +641,7 @@ const translations = {
 
   af: {
     skipToContent: "Slaan oor na hoofinhoud",
-    brandTagline: "Waar elke gees tuis hoort",
+    brandTagline: "",
     mainNavLabel: "Hoof",
     navHome: "Tuis",
     navCommunity: "Gemeenskap",
@@ -677,7 +677,7 @@ const translations = {
     rightsReserved: "Alle regte voorbehou.",
     footerNpcRegistration: "NPC-registrasie:",
     homeHeroHeading: "Wees Vriendelik",
-    homeHeroTagline: "Waar elke gees tuis hoort",
+    homeHeroTagline: "",
     homeHeroMission: "Gemeenskapsgeleenthede en praktiese inligting vir outistiese en neurodivergente mense, hul families en bondgenote.",
     homeHeroDonate: "Skenk",
     homeHeroAbout: "Leer meer oor ons",
@@ -769,7 +769,7 @@ const translations = {
     aboutPageLede: "Active Autism & Neuro-Diversity Allyship Foundation bring mense bymekaar deur gemeenskapsgeleenthede, inligting en outistiese bondgenootskap.",
     aboutStoryHeading: "Ons storie",
     aboutStoryText: "Autism Allyship reël gemeenskapsaktiwiteite en deel inligting vir outistiese en neurodivergente mense, hul families en bondgenote.",
-    aboutStoryTagline: "Waar elke gees tuis hoort.",
+    aboutStoryTagline: "",
     aboutVoiceHeading: "Ons stem in die gemeenskap",
     aboutVoiceText: "Die Stigting het deelgeneem aan gesprekke op die FeministMommy YouTube-reeks, Rekord East en Channel Africa. Sy gemeenskap sluit ook die ShowUpCrew en die maskotte Lumi en Ida in.",
     aboutStandForHeading: "Waarvoor ons staan",
