@@ -84,6 +84,19 @@
       if (appSensory === "on" || appSensory === "off") {
         saved.sensory = appSensory;
       }
+
+      // The language the app is set to, so a WebView page opens already
+      // translated. Only the three the site has translations for, and it
+      // is applied rather than saved, so it never becomes the saved
+      // choice of a visitor who never made one.
+      var appLanguage = appParams.get("lang");
+      if (
+        appLanguage === "en" ||
+        appLanguage === "af" ||
+        appLanguage === "st"
+      ) {
+        saved.language = appLanguage;
+      }
     }
 
     var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
