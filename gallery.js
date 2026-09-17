@@ -354,12 +354,18 @@ function hostMatches(host, domain) {
 // be parsed as a URL has no host to match, so it gets no link at all rather
 // than a guessed label.
 function mediaLinkKey(url) {
-  let host;
+  let parsed;
   try {
-    host = new URL(url).hostname;
+    parsed = new URL(url);
   } catch (error) {
     return null;
   }
+  // Only https links are shown, matching the admin form, so a stored
+  // javascript: or data: address can never become a clickable link.
+  if (parsed.protocol !== "https:") {
+    return null;
+  }
+  const host = parsed.hostname;
   if (hostMatches(host, "omny.fm")) {
     return "galleryMediaListenOmny";
   }
