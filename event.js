@@ -89,6 +89,13 @@ function showMissing() {
   missing.hidden = false;
 }
 
+// A Firestore document id never contains a slash, because that is the path
+// separator, and doc() throws synchronously for one, before the promise
+// chain runs, which would leave the page blank.
+function isPlainDocumentId(id) {
+  return /^[^/]+$/.test(id);
+}
+
 function formatPrice(data) {
   return data.isTicketed ? "R" + data.price : translated("eventsPriceFree");
 }
@@ -472,7 +479,7 @@ function setUpShareButtons(title) {
   });
 }
 
-if (!eventId) {
+if (!eventId || !isPlainDocumentId(eventId)) {
   showMissing();
 } else {
   getDoc(doc(db, "events", eventId))
