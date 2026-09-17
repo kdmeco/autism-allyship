@@ -421,10 +421,29 @@ function askToRemovePhoto(actions, image) {
   actions.appendChild(cancel);
   cancel.focus();
 
-  yes.addEventListener("click", function () {
+  // The Worker deletes the file straight away, while the album document is
+  // only written on Save. Writing the shortened list first means leaving the
+  // page before Save never leaves the public gallery pointing at a deleted
+  // file. If the write fails the photo stays, because the file it points at
+  // still exists.
+  yes.addEventListener("click", async function () {
+    const previousImages = images;
     images = images.filter(function (other) {
       return other !== image;
     });
+
+    if (editingId) {
+      try {
+        await ensureAlbumCheckpoint();
+      } catch (error) {
+        console.error("Failed to remove the photo from the album:", error);
+        images = previousImages;
+        showPhotosError("Failed to remove the photo from the album. Try again.");
+        renderPhotoList();
+        return;
+      }
+    }
+
     renderPhotoList();
     removeUploadedPhoto(image);
   });
