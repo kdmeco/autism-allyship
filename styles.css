@@ -1567,6 +1567,24 @@ textarea {
   border-radius: var(--radius-xl);
 }
 
+.about-logo {
+  display: block;
+  width: min(100%, 24rem);
+  height: auto;
+  border: 1px solid var(--colour-line);
+  border-radius: var(--radius-lg);
+}
+
+.about-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.about-links a {
+  font-weight: 600;
+}
+
 .photo-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
