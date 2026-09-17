@@ -414,9 +414,21 @@ function sortMedia(entries) {
   });
 }
 
+// A span carrying data-i18n, so applyLanguage retranslates it when the
+// visitor switches language on an open page. The text is set as well,
+// because an entry renders after applyLanguage has already run once.
+function translatedSpan(key) {
+  const span = document.createElement("span");
+  span.setAttribute("data-i18n", key);
+  span.textContent = translated(key);
+  return span;
+}
+
 // The same shape the old hardcoded list used: an outlet heading, a meta
 // line, and the optional panel, topic and link. Everything goes in through
-// textContent, so nothing an admin types can run as markup.
+// textContent, so nothing an admin types can run as markup. The labels
+// carry data-i18n and the names and topics stay plain text, so a language
+// switch retranslates the one without touching the other.
 function buildMediaEntry(entry) {
   const item = document.createElement("li");
   item.className = "media-item";
@@ -426,18 +438,26 @@ function buildMediaEntry(entry) {
   outlet.textContent = entry.outlet;
   item.appendChild(outlet);
 
+  // The date itself stays in English, because names, shows and topics are
+  // not translated.
   const meta = document.createElement("p");
   meta.className = "media-meta";
-  const dateText = entry.date ? formatMediaDate(entry.date) : translated("galleryMediaUndated");
-  meta.textContent = entry.typeKey
-    ? dateText + " \u00b7 " + translated(entry.typeKey)
-    : dateText;
+  if (entry.date) {
+    meta.append(formatMediaDate(entry.date));
+  } else {
+    meta.appendChild(translatedSpan("galleryMediaUndated"));
+  }
+  if (entry.typeKey) {
+    meta.append(" \u00b7 ");
+    meta.appendChild(translatedSpan(entry.typeKey));
+  }
   item.appendChild(meta);
 
   if (entry.panel) {
     const panel = document.createElement("p");
     panel.className = "media-panel";
-    panel.textContent = translated("galleryMediaPanelWith") + " " + entry.panel;
+    panel.appendChild(translatedSpan("galleryMediaPanelWith"));
+    panel.append(" " + entry.panel);
     item.appendChild(panel);
   }
 
@@ -449,13 +469,15 @@ function buildMediaEntry(entry) {
   }
 
   if (entry.url) {
+    const labelKey = mediaLinkKey(entry.url);
     const linkParagraph = document.createElement("p");
     linkParagraph.className = "media-link";
     const link = document.createElement("a");
     link.href = entry.url;
     link.target = "_blank";
     link.rel = "noopener";
-    link.textContent = translated(mediaLinkKey(entry.url));
+    link.setAttribute("data-i18n", labelKey);
+    link.textContent = translated(labelKey);
     linkParagraph.appendChild(link);
     item.appendChild(linkParagraph);
   }
