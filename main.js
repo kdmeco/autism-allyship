@@ -100,13 +100,27 @@ function setUpLanguagePicker() {
     return;
   }
 
-  const savedLanguage = readSetting(STORAGE_KEYS.language) || "en";
-  picker.value = savedLanguage;
-  applyLanguage(savedLanguage);
+  // The app WebView passes its language in the URL, the same way it passes
+  // theme and sensory mode. It is applied here but never saved, so it never
+  // becomes the choice of a visitor who never made it. For everyone else the
+  // picker behaves exactly as before, on the saved choice.
+  const urlParams = new URLSearchParams(window.location.search);
+  const appLanguage = urlParams.get("app") === "1" ? urlParams.get("lang") : null;
+  const appEmbedLanguage =
+    appLanguage === "en" || appLanguage === "af" || appLanguage === "st"
+      ? appLanguage
+      : null;
+
+  const language =
+    appEmbedLanguage || readSetting(STORAGE_KEYS.language) || "en";
+  picker.value = language;
+  applyLanguage(language);
 
   picker.addEventListener("change", function () {
     applyLanguage(picker.value);
-    saveSetting(STORAGE_KEYS.language, picker.value);
+    if (!appEmbedLanguage) {
+      saveSetting(STORAGE_KEYS.language, picker.value);
+    }
   });
 }
 
