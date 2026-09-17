@@ -140,7 +140,7 @@ function renderQr(text) {
     function (error) {
       if (error) {
         console.error("Could not render the ticket QR code:", error);
-        qrWrapper.hidden = false;
+        qrWrapper.hidden = true;
       }
     },
   );
