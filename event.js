@@ -210,7 +210,15 @@ async function submitRegistrationRequest(data, startsAt, name, email, quantity) 
       quantity: quantity,
     }),
   });
-  const result = await response.json();
+  // A non JSON reply, an error page from a proxy or an empty body, makes
+  // json() throw, and the raw parse error is no use to a visitor. The API's
+  // own error message still shows when the reply is JSON.
+  let result = null;
+  try {
+    result = await response.json();
+  } catch (error) {
+    throw new Error(translated("ticketRegisterFailed"));
+  }
 
   if (!response.ok || !result.ok) {
     throw new Error(result.error || translated("ticketRegisterFailed"));
