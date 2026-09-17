@@ -56,6 +56,10 @@ const translations = {
     homeHeroDonate: "Donate",
     homeHeroAbout: "Learn about us",
     homeWhatWeDoHeading: "What we do",
+    homeFundingHeading: "Every purchase funds our work",
+    homeFundingText:
+      "We fund our work through the sale of AANDAF merchandise, by hosting an Annual Autism Family Picnic every November (Disability Awareness Month), and by being available for community activations and speaking engagements.",
+    homeFundingButton: "Visit the shop",
     homeCardAboutTitle: "About us",
     homeCardAboutText:
       "Learn about our mission, vision and the people behind the foundation.",
@@ -311,6 +315,8 @@ const translations = {
     shopPageTitle: "Autism Allyship shop",
     shopPageLede:
       "Browse Autism Allyship merchandise, then view the current catalogue and order on WhatsApp.",
+    shopFundingNote:
+      "Merchandise sales are our main source of funding, so every order helps us keep doing this work.",
     shopHeroEyebrow: "Merchandise",
     shopFeaturedHeading: "Made for everyday allyship",
     shopHeroText:
@@ -726,6 +732,9 @@ const translations = {
     homeHeroDonate: "Skenk",
     homeHeroAbout: "Leer meer oor ons",
     homeWhatWeDoHeading: "Wat ons doen",
+    homeFundingHeading: "Elke aankoop befonds ons werk",
+    homeFundingText: "Ons finansier ons werk deur die verkoop van AANDAF-produkte, deur elke November (Gestremdheidsbewustheidsmaand) 'n Jaarlikse Outisme-familiepiekniek aan te bied, en deur beskikbaar te wees vir gemeenskapsaktiverings en praatgeleenthede.",
+    homeFundingButton: "Besoek die winkel",
     homeCardAboutTitle: "Oor ons",
     homeCardAboutText: "Leer meer oor ons missie, visie en die mense agter die stigting.",
     homeCardAboutLink: "Kom meer te wete",
@@ -937,6 +946,7 @@ const translations = {
     eventsCapacityUnlimited: "Geen perk op getalle nie",
     shopPageTitle: "Autism Allyship winkel",
     shopPageLede: "Blaai deur Autism Allyship-handelsware, bekyk dan die huidige katalogus en bestel op WhatsApp.",
+    shopFundingNote: "Verkope van handelsware is ons hoofbron van befondsing, so elke bestelling help ons om met hierdie werk aan te gaan.",
     shopFeaturedHeading: "Gemaak vir alledaagse bondgenootskap",
     shopHeroEyebrow: "Handelsware",
     shopHeroText: "Sien die beskikbare ontwerpe en vra die span oor huidige opsies in die WhatsApp-katalogus.",
@@ -1303,6 +1313,9 @@ const translations = {
     homeHeroDonate: "Nehela",
     homeHeroAbout: "Ithute ka rona",
     homeWhatWeDoHeading: "Seo re se etsang",
+    homeFundingHeading: "Thekiso e nngwe le e nngwe e lefella mosebetsi wa rona",
+    homeFundingText: "Re lefella mosebetsi wa rona ka thekiso ya diapara tsa AANDAF, ka ho hlophisa Pikiniking ya Selemo le Selemo ya Malapa a “Autism” ka Pudungwana selemo se seng le se seng (Kgwedi ya Tsebo ya Bokooa), le ka ho ba teng bakeng sa diketsahalo tsa setjhaba le dipuo.",
+    homeFundingButton: "Ya lebenkeleng",
     homeCardAboutTitle: "Ka rona",
     homeCardAboutText: "Ithute ka morero wa rona, pono ya rona le batho ba ka morao ho motheo ona.",
     homeCardAboutLink: "Fumana tse ding",
@@ -1514,6 +1527,7 @@ const translations = {
     eventsCapacityUnlimited: "Ha ho moedi wa dipalo",
     shopPageTitle: "Lebenkele la Autism Allyship",
     shopPageLede: "Sheba thepa ya Autism Allyship, ebe o sheba bukana ya hajwale mme o odare ho WhatsApp.",
+    shopFundingNote: "Thekiso ya thepa ke mohlodi wa rona o moholo wa madi, kahoo odaro e nngwe le e nngwe e re thusa ho tswela pele ka mosebetsi ona.",
     shopFeaturedHeading: "E entswe bakeng sa botswalle ba letsatsi le letsatsi",
     shopHeroEyebrow: "Thepa",
     shopHeroText: "Sheba meralo e teng mme o botse sehlopha ka dikgetho tsa hajwale bukaneng ya WhatsApp.",
