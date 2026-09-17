@@ -81,6 +81,19 @@
       if (appSensory === "on" || appSensory === "off") {
         saved.sensory = appSensory;
       }
+
+      // The language the app is set to, so a WebView page opens already
+      // translated. Only the three the site has translations for, and it
+      // is applied rather than saved, so it never becomes the saved
+      // choice of a visitor who never made one.
+      var appLanguage = appParams.get("lang");
+      if (
+        appLanguage === "en" ||
+        appLanguage === "af" ||
+        appLanguage === "st"
+      ) {
+        saved.language = appLanguage;
+      }
     }
 
     var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -123,7 +136,7 @@
       <span class="brand-words">
         <span class="brand-name">Autism Allyship</span>
         <span class="brand-tagline" data-i18n="brandTagline"
-          >Where every mind belongs</span
+          >I am an ally</span
         >
       </span>
     </a>
@@ -527,6 +540,10 @@
     <p>
       &copy; <span id="footerYear">2026</span> Active Autism &amp; Neuro-Diversity Allyship Foundation.
       <span data-i18n="rightsReserved">All rights reserved.</span>
+    </p>
+    <p>
+      <span data-i18n="footerNpcRegistration">NPC registration:</span>
+      2023/657319/08
     </p>
     <p class="footer-contact">
       <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>

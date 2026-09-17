@@ -24,7 +24,9 @@ const emptyState = document.getElementById("blogEmpty");
 
 const urlParams = new URLSearchParams(window.location.search);
 const activeCategory = urlParams.get("category") || "";
-const requestedPage = parseInt(urlParams.get("page"), 10) || 1;
+// parseInt gives NaN for page=abc, which falls back to 1, but a negative
+// number parses fine, so anything below 1 falls back too.
+const requestedPage = Math.max(1, parseInt(urlParams.get("page"), 10) || 1);
 
 function pageLink(pageNumber, category) {
   const params = new URLSearchParams();

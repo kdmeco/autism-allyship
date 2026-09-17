@@ -84,6 +84,19 @@
       if (appSensory === "on" || appSensory === "off") {
         saved.sensory = appSensory;
       }
+
+      // The language the app is set to, so a WebView page opens already
+      // translated. Only the three the site has translations for, and it
+      // is applied rather than saved, so it never becomes the saved
+      // choice of a visitor who never made one.
+      var appLanguage = appParams.get("lang");
+      if (
+        appLanguage === "en" ||
+        appLanguage === "af" ||
+        appLanguage === "st"
+      ) {
+        saved.language = appLanguage;
+      }
     }
 
     var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -126,7 +139,7 @@
           <span class="brand-words">
             <span class="brand-name">Autism Allyship</span>
             <span class="brand-tagline" data-i18n="brandTagline"
-              >Where every mind belongs</span
+              >I am an ally</span
             >
           </span>
         </a>
@@ -425,24 +438,279 @@
           </p>
         </section>
 
-        <p class="gallery-status" id="galleryLoading" role="status" data-i18n="galleryLoading">
-          Loading gallery albums...
-        </p>
+        <div class="tabs">
+          <div
+            class="tab-list"
+            role="tablist"
+            id="galleryTabList"
+            aria-label="Gallery sections"
+            data-i18n-aria-label="galleryTabsLabel"
+          >
+            <button
+              type="button"
+              class="tab"
+              role="tab"
+              id="galleryPhotosTab"
+              aria-controls="photos"
+              aria-selected="true"
+            >
+              <span data-i18n="galleryTabPhotos">Photos</span>
+            </button>
+            <button
+              type="button"
+              class="tab"
+              role="tab"
+              id="galleryMediaTab"
+              aria-controls="media"
+              aria-selected="false"
+              tabindex="-1"
+            >
+              <span data-i18n="galleryTabMedia">Interviews and media</span>
+            </button>
+          </div>
 
-        <div class="gallery-years" id="galleryYears"></div>
+          <section
+            class="tab-panel"
+            role="tabpanel"
+            id="photos"
+            aria-labelledby="galleryPhotosTab"
+            tabindex="0"
+          >
+            <p class="gallery-status" id="galleryLoading" role="status" data-i18n="galleryLoading">
+              Loading gallery albums...
+            </p>
 
-        <p class="gallery-state" id="galleryEmpty" hidden data-i18n="galleryEmpty">
-          There are currently no gallery albums available.
-        </p>
-        <p class="gallery-state" id="galleryError" hidden data-i18n="galleryError">
-          We could not load the gallery right now. Please try again later.
-        </p>
+            <div class="gallery-years" id="galleryYears"></div>
 
-        <noscript>
-          <p class="gallery-state" data-i18n="galleryJavaScriptRequired">
-            The gallery needs JavaScript to load its albums. Please enable it to view the photos.
-          </p>
-        </noscript>
+            <p class="gallery-state" id="galleryEmpty" hidden data-i18n="galleryEmpty">
+              There are currently no gallery albums available.
+            </p>
+            <p class="gallery-state" id="galleryError" hidden data-i18n="galleryError">
+              We could not load the gallery right now. Please try again later.
+            </p>
+
+            <noscript>
+              <p class="gallery-state" data-i18n="galleryJavaScriptRequired">
+                The gallery needs JavaScript to load its albums. Please enable it to view the photos.
+              </p>
+            </noscript>
+          </section>
+
+          <section
+            class="tab-panel"
+            role="tabpanel"
+            id="media"
+            aria-labelledby="galleryMediaTab"
+            tabindex="0"
+            hidden
+          >
+            <h2 data-i18n="galleryMediaHeading">Interviews and media</h2>
+            <p class="media-intro" data-i18n="galleryMediaIntro">
+              Appearances by the foundation, newest first.
+            </p>
+            <ul class="media-list">
+              <li class="media-item">
+                <h3 class="media-outlet">Channel Africa</h3>
+                <p class="media-meta">3 Nov 2025 · <span data-i18n="galleryMediaTypeTelevision">Television</span></p>
+                <p class="media-topic">The 3rd Annual Autism Family Picnic</p>
+                <p class="media-link">
+                  <a
+                    href="https://www.youtube.com/watch?v=byfZwNKA95Q"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaWatchYouTube">Watch on YouTube</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Rekord East</h3>
+                <p class="media-meta">22 Nov 2024 · <span data-i18n="galleryMediaTypeNewspaper">Newspaper</span></p>
+                <p class="media-link">
+                  <a
+                    href="https://www.citizen.co.za/rekord/epapers/rekord-east-22-november-2024/"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaReadRekord">Read on Rekord</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">98.7 Woman, Takeover with Bokang</h3>
+                <p class="media-meta">8 Aug 2024 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-topic">Understanding autism in the context of family dynamics</p>
+                <p class="media-link">
+                  <a
+                    href="https://omny.fm/shows/987woman-takeover/understanding-autism-in-the-context-of-family-dyna"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaListenOmny">Listen on Omny</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Power FM, Power Perspective with Denzil Taylor</h3>
+                <p class="media-meta">11 Jul 2024 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi, Nsamu Moonga (therapist)
+                </p>
+                <p class="media-topic">Unpacking caregiver burnout and compassion fatigue</p>
+                <p class="media-link">
+                  <a
+                    href="https://omny.fm/shows/power-perspective/unpacking-caregiver-burnout-and-compassion-fatigue"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaListenOmny">Listen on Omny</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Ayanda's Corner with Ayanda Tetyana</h3>
+                <p class="media-meta">9 Apr 2024 · <span data-i18n="galleryMediaTypeLiveStream">Live stream</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi
+                </p>
+                <p class="media-topic">How we can be a supportive presence for families raising autistic children</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Channel Africa</h3>
+                <p class="media-meta">3 Apr 2024 · <span data-i18n="galleryMediaTypeTelevision">Television</span></p>
+                <p class="media-topic">Autism Awareness Day</p>
+                <p class="media-link">
+                  <a
+                    href="https://www.youtube.com/watch?v=iI5YMjX-FAw"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaWatchYouTube">Watch on YouTube</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Power FM, Power Perspective with Denzil Taylor</h3>
+                <p class="media-meta">23 Nov 2023 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi, Neo Masike, Dineo Makenete
+                </p>
+                <p class="media-topic">Creating inclusive environments for autistic children</p>
+                <p class="media-link">
+                  <a
+                    href="https://omny.fm/shows/power-perspective/disability-feature-with-the-active-neuro-diversity"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaListenOmny">Listen on Omny</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Power FM, Power Weekend Breakfast with Tshegohaco Moagi</h3>
+                <p class="media-meta">30 Oct 2023 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-topic">Power Hustle: Autism Family Hike and Picnic</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Power FM, Power Weekend Breakfast with Pabi Moloi</h3>
+                <p class="media-meta">22 Jan 2023 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi, Lerato Tolamo
+                </p>
+                <p class="media-topic">Autism allyship</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">In His Grace and Mercy with Dr Maphoroma Kekna</h3>
+                <p class="media-meta">15 Sep 2022 · <span data-i18n="galleryMediaTypeOnlineVideo">Online video</span></p>
+                <p class="media-topic">Autism awareness</p>
+                <p class="media-link">
+                  <a
+                    href="https://www.youtube.com/watch?v=yMH258iYxf0"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaWatchYouTube">Watch on YouTube</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">New Frame, by Zandile Bangani</h3>
+                <p class="media-meta">17 May 2022 · <span data-i18n="galleryMediaTypeArticle">Article</span></p>
+                <p class="media-topic">Inclusive education unrealised after 21 years</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">702, Afternoons with Relebogile Mabotja</h3>
+                <p class="media-meta">11 Apr 2022 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-topic">Big and small victories with ASD</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Kaya FM, Point of View with Phemelo Motene</h3>
+                <p class="media-meta">4 Apr 2022 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi, Lindiwe Ndlovu, Vezi, Neo Masike, Nomsa Masoka, Joyce McChambers
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Newzroom Afrika with Hugo Ribatika</h3>
+                <p class="media-meta">2 Apr 2022 · <span data-i18n="galleryMediaTypeTelevision">Television</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi and Vezi
+                </p>
+                <p class="media-topic">World Autism Awareness and Acceptance Day</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Power FM, Power Perspective with Denzil Taylor</h3>
+                <p class="media-meta">1 Apr 2022 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi and Autism eKasi
+                </p>
+                <p class="media-topic">Autism Month</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">UnPacked with Relebogile Mabotja</h3>
+                <p class="media-meta">22 Jul 2021 · <span data-i18n="galleryMediaTypeTelevision">Television</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi
+                </p>
+                <p class="media-topic">Raising autistic children</p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Power FM, Power Lunch with Aphelele Somi-Musa</h3>
+                <p class="media-meta">3 Apr 2019 · <span data-i18n="galleryMediaTypeRadio">Radio</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi, Neo Masike, Dr Tumelo Leuuw
+                </p>
+                <p class="media-topic">Things no one tells you about raising a child with autism</p>
+                <p class="media-link">
+                  <a
+                    href="https://omny.fm/shows/power-lunch/things-no-one-tells-you-about-raising-a-child-with"
+                    target="_blank"
+                    rel="noopener"
+                    data-i18n="galleryMediaListenOmny">Listen on Omny</a
+                  >
+                </p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Instagram live with Bokang Montjane-Tshabalala</h3>
+                <p class="media-meta"><span data-i18n="galleryMediaUndated">Undated</span> · <span data-i18n="galleryMediaTypeLiveStream">Live stream</span></p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Facebook live, Wesley Guild with Selalelo Arendse</h3>
+                <p class="media-meta"><span data-i18n="galleryMediaUndated">Undated</span> · <span data-i18n="galleryMediaTypeLiveStream">Live stream</span></p>
+              </li>
+              <li class="media-item">
+                <h3 class="media-outlet">Sunnyside Seventh-day Adventist Church</h3>
+                <p class="media-meta"><span data-i18n="galleryMediaUndated">Undated</span> · <span data-i18n="galleryMediaTypeVisitAndLiveStream">Visit and live stream</span></p>
+                <p class="media-panel">
+                  <span data-i18n="galleryMediaPanelWith">With</span>
+                  Kgomotso Mmalegae Moalusi and Autism eKasi
+                </p>
+              </li>
+            </ul>
+          </section>
+        </div>
       </div>
     </main>
 
@@ -518,113 +786,113 @@
     </div>
 
     <footer class="site-footer">
-      <div class="footer-columns">
-        <div class="footer-column footer-about">
-          <a class="brand brand-footer" href="index.html">
-            <img
-              class="brand-mark"
-              src="assets/brand/logo-mark.webp"
-              alt=""
-              width="176"
-              height="264"
-            />
-            <span class="brand-words">
-              <span class="brand-name">Autism Allyship</span>
-            </span>
-          </a>
-          <p data-i18n="footerDescription">
-            Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
-          </p>
-        </div>
+  <div class="footer-columns">
+    <div class="footer-column footer-about">
+      <a class="brand brand-footer" href="index.html">
+        <img
+          class="brand-mark"
+          src="assets/brand/logo-mark.webp"
+          alt=""
+          width="176"
+          height="264"
+        />
+        <span class="brand-words">
+          <span class="brand-name">Autism Allyship</span>
+        </span>
+      </a>
+      <p data-i18n="footerDescription">
+        Active Autism &amp; Neuro-Diversity Allyship Foundation organises community events and shares information for autistic and neurodivergent people, their families and allies.
+      </p>
+    </div>
 
-        <nav
-          class="footer-column"
-          data-i18n-aria-label="footerQuickLinks"
-          aria-label="Quick links"
-        >
-          <h2 class="footer-heading" data-i18n="footerQuickLinks">
-            Quick links
-          </h2>
-          <ul class="footer-list">
-            <li><a href="about.html" data-i18n="navAbout">About</a></li>
-            <li>
-              <a href="resources.html" data-i18n="navResources">Resources</a>
-            </li>
-            <li><a href="events.html" data-i18n="navEvents">Events</a></li>
-            <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
-            <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
-          </ul>
-        </nav>
+    <nav
+      class="footer-column"
+      data-i18n-aria-label="footerQuickLinks"
+      aria-label="Quick links"
+    >
+      <h2 class="footer-heading" data-i18n="footerQuickLinks">Quick links</h2>
+      <ul class="footer-list">
+        <li><a href="about.html" data-i18n="navAbout">About</a></li>
+        <li><a href="resources.html" data-i18n="navResources">Resources</a></li>
+        <li><a href="events.html" data-i18n="navEvents">Events</a></li>
+        <li><a href="shop.html" data-i18n="navShop">Shop</a></li>
+        <li><a href="contact.html" data-i18n="navContact">Contact</a></li>
+      </ul>
+    </nav>
 
-        <nav
-          class="footer-column"
-          data-i18n-aria-label="footerSocials"
-          aria-label="Social media"
-        >
-          <h2 class="footer-heading" data-i18n="footerSocials">Follow us</h2>
-          <ul class="footer-list">
-            <li>
-              <a
-                href="https://www.instagram.com/autismallyship/"
-                rel="me noopener"
-                target="_blank"
-                >Instagram</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://x.com/AutismAllyship"
-                rel="me noopener"
-                target="_blank"
-                >X</a
-              >
-            </li>
-            <li>
-              <a
-                href="https://chat.whatsapp.com/HI0K5zd5oTxC1tt8sWYPk2"
-                rel="noopener"
-                target="_blank"
-                >WhatsApp community</a
-              >
-            </li>
-          </ul>
-        </nav>
+    <nav
+      class="footer-column"
+      data-i18n-aria-label="footerSocials"
+      aria-label="Social media"
+    >
+      <h2 class="footer-heading" data-i18n="footerSocials">Follow us</h2>
+      <ul class="footer-list">
+        <li>
+          <a
+            href="https://www.instagram.com/autismallyship/"
+            rel="me noopener"
+            target="_blank"
+            >Instagram</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://x.com/AutismAllyship"
+            rel="me noopener"
+            target="_blank"
+            >X</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://chat.whatsapp.com/HI0K5zd5oTxC1tt8sWYPk2"
+            rel="noopener"
+            target="_blank"
+            >WhatsApp community</a
+          >
+        </li>
+      </ul>
+    </nav>
 
-        <nav
-          class="footer-column"
-          data-i18n-aria-label="footerLegal"
-          aria-label="Legal"
-        >
-          <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
-          <ul class="footer-list">
-            <li>
-              <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
-            </li>
-            <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
-            <li>
-              <a href="accessibility.html" data-i18n="legalAccessibility"
-                >Accessibility statement</a
-              >
-            </li>
-            <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
-          </ul>
-        </nav>
-      </div>
+    <nav
+      class="footer-column"
+      data-i18n-aria-label="footerLegal"
+      aria-label="Legal"
+    >
+      <h2 class="footer-heading" data-i18n="footerLegal">Legal</h2>
+      <ul class="footer-list">
+        <li>
+          <a href="privacy.html" data-i18n="legalPrivacy">Privacy policy</a>
+        </li>
+        <li><a href="terms.html" data-i18n="legalTerms">Terms of use</a></li>
+        <li>
+          <a href="accessibility.html" data-i18n="legalAccessibility"
+            >Accessibility statement</a
+          >
+        </li>
+        <li><a href="paia.html" data-i18n="legalPaia">PAIA manual</a></li>
+      </ul>
+    </nav>
+  </div>
 
-      <div class="footer-baseline">
-        <p>
-          &copy; <span id="footerYear">2026</span> Active Autism &amp; Neuro-Diversity Allyship Foundation.
-          <span data-i18n="rightsReserved">All rights reserved.</span>
-        </p>
-        <p class="footer-contact">
-          <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>
-          <span aria-hidden="true">&middot;</span>
-          <a href="tel:+27663859936">+27 66 385 9936</a>
-          <span aria-hidden="true">&middot;</span>
-          <span>Pretoria, Gauteng, South Africa</span>
-        </p>
-      </div>
-    </footer>
+  <div class="footer-baseline">
+    <p>
+      &copy; <span id="footerYear">2026</span> Active Autism &amp; Neuro-Diversity Allyship Foundation.
+      <span data-i18n="rightsReserved">All rights reserved.</span>
+    </p>
+    <p>
+      <span data-i18n="footerNpcRegistration">NPC registration:</span>
+      2023/657319/08
+    </p>
+    <p class="footer-contact">
+      <a href="mailto:info@autismallyship.org">info@autismallyship.org</a>
+      <span aria-hidden="true">&middot;</span>
+      <a href="tel:+27663859936">+27 66 385 9936</a>
+      <span aria-hidden="true">&middot;</span>
+      <span>Pretoria, Gauteng, South Africa</span>
+    </p>
+  </div>
+</footer>
 
     <script type="module" src="gallery.js"></script>
   </body>

@@ -6,20 +6,18 @@ operations and managed image uploads.
 
 ## Related projects
 
-- `../autism-allyship-api` — ticket, contact and donation Worker API.
-- `../autism-allyship-upload` — authenticated gallery upload and removal Worker.
+- `../autism-allyship-api`: ticket and contact Worker API.
+- `../autism-allyship-upload`: authenticated gallery upload and removal Worker.
 
 ## Deployment branches
 
 Cloudflare Pages deploys each environment from Git:
 
-- `dev` — development integration
-- `staging` — pre-production review
-- `main` — production
+- `dev`: development integration
+- `staging`: pre-production review
+- `main`: production
 
-Promote a tested change in that order. Gallery test albums must be removed through the staging
-admin before promoting staging to `main`, so the Firestore record and its uploaded image files
-are deleted together.
+Promote a tested change in that order.
 
 ## Gallery behaviour
 
