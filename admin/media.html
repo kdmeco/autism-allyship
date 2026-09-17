@@ -57,7 +57,7 @@
         if (saved.language) root.setAttribute("lang", saved.language);
       })();
     </script>
-    <title>Admin dashboard | Autism Allyship</title>
+    <title>Media | Admin | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -322,86 +322,45 @@
 
     <main id="main" tabindex="-1">
       <div class="container">
-        <section class="admin-dashboard" aria-labelledby="dashboardHeading">
-          <h1 id="dashboardHeading" data-i18n="adminDashboardHeading">
-            Admin dashboard
-          </h1>
-          <p class="admin-dashboard-intro" data-i18n="adminDashboardIntro">
-            Manage the site content from here.
+        <section class="admin-page" aria-labelledby="mediaListHeading">
+          <div class="admin-page-header">
+            <div>
+              <h1 id="mediaListHeading" data-i18n="adminMediaHeading">
+                Media
+              </h1>
+              <p class="admin-page-intro" data-i18n="adminMediaIntro">
+                Interviews and media appearances, published and not published.
+              </p>
+            </div>
+            <div class="admin-page-actions">
+              <a
+                class="button button-secondary"
+                href="index.html"
+                data-i18n="adminBackToDashboard"
+                >Back to dashboard</a
+              >
+              <a
+                class="button button-primary"
+                href="media-edit.html"
+                data-i18n="adminMediaNew"
+                >New media entry</a
+              >
+            </div>
+          </div>
+
+          <p
+            class="admin-empty"
+            id="emptyState"
+            hidden
+            data-i18n="adminMediaEmpty"
+          >
+            No media entries yet. Add the first one.
           </p>
 
-          <nav class="admin-nav" aria-label="Admin sections">
-            <ul class="admin-nav-list">
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="blog.html"
-                  data-i18n="adminNavBlog"
-                  >Blog posts</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="resources.html"
-                  data-i18n="adminNavResources"
-                  >Resources</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="events.html"
-                  data-i18n="adminNavEvents"
-                  >Events</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="gallery.html"
-                  data-i18n="adminNavGallery"
-                  >Gallery</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="media.html"
-                  data-i18n="adminNavMedia"
-                  >Media</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="instagram.html"
-                  data-i18n="adminNavInstagram"
-                  >Instagram</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="inbox.html"
-                  data-i18n="adminNavInbox"
-                  >Inbox</a
-                >
-              </li>
-            </ul>
-          </nav>
-
-          <button
-            type="button"
-            class="button button-secondary"
-            id="signOutButton"
-            data-i18n="adminSignOut"
-          >
-            Sign out
-          </button>
+          <div id="mediaGroups"></div>
         </section>
       </div>
-    </main>
+    </main>    
 
     <footer class="site-footer">
       <div class="footer-columns">
@@ -516,6 +475,6 @@
       </div>
     </footer>
 
-    <script type="module" src="dashboard.js"></script>
+    <script type="module" src="media.js"></script>
   </body>
 </html>

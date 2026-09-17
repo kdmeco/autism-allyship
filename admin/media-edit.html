@@ -57,7 +57,7 @@
         if (saved.language) root.setAttribute("lang", saved.language);
       })();
     </script>
-    <title>Admin dashboard | Autism Allyship</title>
+    <title>Resource | Admin | Autism Allyship</title>
   </head>
   <body>
     <header class="site-header" id="siteHeader">
@@ -322,86 +322,157 @@
 
     <main id="main" tabindex="-1">
       <div class="container">
-        <section class="admin-dashboard" aria-labelledby="dashboardHeading">
-          <h1 id="dashboardHeading" data-i18n="adminDashboardHeading">
-            Admin dashboard
-          </h1>
-          <p class="admin-dashboard-intro" data-i18n="adminDashboardIntro">
-            Manage the site content from here.
-          </p>
+        <section class="admin-page" aria-labelledby="mediaEditHeading">
+          <div class="admin-page-header">
+            <div>
+              <h1 id="mediaEditHeading" data-i18n="adminMediaEditHeading">
+                Edit media
+              </h1>
+              <p class="admin-page-intro" data-i18n="adminMediaEditIntro">
+                Add or edit an interview or appearance.
+              </p>
+            </div>
+            <div class="admin-page-actions">
+              <a
+                class="button button-secondary"
+                href="media.html"
+                data-i18n="adminMediaBackToList"
+                >Back to media</a
+              >
+            </div>
+          </div>
 
-          <nav class="admin-nav" aria-label="Admin sections">
-            <ul class="admin-nav-list">
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="blog.html"
-                  data-i18n="adminNavBlog"
-                  >Blog posts</a
+          <form class="admin-form admin-form-wide" id="mediaForm" novalidate>
+            <div class="form-field">
+              <label for="outlet">
+                <span data-i18n="adminMediaOutlet">Outlet</span>
+                <span class="required-mark" data-i18n="requiredField"
+                  >(required)</span
                 >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="resources.html"
-                  data-i18n="adminNavResources"
-                  >Resources</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="events.html"
-                  data-i18n="adminNavEvents"
-                  >Events</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="gallery.html"
-                  data-i18n="adminNavGallery"
-                  >Gallery</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="media.html"
-                  data-i18n="adminNavMedia"
-                  >Media</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="instagram.html"
-                  data-i18n="adminNavInstagram"
-                  >Instagram</a
-                >
-              </li>
-              <li>
-                <a
-                  class="admin-nav-link"
-                  href="inbox.html"
-                  data-i18n="adminNavInbox"
-                  >Inbox</a
-                >
-              </li>
-            </ul>
-          </nav>
+              </label>
+              <input type="text" id="outlet" name="outlet" required />
+              <p class="form-field-note" data-i18n="adminMediaOutletNote">
+                The station, paper or channel, and the show.
+              </p>
+              <p
+                class="form-error"
+                id="outletError"
+                hidden
+                data-i18n="adminMediaOutletError"
+              >
+                Enter an outlet for the media entry.
+              </p>
+            </div>
 
-          <button
-            type="button"
-            class="button button-secondary"
-            id="signOutButton"
-            data-i18n="adminSignOut"
-          >
-            Sign out
-          </button>
+            <div class="form-field">
+              <label for="type">
+                <span data-i18n="adminMediaType">Type</span>
+                <span class="required-mark" data-i18n="requiredField"
+                  >(required)</span
+                >
+              </label>
+              <select id="type" name="type" required>
+                <option value="" data-i18n="adminMediaTypeChoose"
+                  >Choose a type</option
+                >
+                <option value="television">Television</option>
+                <option value="radio">Radio</option>
+                <option value="newspaper">Newspaper</option>
+                <option value="article">Article</option>
+                <option value="online video">Online video</option>
+                <option value="live stream">Live stream</option>
+                <option value="visit and live stream"
+                  >Visit and live stream</option
+                >
+              </select>
+              <p
+                class="form-error"
+                id="typeError"
+                hidden
+                data-i18n="adminMediaTypeError"
+              >
+                Choose a type for the media entry.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="date" data-i18n="adminMediaDate">Date</label>
+              <input type="date" id="date" name="date" />
+              <p class="form-field-note" data-i18n="adminMediaDateNote">
+                Optional. The day it aired or was published.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="panel" data-i18n="adminMediaPanel">Panel</label>
+              <input type="text" id="panel" name="panel" />
+              <p class="form-field-note" data-i18n="adminMediaPanelNote">
+                Optional. The people who took part.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="topic" data-i18n="adminMediaTopic">Topic</label>
+              <input type="text" id="topic" name="topic" />
+              <p class="form-field-note" data-i18n="adminMediaTopicNote">
+                Optional. What the interview or appearance was about.
+              </p>
+            </div>
+
+            <div class="form-field">
+              <label for="url" data-i18n="adminMediaUrl">Web address</label>
+              <input type="text" id="url" name="url" />
+              <p class="form-field-note" data-i18n="adminMediaUrlNote">
+                Optional. The full https address of the recording or article.
+              </p>
+              <p
+                class="form-error"
+                id="urlError"
+                hidden
+                data-i18n="adminMediaUrlError"
+              >
+                That web address must start with https://.
+              </p>
+            </div>
+
+            <div class="form-field form-field-toggle">
+              <label for="published" class="toggle-label">
+                <span data-i18n="adminMediaPublished">Published</span>
+                <span class="toggle-note" data-i18n="adminMediaPublishedNote"
+                  >Visible on the public media gallery.</span
+                >
+              </label>
+              <input type="checkbox" id="published" name="published" />
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="submit"
+                class="button button-primary"
+                data-i18n="adminMediaSaveButton"
+              >
+                Save media entry
+              </button>
+              <a
+                class="button button-secondary"
+                href="media.html"
+                data-i18n="adminMediaCancelButton"
+                >Cancel</a
+              >
+            </div>
+
+            <p
+              class="form-error form-error-general"
+              id="formError"
+              hidden
+              data-i18n="adminMediaSaveFailed"
+            >
+              Failed to save the media entry. Try again.
+            </p>
+          </form>
         </section>
       </div>
-    </main>
+    </main>    
 
     <footer class="site-footer">
       <div class="footer-columns">
@@ -516,6 +587,6 @@
       </div>
     </footer>
 
-    <script type="module" src="dashboard.js"></script>
+    <script type="module" src="media-edit.js"></script>
   </body>
 </html>
