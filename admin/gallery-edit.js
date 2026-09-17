@@ -488,7 +488,6 @@ photosInput.addEventListener("change", async function () {
   let uploadedCount = 0;
 
   try {
-    const token = await auth.currentUser.getIdToken();
     const branch = uploadBranch();
 
     await ensureAlbumCheckpoint();
@@ -527,6 +526,11 @@ photosInput.addEventListener("change", async function () {
         " of " +
         files.length +
         "...";
+
+      // A fresh token per batch. An ID token expires after an hour, and one
+      // fetched before the first batch can lapse part way through a long
+      // import, failing every later batch with a 401.
+      const token = await auth.currentUser.getIdToken();
 
       const response = await fetch(WORKER_UPLOAD_URL, {
         method: "POST",
