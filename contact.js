@@ -40,6 +40,7 @@ const categoryPlaceholders = {
   media: "contactPlaceholderMedia",
   "resource suggestion": "contactPlaceholderResourceSuggestion",
   accessibility: "contactPlaceholderAccessibilityFeedback",
+  "speaking engagement": "contactPlaceholderSpeakingEngagement",
 };
 
 function updateMessagePlaceholder() {
