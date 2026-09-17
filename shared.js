@@ -251,3 +251,94 @@ export function chevronSvg() {
   svg.appendChild(path);
   return svg;
 }
+
+// The WAI-ARIA tabs pattern, written once so the gallery and the resources
+// page do not grow two versions of it. The markup supplies role="tablist"
+// with buttons carrying role="tab" and aria-controls pointing at
+// role="tabpanel" sections. One tab stop: the selected tab is the only one
+// in the order, arrows move focus and select as they go, Home and End jump
+// to the ends.
+//
+// The selected tab is mirrored into the URL hash, so a tab can be linked to:
+// gallery.html#media is the address other pages use for the media list. On
+// load, a hash selects its tab; a plain visit selects the first tab without
+// inventing a hash that was never asked for.
+export function setUpTabs(tabList) {
+  const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+  if (tabs.length === 0) {
+    return;
+  }
+
+  function panelFor(tab) {
+    const id = tab.getAttribute("aria-controls");
+    return id ? document.getElementById(id) : null;
+  }
+
+  function selectTab(tab, moveFocus, updateHash) {
+    tabs.forEach(function (other) {
+      const selected = other === tab;
+      other.setAttribute("aria-selected", String(selected));
+      other.tabIndex = selected ? 0 : -1;
+      const panel = panelFor(other);
+      if (panel) {
+        panel.hidden = !selected;
+      }
+    });
+    if (moveFocus) {
+      tab.focus();
+    }
+    if (updateHash) {
+      const id = tab.getAttribute("aria-controls");
+      if (window.location.hash !== "#" + id) {
+        history.replaceState(null, "", "#" + id);
+      }
+    }
+  }
+
+  tabList.addEventListener("click", function (event) {
+    const tab = event.target.closest('[role="tab"]');
+    if (tab) {
+      selectTab(tab, false, true);
+    }
+  });
+
+  tabList.addEventListener("keydown", function (event) {
+    const current = tabs.indexOf(document.activeElement);
+    if (current === -1) {
+      return;
+    }
+    let next = -1;
+    if (event.key === "ArrowRight") {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === "ArrowLeft") {
+      next = (current - 1 + tabs.length) % tabs.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = tabs.length - 1;
+    }
+    if (next !== -1) {
+      event.preventDefault();
+      selectTab(tabs[next], true, true);
+    }
+  });
+
+  // Someone editing the address bar of an already open page changes only the
+  // hash, which the browser delivers as hashchange rather than a load. The
+  // same listener covers a link to another tab of this same page.
+  window.addEventListener("hashchange", function () {
+    const id = window.location.hash.replace(/^#/, "");
+    const match = tabs.find(function (tab) {
+      return tab.getAttribute("aria-controls") === id;
+    });
+    if (match && match.getAttribute("aria-selected") !== "true") {
+      selectTab(match, false, false);
+    }
+  });
+
+  const hash = window.location.hash.replace(/^#/, "");
+  const initial = tabs.find(function (tab) {
+    return tab.getAttribute("aria-controls") === hash;
+  });
+  selectTab(initial || tabs[0], false, false);
+}

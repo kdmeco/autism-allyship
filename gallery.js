@@ -3,7 +3,7 @@ import {
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
-import { thumbPath, translated } from "./shared.js";
+import { thumbPath, translated, setUpTabs } from "./shared.js";
 
 const loadingState = document.getElementById("galleryLoading");
 const yearsContainer = document.getElementById("galleryYears");
@@ -332,6 +332,14 @@ async function loadGallery() {
     .filter(function (album) {
       return album !== null;
     });
+}
+
+// The tab list sits above everything the album code touches, so wiring it
+// here keeps one script per page. A missing list means the page was changed;
+// the albums still load under whatever markup replaced it.
+const tabList = document.getElementById("galleryTabList");
+if (tabList) {
+  setUpTabs(tabList);
 }
 
 setUpLightbox();
