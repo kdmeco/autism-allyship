@@ -208,6 +208,25 @@ const translations = {
     resourcesPageTitle: "Resources",
     resourcesPageLede:
       "Support services, organisations and information across South Africa.",
+    resourcesIntroText:
+      "One of our key projects is to develop and maintain a national database that guides families and people affected by autism and neurodiversity. It covers:",
+    resourcesIntroCommunity:
+      "community activations at schools, clinics, police stations and shops",
+    resourcesIntroSpecialists:
+      "specialists such as doctors, occupational therapists and educational psychologists",
+    resourcesIntroLeisure:
+      "leisure and recreational spaces willing to make the necessary accommodations",
+    resourcesIntroSupport:
+      "support groups, so people can find the one closest to them",
+    resourcesChoosePrompt: "Choose a category to see what it holds.",
+    resourcesGroupSchools: "Schools",
+    resourcesGroupSpecialists: "Doctors, therapists and assessments",
+    resourcesGroupSupport: "Support groups",
+    resourcesGroupRecreation: "Leisure and recreation",
+    resourcesGroupOrganisations: "Organisations and helplines",
+    resourcesGroupAdults: "Adult services",
+    resourcesGroupGrants: "Grants and equipment",
+    resourcesGroupOther: "Other",
     resourcesDisclaimer:
       "Listing a service here does not mean we recommend or endorse it. Please check that anything you find is right for you and your family.",
     resourcesSuggestPrompt:
@@ -216,7 +235,6 @@ const translations = {
     resourcesSearchLabel: "Search by name or description",
     resourcesSearchPlaceholder: "Search by name or description",
     resourcesFilterLabel: "Filter by category",
-    resourcesFilterAll: "All",
     resourcesProvinceLabel: "Province",
     resourcesAllProvinces: "All provinces",
     resourcesProvinceEasternCape: "Eastern Cape",
@@ -405,7 +423,8 @@ const translations = {
     adminResourcesDescriptionError: "Write a description for the resource.",
     adminResourcesCategory: "Category",
     adminResourcesCategoryNote:
-      "Optional. Used for the filter pills on the resources page.",
+      "Used for the groups on the resources page.",
+    adminResourcesCategoryChoose: "Choose a category",
     adminResourcesProvince: "Provinces",
     adminResourcesProvincesNote:
       "Tick every province the service covers, or National, or Not applicable.",
@@ -805,13 +824,31 @@ const translations = {
     accessibilityReviewDate: "Hierdie verklaring is laas op 14 Augustus 2026 hersien.",
     resourcesPageTitle: "Hulpbronne",
     resourcesPageLede: "Ondersteuningsdienste, organisasies en inligting regoor Suid-Afrika.",
+    resourcesIntroText:
+      "Een van ons sleutelprojekte is om 'n nasionale databasis te ontwikkel en in stand te hou wat gesinne en mense wat deur outisme en neurodiversiteit geraak word, lei. Dit dek:",
+    resourcesIntroCommunity:
+      "Gemeenskapsaktiverings by skole, klinieke, polisiestasies en winkels",
+    resourcesIntroSpecialists:
+      "Spesialiste soos dokters, beroepsterapeute en opvoedkundige sielkundiges",
+    resourcesIntroLeisure:
+      "Vrytyd- en ontspanningsruimtes wat bereid is om die nodige akkommodasie te maak",
+    resourcesIntroSupport:
+      "Ondersteuningsgroepe, sodat mense die een die naaste aan hulle kan vind",
+    resourcesChoosePrompt: "Kies 'n kategorie om te sien wat dit bevat.",
+    resourcesGroupSchools: "Skole",
+    resourcesGroupSpecialists: "Dokters, terapeute en assesserings",
+    resourcesGroupSupport: "Ondersteuningsgroepe",
+    resourcesGroupRecreation: "Vrytyd en ontspanning",
+    resourcesGroupOrganisations: "Organisasies en hulplyne",
+    resourcesGroupAdults: "Volwassedienste",
+    resourcesGroupGrants: "Toelae en toerusting",
+    resourcesGroupOther: "Ander",
     resourcesDisclaimer: "Om 'n diens hier te lys beteken nie dat ons dit aanbeveel of onderskryf nie. Gaan asseblief na dat enigiets wat jy vind reg is vir jou en jou gesin.",
     resourcesSuggestPrompt: "Weet jy van 'n diens wat ons moet byvoeg, iets wat reggestel moet word, of 'n lys wat verwyder moet word?",
     resourcesSuggestLink: "Laat weet ons op die kontakbladsy",
     resourcesSearchLabel: "Soek volgens naam of beskrywing",
     resourcesSearchPlaceholder: "Soek volgens naam of beskrywing",
     resourcesFilterLabel: "Filtreer volgens kategorie",
-    resourcesFilterAll: "Alles",
     resourcesProvinceLabel: "Provinsie",
     resourcesAllProvinces: "Alle provinsies",
     resourcesProvinceEasternCape: "Oos-Kaap",
@@ -980,7 +1017,8 @@ const translations = {
     adminResourcesDescriptionNote: "Wat hulle doen, wie hulle bedien, koste en ouderdomsgroep, in jou eie woorde.",
     adminResourcesDescriptionError: "Skryf 'n beskrywing vir die hulpbron.",
     adminResourcesCategory: "Kategorie",
-    adminResourcesCategoryNote: "Opsioneel. Word gebruik vir die filterknoppies op die hulpbronbladsy.",
+    adminResourcesCategoryNote: "Word gebruik vir die groepe op die hulpbronbladsy.",
+    adminResourcesCategoryChoose: "Kies 'n kategorie",
     adminResourcesProvince: "Provinsies",
     adminResourcesProvincesNote: "Merk elke provinsie wat die diens dek, of Nasionaal, of Nie van toepassing nie.",
     adminResourcesPhone: "Telefoon",
@@ -1347,13 +1385,31 @@ const translations = {
     accessibilityReviewDate: "Polelo ena e hlahlobilwe la ho qetela ka la 14 Phato 2026.",
     resourcesPageTitle: "Disebediswa",
     resourcesPageLede: "Ditshebeletso tsa tshehetso, mekgatlo le tlhahisoleseding ho pota Afrika Borwa.",
+    resourcesIntroText:
+      "E 'ngoe ea merero ea rona ea bohlokwa ke ho theha le ho tsamaisa databeise ea naha e tataisang malapa le batho ba ameileng ke “autism” le “neurodiversity”. E akaretsa:",
+    resourcesIntroCommunity:
+      "Diketsahalo tsa setjhaba dikolong, dikliniking, marepong le dithekweng",
+    resourcesIntroSpecialists:
+      "Dingaka le ba fodisang ba fapaneng, jwalo ka ba fodisang ba mesebetsi le ba fodisang ba thuto",
+    resourcesIntroLeisure:
+      "Mabala a boithabiso le phomolo a ileng a amohela diphutholho tse hlokahalang",
+    resourcesIntroSupport:
+      "Dihlopha tsa thekgo, hore batho ba kgone ho fumana eo e haufi le bona",
+    resourcesChoosePrompt: "Kgetha sehlopha ho bona se se nang teng.",
+    resourcesGroupSchools: "Dikolo",
+    resourcesGroupSpecialists: "Dingaka, ba fodisang le tlhahlobo",
+    resourcesGroupSupport: "Dihlopha tsa thekgo",
+    resourcesGroupRecreation: "Boithabiso le phomolo",
+    resourcesGroupOrganisations: "Mekgatlo le ditshebeletso tsa thuso",
+    resourcesGroupAdults: "Ditshebeletso tsa baholo",
+    resourcesGroupGrants: "Dithuso tsa madi le didiriswa",
+    resourcesGroupOther: "Tse ding",
     resourcesDisclaimer: "Ho ngola tshebeletso mona ha ho bolele hore rea e kgothaletsa kapa rea e dumela. Ka kopo netefatsa hore seo o se fumanang se o loketse le lelapa la hao.",
     resourcesSuggestPrompt: "O tseba tshebeletso eo re lokelanga ho e lokisa, kapa ho hong lokelang ho kenye kapa ho tlosa?",
     resourcesSuggestLink: "Re bolelle leqepheng la boikopanyo",
     resourcesSearchLabel: "Batla ka lebitso kapa tlhaloso",
     resourcesSearchPlaceholder: "Batla ka lebitso kapa tlhaloso",
     resourcesFilterLabel: "Hlopha ka sehlopha",
-    resourcesFilterAll: "Tsohle",
     resourcesProvinceLabel: "Profinse",
     resourcesAllProvinces: "Diprofinse tsohle",
     resourcesProvinceEasternCape: "Kapa Botjhabela",
@@ -1522,7 +1578,8 @@ const translations = {
     adminResourcesDescriptionNote: "Seo ba se etsang, bao ba ba sebeletsang, ditshenyehelo le dilemo, ka mantswe a hao.",
     adminResourcesDescriptionError: "Ngola tlhaloso ya sesebediswa.",
     adminResourcesCategory: "Sehlopha",
-    adminResourcesCategoryNote: "Ha e tlame. E sebediswa bakeng sa dikonopo tsa dihlopha leqepheng la disebediswa.",
+    adminResourcesCategoryNote: "E sebediswa bakeng sa dihlopha leqepheng la disebediswa.",
+    adminResourcesCategoryChoose: "Kgetha sehlopha",
     adminResourcesProvince: "Diprofinse",
     adminResourcesProvincesNote: "Tshwaya profinse e nngwe le e nngwe eo tshebeletso e e akaretsang, kapa Naha kaofela, kapa Ha e sebetse.",
     adminResourcesPhone: "Mohala",
