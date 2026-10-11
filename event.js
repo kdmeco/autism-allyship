@@ -96,8 +96,12 @@ function isPlainDocumentId(id) {
   return /^[^/]+$/.test(id);
 }
 
+// A ticketed event saved without a usable price would otherwise read
+// "Rundefined" or "R0", so only a real amount is shown as one.
 function formatPrice(data) {
-  return data.isTicketed ? "R" + data.price : translated("eventsPriceFree");
+  return hasTicketPrice(data)
+    ? "R" + formatRands(data.price)
+    : translated("eventsPriceFree");
 }
 
 function formatRands(amount) {

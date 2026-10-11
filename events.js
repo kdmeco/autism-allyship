@@ -33,10 +33,17 @@ let activePriceFilter = "";
 let totalEvents = 0;
 let allEvents = [];
 
+// Same rule as event.js: only a real amount is shown as one, so a ticketed
+// event saved without a price never reads "R0".
 function formatPrice(eventItem) {
-  return eventItem.isTicketed
-    ? "R" + eventItem.price
-    : translated("eventsPriceFree");
+  if (!eventItem.isTicketed || !(eventItem.price > 0)) {
+    return translated("eventsPriceFree");
+  }
+  const amount =
+    eventItem.price % 1 === 0
+      ? String(eventItem.price)
+      : eventItem.price.toFixed(2);
+  return "R" + amount;
 }
 
 // capacity of 0 means unlimited, never sold out, no matter how many tickets
