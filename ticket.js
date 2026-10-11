@@ -152,7 +152,10 @@ async function loadTicket() {
   missing.hidden = true;
   errorState.hidden = true;
 
-  if (!token) {
+  // doc() throws for a value containing "/", which would land on the
+  // connection error and its retry button instead of the honest "not found".
+  // Same check event.js and blog-post.js make on their ids.
+  if (!token || !/^[^/]+$/.test(token)) {
     showMissing();
     return;
   }
